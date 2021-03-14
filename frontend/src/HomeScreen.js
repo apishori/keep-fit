@@ -24,7 +24,7 @@ const HomeScreen = () => {
 
 	const fetchData = () =>{
 		setLoading(true)
-		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`)
+		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=[ADD API KEY HERE]`)
 		.then(res=>res.json())
 		.then(data=>{
 			setLoading(false)
