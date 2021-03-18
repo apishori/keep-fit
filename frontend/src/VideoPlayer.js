@@ -2,31 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View,Dimensions, Animated} from 'react-native';
 import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
-import Header from './components/Header'
 
 const VideoPlayer = ({route})=>{
-  const scrollY = new Animated.Value(0)
-  const diffClamp = Animated.diffClamp(scrollY,0,45)
-  const translateY = diffClamp.interpolate({
-    inputRange:[0,45],
-    outputRange:[0,-45]
-  })
+  
   const {videoId,title} = route.params
   return(
 
-    <View style={{ flex:1, marginTop:Constant.statusBarHeight}}>
-      <Animated.View
-        style={{
-          transform:[
-            {translateY:translateY }
-          ],
-          elevation:4,
-          zIndex:100,
-        }}>
-        <Header />
-      </Animated.View>
-
-      <View style={{width:"100%", height:"40%",marginTop:Constant.statusBarHeight}}>
+    <View style={{ flex:1}}>
+      <View style={{width:"100%", height:"40%"}}>
         <WebView
         javaScriptEnabled={true}
         domStorageEnabled={true}

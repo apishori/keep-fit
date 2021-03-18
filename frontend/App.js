@@ -1,18 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View,Button } from 'react-native';
 import HomeScreen from "./src/HomeScreen";
 import Profile from "./src/Profile";
 import Search from "./src/Search";
 import Cals from "./src/Cals";
 import VideoPlayer from "./src/VideoPlayer";
+import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
 import {reducer} from './src/reducer'
 import {Provider,useSelector} from 'react-redux'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStore,combineReducers} from 'redux'
-import {NavigationContainer,DefaultTheme,DarkTheme,useTheme} from '@react-navigation/native'
+import {NavigationContainer,DefaultTheme,useNavigation,DarkTheme,useTheme} from '@react-navigation/native'
 
 
 const rooReducer = combineReducers({
@@ -64,10 +65,11 @@ export function Navigation() {
   return (
  
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          <Stack.Screen name="rootHome" component={RootHome} />
-          <Stack.Screen name="search" component={Search} />
-          <Stack.Screen name="videoplayer" component={VideoPlayer} />
+        <Stack.Navigator>
+          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "Home"}} />
+          <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
+          <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
+          <Stack.Screen name="uploadvideo" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
         </Stack.Navigator>
       </NavigationContainer>
    
@@ -75,6 +77,7 @@ export function Navigation() {
 }
 
 export default function App() {
+  
   return (
     <Provider store={store}>
       <Navigation />

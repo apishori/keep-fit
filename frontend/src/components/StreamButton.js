@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View,Image,Dimensions,TouchableOpacity} from 'react-native';
-import {MaterialIcons} from '@expo/vector-icons'
+import {Ionicons} from '@expo/vector-icons'
 import {useNavigation ,useTheme} from '@react-navigation/native';
 
-const Streams = (props) => {
+const StreamButton = () => {
 	const navigation = useNavigation();
 
 	return (
@@ -15,17 +15,10 @@ const Streams = (props) => {
 							padding:8
 						}}>
 				<View style={styles.circular}>
-					<Image 
-			           source={{uri:`https://i.ytimg.com/vi/${props.videoId}/hqdefault.jpg`}}
-			           style={{
-			               width:"100%",
-			               height:"100%",
-			                borderRadius: 40
-			           }} 
-			        />
+					<Ionicons name="md-add" size={32}/>
 				</View>
 				
-				<Text style={{justifyContent:'center',alignItems:'center',fontSize:12}}>{props.channel}</Text>
+				<Text style={{justifyContent:'center',alignItems:'center',fontSize:12}}>Start Stream</Text>
 			</View>
 		</TouchableOpacity>
 	)
@@ -46,9 +39,11 @@ const styles = StyleSheet.create({
 		height: 48,
 		borderColor: '#ddd',
 		borderWidth: 2,
-		borderRadius: 32
+		borderRadius: 32,
+		alignItems:'center',
+		justifyContent:'center',
 	}
 });
 
-export default Streams;
+export default StreamButton;
 
