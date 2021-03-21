@@ -70,7 +70,7 @@ export function Navigation() {
  
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit"}} />
+          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit", headerShown: false}} />
           <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
           <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
           <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
