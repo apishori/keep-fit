@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState, useNavigation } from 'react';
-import { StyleSheet, Text, TextInput, Button, FlatList, View } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, FlatList, View, Pressable } from 'react-native';
 
 const SearchResults = () => {
 	//const navigation = useNavigation();
@@ -48,27 +48,26 @@ const SearchResults = () => {
 	);
 };
 
-const SearchStatus = ({ numOfResults, searchTerm }) => {
-	const [status, setStatus] = useState('');
-
-	useEffect(() => {
-		if (searchTerm === '') {
-			setStatus('No results');
-		}
-		else {
-			setStatus(numOfResults + ' results for "' + searchTerm + '"');
-		}			
-	});
-
+const SearchStatus = ({ status }) => {
 	return <Text>{status}</Text>;
 };
 
 const Search = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [numOfResults, setNumOfResults] = useState(0);
-	const searchCount = 0;
+	const [status, setStatus] = useState('No results');
+	const [didSearch, setDidSearch] = useState(false);
 	
-	function OnSubmitEdit() {
+	useEffect(() => {
+		if (didSearch) {
+			setStatus(numOfResults + ' results for "' + searchTerm + '"');
+			
+			setDidSearch(false);
+		}
+	});
+
+	function SearchFor(searchTerm) {
+		setDidSearch(true);
 		setNumOfResults(3);
 	};
 
@@ -76,14 +75,14 @@ const Search = () => {
 		<View style={{flex:1}}>
 			<TextInput
 				onChangeText={searchTerm => setSearchTerm(searchTerm)}
-				onSubmitEditing={event => {nativeEvent: {searchTerm, searchCount, OnSubmitEdit}}}
-				returnKeyLabel='search'
 				placeholder='Search'
 			>
 			</TextInput>
+			<Button
+				onPress={() => SearchFor(searchTerm)}
+			/>
 			<SearchStatus
-				numOfResults={numOfResults}
-				searchTerm={searchTerm}
+				status={status}
 			/>
 			<SearchResults/>
 		</View>
