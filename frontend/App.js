@@ -5,6 +5,7 @@ import HomeScreen from "./src/HomeScreen";
 import Profile from "./src/Profile";
 import Search from "./src/Search";
 import Cals from "./src/Cals";
+import UploadStreamScreen from "./src/UploadStreamScreen";
 import VideoPlayer from "./src/VideoPlayer";
 import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
@@ -36,9 +37,11 @@ const RootHome = ()=>{
           iconName = 'home';
         } else if (route.name === 'search') {
           iconName = 'search';
-        } else if(route.name === 'cals'){
+        } else if (route.name === 'upload') {
+          iconName = 'add';
+        } else if(route.name === 'cals')  {
           iconName = 'local-fire-department'
-        } else if(route.name === 'profile'){
+        } else if(route.name === 'profile') {
           iconName = 'person'
         }
         // You can return any component that you like here!
@@ -52,6 +55,7 @@ const RootHome = ()=>{
     >
       <Tabs.Screen name="home" component={HomeScreen} />
       <Tabs.Screen name="search" component={Search} />
+      <Tabs.Screen name="upload" component={UploadVideoScreen} />
       <Tabs.Screen name="cals" component={Cals} />
       <Tabs.Screen name="profile" component={Profile} />
     </Tabs.Navigator>
@@ -66,10 +70,11 @@ export function Navigation() {
  
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "Home"}} />
+          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit"}} />
           <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
           <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
-          <Stack.Screen name="uploadvideo" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
+          <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
+          <Stack.Screen name="stream" component={UploadStreamScreen} options={{headerTitle: "Start Stream"}} />
         </Stack.Navigator>
       </NavigationContainer>
    

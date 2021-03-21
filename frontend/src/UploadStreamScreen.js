@@ -5,11 +5,11 @@ import { WebView } from 'react-native-webview';
 import { Input,Button } from 'react-native-elements';
 
 
-const UploadVideoScreen = () => {
+const UploadStreamScreen = () => {
   return(
     <View style={{flex:1}}>
 		<View style={styles.videosWrapper}>
-			<Text style = {styles.sectionTitle}>Upload Exercise</Text>
+			<Text style = {styles.sectionTitle}>Stream</Text>
 			<View style = {styles.form}>
 			<Input
 				label='Exercise Title'
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default UploadVideoScreen
+export default UploadStreamScreen

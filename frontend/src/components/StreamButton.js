@@ -7,7 +7,7 @@ const StreamButton = () => {
 	const navigation = useNavigation();
 
 	return (
-		<TouchableOpacity onPress={()=>navigation.navigate("videoplayer",{videoId:props.videoId,title:props.title})}>
+		<TouchableOpacity onPress={()=>navigation.navigate('stream')}>
 			<View style={{
 							flexDirection:'column',
 							alignItems:'center',
