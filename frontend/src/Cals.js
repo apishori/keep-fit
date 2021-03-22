@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Pressable } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -19,26 +20,50 @@ const ExerciseList= () => {
 		},
 	];
 	
+	const ItemSeperator = () => (
+			<View
+				borderStyle='solid'
+				style={styles.itemSeparator}
+			/>
+	);
+
+	const Item = ({ item }) => (
+		<Pressable
+			style={styles.goTo}
+		>
+			<Text
+					//styles={styles.}
+			>
+				{item.name}
+			</Text>
+            <Button
+                title='Go to counter'
+                onPress={() => navigation.navigate('counter')} // TODO: add params later
+            />
+		</Pressable>
+	);
+
 	const renderItem = ({ item }) => {
 		return (
-            <>
-                <Text>{item.name}</Text>
-                <Button
-                    title='Go to counter'
-                    onPress={() => navigation.navigate('counter')} // TODO: add params later
-                />
-            </>
+            <View
+				//style={styles.entry}
+			>
+               <Item
+			   	item={item}
+			   />
+            </View>
 		);
 	};
 
 	return (
-        <View>
-            <Text>Exercises</Text>
+        //<View style={styles.ExerciseList}>
             <FlatList
                 data={EXERCISEDATA}
                 renderItem={renderItem}
+				ItemSeparatorComponent={ItemSeperator}
+				style={styles.exerciseList}
             />	
-        </View>	
+        //</View>	
 	);
 };
 
@@ -107,6 +132,7 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 };
 
 const CalorieCounter = () => {
+	const navigation = useNavigation();
 
 	const [timeInHours, setTimeInHours] = useState(0); // dummy val
 	// TODO: get MET values & might have to use gender as well
@@ -126,6 +152,10 @@ const CalorieCounter = () => {
 					onPress={() => setTimeInHours(0)}
 				/>
 			</Text>
+			<Button
+				title='Back to exercise list'
+				onPress={() => navigation.goBack()}
+			/>
 		</>
 	);
 };
@@ -146,14 +176,17 @@ function Cals() {
 };
 
 const styles = StyleSheet.create({
-    exercisePage: {
+    exerciseList: {
         flex: 6,
+		padding: 15
     },
-    list: {
-        flex: 5.5,
+    itemSeparator: {
+		height: 1,
+        width: '95%'
     },
     entry: {
         /*flex: ,*/
+		flexDirection: 'row'
     },
 });
 
