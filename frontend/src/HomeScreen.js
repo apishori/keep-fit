@@ -118,7 +118,7 @@ const HomeScreen = () => {
 			<View style={styles.streamsWrapper}>
 				<Text style = {styles.sectionTitle}>Livestreams</Text>
 				
-				<View style={{flexDirection: 'row', paddingTop:16}}>
+				<View style={{flexDirection: 'row', paddingTop:16, flex:1}}>
 					<StreamButton />
 					<FlatList
 						horizontal={true}
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
 	    fontWeight: 'bold'
  	},
  	videosWrapper: {
+		flex: 1,
 	    paddingTop: 24,
 	    paddingHorizontal: 16,
 	},
