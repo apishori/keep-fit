@@ -30,6 +30,10 @@ class Profile(models.Model):
     birthday = models.DateField(blank=False, null=False)
     created_at = models.DateTimeField(default=timezone.now)
 
+    @property
+    def bmi(self):
+        return 703.0*self.weight/(self.height * self.height)
+
 class Follow(models.Model):
     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followings')
     user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
@@ -42,4 +46,4 @@ class Follow(models.Model):
     def save(self, *args, **kwargs):
         if self.user1 == self.user2:
             raise ValidationError("Users cannot follow themselves")
-        super(Friendship, self).save(*args, **kwargs)
+        super(Follow, self).save(*args, **kwargs)
