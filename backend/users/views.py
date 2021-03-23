@@ -67,7 +67,7 @@ class UserView(APIView):
         serializer = UserSerializer(user, data=request.data, context={'request':self.request}, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, username, format=None):
@@ -82,7 +82,7 @@ class RegisterUserView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        serializer = UserRegisterSerializer(data=request.data)
+        serializer = UserRegisterSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -98,3 +98,17 @@ class UserSearchView(APIView):
             users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
         serializer = UserSerializer(users, many=True, context={'request': request})
         return Response(serializer.data)
+
+class UpdatePasswordView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        username = request.data.get('username', None)
+        email = request.data.get('email', None)
+        password = request.data.get('password', None)
+        if request.user.username == username and password:
+            if request.user.email == email:
+                request.user.set_password(password)
+                request.user.save()
+                return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)

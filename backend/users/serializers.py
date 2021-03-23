@@ -22,10 +22,28 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    full_name = serializers.CharField(read_only=True)
+    username = serializers.CharField(read_only=True)
+    email = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'full_name', 'email', 'profile']
+        fields = ['username', 'first_name', 'last_name', 'full_name', 'email', 'profile']
+
+    def update(self, instance, validated_data):
+        instance.first_name=validated_data.get('first_name', instance.first_name)
+        instance.last_name=validated_data.get('last_name', instance.last_name)
+
+        profile_data = self.context.get('request').data
+
+        instance.profile.height=profile_data.get('height', instance.profile.height)
+        instance.profile.weight=profile_data.get('weight', instance.profile.weight)
+        instance.profile.sex=profile_data.get('sex', instance.profile.sex)
+        instance.profile.birthday=profile_data.get('birthday', instance.profile.birthday)
+        if 'profile_pic' in profile_data:
+            instance.profile.profile_pic = profile_data.get('profile_pic', instance.profile.profile_pic)
+        instance.profile.save()
+        return instance
 
 class UserRegisterSerializer(UserSerializer):
     profile = None
@@ -55,13 +73,17 @@ class UserRegisterSerializer(UserSerializer):
 
         profile_data = validated_data.pop('profile')
         user.refresh_from_db()
-        user.profile.height = profile_data['height']
-        user.profile.weight = profile_data['weight']
-        user.profile.sex = profile_data['sex']
-        user.profile.birthday = profile_data['birthday']
+        profile = Profile(
+            user=user,
+            height=profile_data['height'],
+            weight=profile_data['weight'],
+            sex=profile_data['sex'],
+            birthday=profile_data['birthday']
+        )
+        profile.save()
         if 'profile_pic' in profile_data:
-            user.profile.profile_pic = profile_data['profile_pic']
-        user.save()
+            profile.profile_pic = profile_data['profile_pic']
+        profile.save()
         return user
 
 class FollowSerializer(serializers.ModelSerializer):

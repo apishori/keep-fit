@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout/', views.LogoutUserView.as_view(), name='logout-user'),
     path('register/', views.RegisterUserView.as_view(), name='register-user'),
     path('search/', views.UserSearchView.as_view(), name='search-user'),
+    path('update_password/', views.UpdatePasswordView.as_view(), name='update-password'),
 
     #Follow Endpoints
     path('follow/<str:username>/', views.ToggleFollowView.as_view(), name='toggle-follow'),
