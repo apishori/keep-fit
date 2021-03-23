@@ -14,8 +14,15 @@ import {Provider,useSelector} from 'react-redux'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStore,combineReducers} from 'redux'
+import Routers from './src/Router'
 import {NavigationContainer,DefaultTheme,useNavigation,DarkTheme,useTheme} from '@react-navigation/native'
-
+import { render } from 'react-dom';
+import './react-login-signup-ui-template/node_modules/bootstrap/dist/css/bootstrap.min.css';
+window.React = React
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Login from "./src/Login";
+import Register from "./src/Registration";
+import "./src/components/index.css";
 
 const rooReducer = combineReducers({
   cardData:reducer
@@ -81,15 +88,42 @@ export function Navigation() {
   );
 }
 
-export default function App() {
-  
-  return (
-    <Provider store={store}>
-      <Navigation />
-    </Provider>
-    
+
+function App() {
+  return (<Router>
+    <div className="App">
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+        <div className="container">
+          <Link className="navbar-brand" to={"/sign-in"}></Link>
+          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to={"/sign-in"}>Login</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div className="auth-wrapper">
+        <div className="auth-inner">
+          <Switch>
+            <Route exact path='/' component={Login} />
+            <Route path="/sign-in" component={Login} />
+            <Route path="/sign-up" component={Register} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/home" component={HomeScreen} />
+          </Switch>
+        </div>
+      </div>
+    </div></Router>
   );
 }
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
