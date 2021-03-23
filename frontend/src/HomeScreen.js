@@ -2,10 +2,9 @@ import React, {useState, useEffect} from 'react';
 import VideoCard from './components/VideoCard'
 import Constant from 'expo-constants'
 import Streams from './components/Streams'
-import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView, Animated, TouchableOpacity} from "react-native";
+import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useSelector,useDispatch} from 'react-redux'
 import StreamButton from './components/StreamButton'
-
 
 const HomeScreen = () => {
 	const [value,setValue] = useState("")
@@ -17,6 +16,7 @@ const HomeScreen = () => {
 
 	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
+
 
 	const fetchData = () =>{
 		setLoading(true)
@@ -118,7 +118,7 @@ const HomeScreen = () => {
 			<View style={styles.streamsWrapper}>
 				<Text style = {styles.sectionTitle}>Livestreams</Text>
 				
-				<View style={{flexDirection: 'row', paddingTop:16, flex:1}}>
+				<View style={{flexDirection: 'row', paddingTop:16}}>
 					<StreamButton />
 					<FlatList
 						horizontal={true}
@@ -163,11 +163,11 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
 	sectionTitle: {
 	    fontSize: 24,
-	    fontWeight: 'bold'
+	    fontWeight: 'bold',
+	    paddingTop: 24,
  	},
  	videosWrapper: {
 		flex: 1,
-	    paddingTop: 24,
 	    paddingHorizontal: 16,
 	},
 	streamsWrapper: {

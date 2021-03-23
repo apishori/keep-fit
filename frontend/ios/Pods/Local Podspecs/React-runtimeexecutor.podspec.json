@@ -1,5 +1,5 @@
 {
-  "name": "FBLazyVector",
+  "name": "React-runtimeexecutor",
   "version": "0.64.0",
   "summary": "-",
   "homepage": "https://reactnative.dev/",
@@ -12,6 +12,11 @@
     "git": "https://github.com/facebook/react-native.git",
     "tag": "v0.64.0"
   },
-  "source_files": "**/*.{c,h,m,mm,cpp}",
-  "header_dir": "FBLazyVector"
+  "source_files": "**/*.{cpp,h}",
+  "header_dir": "ReactCommon",
+  "dependencies": {
+    "React-jsi": [
+      "0.64.0"
+    ]
+  }
 }

@@ -6,6 +6,7 @@ import Profile from "./src/Profile";
 import Search from "./src/Search";
 import Cals from "./src/Cals";
 import UploadStreamScreen from "./src/UploadStreamScreen";
+import RecordCameraScreen from "./src/RecordCameraScreen";
 import VideoPlayer from "./src/VideoPlayer";
 import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
@@ -70,11 +71,12 @@ export function Navigation() {
  
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit", headerShown: false}} />
+          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "Back", headerShown: false}} />
           <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
           <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
           <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
           <Stack.Screen name="stream" component={UploadStreamScreen} options={{headerTitle: "Start Stream"}} />
+          <Stack.Screen name="camera" component={RecordCameraScreen} options={{headerTitle: "Record Video"}} />
         </Stack.Navigator>
       </NavigationContainer>
    

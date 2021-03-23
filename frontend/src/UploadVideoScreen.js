@@ -1,13 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View,Dimensions, Animated} from 'react-native';
+import React,  { useState, useEffect } from 'react';
+import { StyleSheet, Text, View,Dimensions, Animated, TouchableOpacity} from 'react-native';
 import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
 import { Input,Button } from 'react-native-elements';
-
+import {useNavigation ,useTheme} from '@react-navigation/native';
 
 const UploadVideoScreen = () => {
-  return(
-    <View style={{flex:1}}>
+	const navigation = useNavigation();
+  	return(
+  	<View style={{flex:1}}>
 		<View style={styles.videosWrapper}>
 			<Text style = {styles.sectionTitle}>Upload Exercise</Text>
 			<View style = {styles.form}>
@@ -20,8 +21,10 @@ const UploadVideoScreen = () => {
 				placeholder='Enter category'
 			/>
 			<Button
-			  title="Select Video"
-			  type="clear">
+			  title="Record Exercise"
+			  type="clear"
+			  onPress={()=>navigation.navigate('camera')}
+			  >
 			</Button>
 			
 			</View>
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
 	    
  	},
  	videosWrapper: {
-	    paddingTop: 24,
+	    paddingTop: 48,
 	    paddingHorizontal: 16,
 	},
 	form:{
