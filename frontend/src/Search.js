@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState, useNavigation } from 'react';
-import { StyleSheet, Text, TextInput, Button, FlatList, View, Pressable } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, FlatList, View, Modal, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import VideoCard from './components/VideoCard';
 
@@ -47,38 +47,13 @@ const SearchResults = () => {
 	];*/
 	
 	const renderItem = ({ item }) => {
-		return <VideoCard 
+		return (
+			<VideoCard 
 				videoId={item.id.videoId}
 				title={item.snippet.title}
 				channel={item.snippet.channelTitle}
-			   />;
-		/*return (
-            <>
-				<View>
-		<Text>Videos</Text>
-		<FlatList
-		   data={cardData}
-		   renderItem={renderItem}
-			   
-			   }}
-		   keyExtractor={item=>item.id.videoId}
-		   style={{paddingTop:16}}
-		/>
-		</View>
-		</>
-		*/
-		/*
-                <Text>
-					{item.title}
-					{item.nickname}
-					{item.exercise}
-				</Text>
-                <Button
-                    title='Watch video/stream'
-                    //onPress={() => navigation.goBack()} //navigate('counter')} // TODO: add params later
-                />
-			
-		);*/
+			/>
+		);
 	};
 
 	return (
@@ -96,30 +71,83 @@ const SearchResults = () => {
 	);
 };
 
+const RequestData = () => {
+
+};
+
 const SearchStatus = ({ status }) => {
 	return <Text>{status}</Text>;
 };
 
-const Search = () => {
+const DropdownMenu = ({ renderItem }) => {
+	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+	const SEARCHTYPES = [
+		{
+			type: 'user'
+		},
+		{
+			type: 'title'
+		},
+		{
+			type: 'exercise'
+		}
+	];
+
+	return (
+		<>
+		<Modal
+			animationType='slide'
+			transparent={true}
+			visible={isDropdownVisible}
+			onRequestClose={() => setIsDropdownVisible(!isDropdownVisible)}
+			style={{flex:0.5}}
+		>
+			<FlatList
+				data={SEARCHTYPES}
+				renderItem={renderItem}
+			/>
+			<Button
+				onPress={() => setIsDropdownVisible(!isDropdownVisible)}
+			/>
+		</Modal>
+		<Button
+			onPress={() => setIsDropdownVisible(true)}
+		/>
+		</>
+	);
+};
+
+const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
+	const [searchAmong, setSearchAmong] = useState('exercises');
 	const [numOfResults, setNumOfResults] = useState(0);
 	const [status, setStatus] = useState('No results');
 	const [didSearch, setDidSearch] = useState(false);
-	
+
 	useEffect(() => {
 		if (didSearch) {
-			setStatus(numOfResults + ' results for "' + searchTerm + '"');
+			setStatus(numOfResults + ' results for "' + searchTerm + '" in ' + searchAmong);
 			
 			setDidSearch(false);
 		}
 	});
 
-	function SearchFor(searchTerm) {
+	const renderItem = ({ item }) => {
+		return (
+			<Pressable
+				onPress={() => setSearchAmong(item.type)}
+			>
+				<Text>{item.type}</Text>
+			</Pressable>
+		);
+	};
+
+	function SearchFor() {
 		setDidSearch(true);
 		setNumOfResults(3);
 	};
 
-	return(
+	return (
 		<>
 		<View style={styles.searchBar}>
 			<TextInput
@@ -128,20 +156,32 @@ const Search = () => {
 				style={styles.searchInput}
 			>
 			</TextInput>
+			<Text>
+				in: {searchAmong}
+			</Text>
+			<DropdownMenu
+				renderItem={renderItem}
+			/>
 			<Button
-				onPress={() => SearchFor(searchTerm)}
+				onPress={() => SearchFor()}
 				style={styles.searchSubmit}
 			/>
 		</View>
 		<SearchStatus
 			status={status}
-			style={{flex: 0.1}}
-		/>
-		<SearchResults
-			style={{flex: 0.7}}
 		/>
 		</>
-		//<SearchResults/>
+	);
+};
+
+const Search = () => {
+	return(
+		<>
+			<SearchMenu/>
+			<SearchResults
+				style={{flex: 0.7}}
+			/>
+		</>
 	);
 };
 
