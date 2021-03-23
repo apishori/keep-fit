@@ -4,6 +4,21 @@ from users.models import User
 
 # Create your models here.
 
+#Using MET Values from:
+#https://www.acefitness.org/education-and-resources/professional/expert-articles/6434/5-things-to-know-about-metabolic-equivalents/
+MET_VALS = {
+            "R": 9.8,
+            "Y": 2.5,
+            "HC": 4.0,
+            "T": 8.0,
+            "S": 5.8,
+            "B": 6.5,
+            "C": 8.0,
+            "J": 12.3,
+            "H": 7.3,
+            "O": 4.0,
+    }
+
 class Post(models.Model):
     
     #options for Post.category
@@ -29,24 +44,8 @@ class Post(models.Model):
                    (HIKING, 'Hiking'),
                    (OTHER, 'Other')]
 
-    #Using MET Values from:
-    #https://www.acefitness.org/education-and-resources/professional/expert-articles/6434/5-things-to-know-about-metabolic-equivalents/
-
-    MET_VALS = {
-            "R": 9.8,
-            "Y": 2.5,
-            "HC": 4.0,
-            "T": 8.0,
-            "S": 5.8,
-            "B": 6.5,
-            "C": 8.0,
-            "J": 12.3,
-            "H": 7.3,
-            "O": 4.0,
-    }
-
     #All data members of Post
-    video = models.FileField(blank=False, upload_to='post_videos')
+    video = models.CharField(max_length=255, blank=False, null=False)
     title = models.CharField(max_length=255, blank = True, null=True, unique=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=2, blank=False, null=False, choices=WORKOUT_CATEGORIES, default=OTHER)
@@ -66,7 +65,5 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liked_posts")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
 
-    #All remaining functions for Like are to be implemented in the Front-End:
-    #1. like_post()
-    #2. unlike_post()
+
     
