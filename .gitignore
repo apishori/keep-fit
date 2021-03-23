@@ -146,3 +146,4 @@ web-build/
 # switching to python3
 .vscode
 media
+.expo

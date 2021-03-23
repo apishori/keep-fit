@@ -4,7 +4,6 @@ from users.models import User
 
 # Create your models here.
 class Livestream(models.Model):
-
     RUN = 'R'
     YOGA = 'Y'
     HOME_CARDIO = 'HC'
@@ -42,19 +41,15 @@ class Livestream(models.Model):
             "H": 7.3,
             "O": 4.0,
     }
-
-
     stream_id = models.IntegerField(primary_key=True, blank=False, null=False, unique=True)
     video_APIKey = models.CharField(max_length=255, blank=False, null=False, unique=False)
-	title = models.CharField(max_length=255, blank=False, null=False, unique=False)
-	author = models.ForeignKey(User, on_delete=models.CASCADE)
-	# This should be username of user who starts it
-	start_time = models.DateTimeField(default=timezone.now)
-	category = category = models.CharField(max_length=2, blank=False, null=False, choices=WORKOUT_CATEGORIES, default=OTHER)
+    title = models.CharField(max_length=255, blank=False, null=False, unique=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(default=timezone.now)
+    category = models.CharField(max_length=2, blank=False, null=False, choices=WORKOUT_CATEGORIES, default=OTHER)
 
-
-	@property
-	def calorie_bpm_count(self):
+    @property
+    def calorie_bpm_count(self):
         #RETURNS CALORIES BURNED PER MINUTE
         # = METs x 3.5 x (body weight in kilograms) / 200 
         return ((MET_VALS[self.category] * 3.5 * (self.author.profile.weight/2.20462)) / 200)
@@ -62,4 +57,3 @@ class Livestream(models.Model):
     @property
     def title(self):
     	return self.title
-    
