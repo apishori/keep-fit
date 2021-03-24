@@ -13,6 +13,7 @@ pip install Pillow
 `
 
 To run the server:
+
 `
 python manage.py makemigrations
 python manage.py migrate
@@ -26,9 +27,11 @@ python manage.py runserver
 `cd keep-fit/frontend`
 
 Set-up:
+
 `npm install --global expo-cli`
 
 Run:
+
 `expo start`
 
 
