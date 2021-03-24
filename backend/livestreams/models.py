@@ -41,7 +41,7 @@ class Livestream(models.Model):
             "H": 7.3,
             "O": 4.0,
     }
-    stream_id = models.IntegerField(primary_key=True, blank=False, null=False, unique=True)
+    stream_id = models.CharField(blank=False, null=False, unique=True)
     video_APIKey = models.CharField(max_length=255, blank=False, null=False, unique=False)
     title = models.CharField(max_length=255, blank=False, null=False, unique=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -54,6 +54,3 @@ class Livestream(models.Model):
         # = METs x 3.5 x (body weight in kilograms) / 200 
         return ((MET_VALS[self.category] * 3.5 * (self.author.profile.weight/2.20462)) / 200)
 
-    @property
-    def title(self):
-    	return self.title
