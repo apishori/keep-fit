@@ -21,14 +21,14 @@ class LoginUserView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutUserView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, *args, **kwargs):
         logout(request)
         return Response(status=status.HTTP_200_OK)
 
 class ToggleFollowView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, username, format=None):
         following = False
@@ -52,7 +52,7 @@ class ToggleFollowView(APIView):
         return Response(data)
 
 class UserView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, username, format=None):
         user = get_object_or_404(User, username__iexact=username)
@@ -89,7 +89,7 @@ class RegisterUserView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSearchView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, format=None):
         query = request.GET.get('query')
@@ -100,7 +100,7 @@ class UserSearchView(APIView):
         return Response(serializer.data)
 
 class UpdatePasswordView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
         username = request.data.get('username', None)
