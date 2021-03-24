@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 export default class SignUp extends Component {
     render() {
@@ -7,6 +9,11 @@ export default class SignUp extends Component {
           //  <View style={styles.login}>
             <form>
                 <h3>Sign Up</h3>
+
+                <div className="form-group">
+                    <label>Username</label>
+                    <input type="text" className="form-control" placeholder="Username" />
+                </div>
 
                 <div className="form-group">
                     <label>First name</label>
@@ -19,8 +26,13 @@ export default class SignUp extends Component {
                 </div>
 
                 <div className="form-group">
-                    <label>Birthday</label>
-                    <input type="date" className="form-control" placeholder="Birthday" />
+                    <label>Email address</label>
+                    <input type="email" className="form-control" placeholder="Enter email" />
+                </div>
+
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" className="form-control" placeholder="Enter password" />
                 </div>
 
                 <div className="form-group">
@@ -34,13 +46,23 @@ export default class SignUp extends Component {
                 </div>
 
                 <div className="form-group">
-                    <label>Email address</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
+                    <label>Sex At Birth</label>
+                    <DropDownPicker items={[
+                            {label: 'Female', value: 'female'},
+                            {label: 'Male', value: 'male'}
+                        ]}
+                        containerStyle={{height: 40}}
+                        style={{backgroundColor: '#fafafa'}}
+                        itemStyle={{
+                            justifyContent: 'flex-start'
+                        }}
+                        placeholder="Select"
+                        dropDownStyle={{backgroundColor: '#fafafa'}}/>
                 </div>
 
                 <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <label>Birthday</label>
+                    <input type="date" className="form-control" placeholder="Birthday" />
                 </div>
 
                 <div className="form-group">

@@ -9,16 +9,16 @@ import StreamButton from './components/StreamButton'
 
 const HomeScreen = () => {
 	const [value,setValue] = useState("")
-	const dispatch = useDispatch()
-	const cardData = useSelector(state=>{
-        return state.cardData
-      })
-	const [loading,setLoading] = useState(false)
+	//const dispatch = useDispatch()
+	//const cardData = useSelector(state=>{
+    //    return state.cardData
+    //  })
+	//const [loading,setLoading] = useState(false)
 
 	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
 
-	const fetchData = () =>{
+/*	const fetchData = () =>{
 		setLoading(true)
 		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
 		.then(res=>res.json())
@@ -26,7 +26,7 @@ const HomeScreen = () => {
 			setLoading(false)
             dispatch({type:"add",payload:data.items})
 		})
-	}
+	}*/
 	
 	const streamData = [
 	  {
@@ -99,7 +99,7 @@ const HomeScreen = () => {
     }
 	];
 
-	const fetchStream = () =>{
+	/*const fetchStream = () =>{
 		setLoading(true)
 		fetch(YOUTUBE_API)
 		.then(res=>res.json())
@@ -111,7 +111,7 @@ const HomeScreen = () => {
 
 	useEffect(() => {
         fetchData();
-    }, [])
+    }, [])*/
 
 	return (
 		<View style={{flex:1}}>
@@ -138,18 +138,6 @@ const HomeScreen = () => {
 
 		<View style={styles.videosWrapper}>
 			<Text style = {styles.sectionTitle}>Videos</Text>
-			<FlatList
-	           data={cardData}
-	           renderItem={({item})=>{
-	               return <VideoCard 
-	                videoId={item.id.videoId}
-	                title={item.snippet.title}
-	                channel={item.snippet.channelTitle}
-	               />
-		           }}
-		       keyExtractor={item=>item.id.videoId}
-		       style={{paddingTop:16}}
-		    />
 		</View>
 		</View>
 

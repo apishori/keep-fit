@@ -2,13 +2,12 @@ import React, {useState, useEffect} from 'react';
 import VideoCard from './components/VideoCard'
 import Constant from 'expo-constants'
 import {useSelector,useDispatch} from 'react-redux'
-import { StyleSheet, Image, FlatList, Text, View } from 'react-native';
-
+import { StyleSheet, Image, FlatList, Text, View, button } from 'react-native';
 
 const Profile = () =>{
 	const [value,setValue] = useState("")
 	const [name,setName] = useState("")
-	const dispatch = useDispatch()
+	/*const dispatch = useDispatch()
 	const cardData = useSelector(state=>{
         return state.cardData
       })
@@ -25,7 +24,7 @@ const Profile = () =>{
 			setLoading(false)
             dispatch({type:"add",payload:data.items})
 		})
-	}
+	}*/
 	
 	const streamData = [
 	  {
@@ -98,7 +97,7 @@ const Profile = () =>{
     }
 	];
 
-	const fetchStream = () =>{
+	/*const fetchStream = () =>{
 		setLoading(true)
 		fetch(YOUTUBE_API)
 		.then(res=>res.json())
@@ -110,7 +109,7 @@ const Profile = () =>{
 
 	useEffect(() => {
         fetchData();
-    }, [])
+    }, [])*/
 
 	return(
 		<View style={{flex:1}}>
@@ -119,19 +118,7 @@ const Profile = () =>{
        			style={styles.circular} />
 				<Text style = {styles.profileTitle}>Ayushi Gupta</Text>
 				<Text style = {styles.followersTitle}>6000 Followers | 2 Following</Text>
-			<Text style = {styles.sectionTitle}>Videos</Text>
-			<FlatList
-	           data={cardData}
-	           renderItem={({item})=>{
-	               return <VideoCard 
-	                videoId={item.id.videoId}
-	                title={item.snippet.title}
-	                channel={item.snippet.channelTitle}
-	               />
-		           }}
-		       keyExtractor={item=>item.id.videoId}
-		       style={{paddingTop:16}}
-		    />
+				<button type="submit" className="btn btn-primary btn-block">Delete Profile</button><button type="submit" className="btn btn-primary btn-block">Update Profile</button>
 			</View>
 		</View>
 	)
@@ -139,14 +126,14 @@ const Profile = () =>{
 
 const styles = StyleSheet.create({
 	circular: {
-	width: 100,
-	height: 100,
-	borderColor: '#ddd',
-	borderWidth: 2,
-	borderRadius: 60,
-	alignItems:'center',
-	justifyContent:'center',
-	padding: 7,
+		width: 100,
+		height: 100,
+		borderColor: '#ddd',
+		borderWidth: 2,
+		borderRadius: 60,
+		alignItems:'center',
+		justifyContent:'center',
+		padding: 7,
 	},
 	sectionTitle: {
 	    fontSize: 24,
@@ -170,12 +157,6 @@ const styles = StyleSheet.create({
 	},
 	items: {
 	marginTop: 16,
-	},
-	searchBar: {
-	//flex: 0.05,
-	flex: 0.2,
-	flexDirection: 'row',
-	padding: 15
 	},
 	profileSection:{
 		alignItems:'center',

@@ -1,21 +1,36 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, Text, View } from 'react-native';
+import Root, { Navigation } from "./Router";
+import App from "./Router";
+import { withRouter, Route } from "react-dom";
+import { push } from 'react-redux';
+import axios from "axios";
 
-export default class Login extends Component {
+class Login extends Component { 
+    handleClick(){
+        async (dispatch) => {
+            try {
+                const response = await axios.post('login/', { username: this.state.username, password: this.state.password });
+                console.log('Returned data:', response);
+            } catch (e) {
+                console.log(`Axios request failed: ${e}`);
+            }
+        }
+    }
     render() {
         return (
-           // <View style={styles.login}>
             <form>
-                <h3>Sign In</h3>
+
+                <h3>Log in</h3>
 
                 <div className="form-group">
-                    <label>Email address</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
+                    <label>Username</label>
+                    <input name = "username" type="text" className="form-control" placeholder="Enter username" />
                 </div>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <input name = "password" type="password" className="form-control" placeholder="Enter password" />
                 </div>
 
                 <div className="form-group">
@@ -24,16 +39,16 @@ export default class Login extends Component {
                         <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
                     </div>
                 </div>
-
-                <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                <button type="submit" className="btn btn-dark btn-lg btn-block" onClick={() => {this.handleClick()}}>Sign in</button>
                 <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
+                    Forgot <a href="forgot-password">password?</a>
                 </p>
             </form>
-           // </View>
         );
     }
 }
+  
+export default Login;
 
 const styles = StyleSheet.create({
     login: {

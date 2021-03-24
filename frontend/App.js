@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View,Button } from 'react-native';
 import HomeScreen from "./src/HomeScreen";
 import Profile from "./src/Profile";
@@ -22,6 +22,8 @@ window.React = React
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Login from "./src/Login";
 import Register from "./src/Registration";
+import ForgotPassword from "./src/ForgotPassword";
+import UpdateProfile from "./src/UpdateProfile";
 import "./src/components/index.css";
 
 const rooReducer = combineReducers({
@@ -33,6 +35,7 @@ const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
 
 const RootHome = ()=>{
+  const [signedIn,setSignedIn] = useState(false)
   const {colors} = useTheme()
   return(
     <Tabs.Navigator
@@ -72,22 +75,19 @@ const RootHome = ()=>{
 
 
 export function Navigation() {
-
   return (
- 
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit", headerShown: false}} />
-          <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
-          <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
-          <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
-          <Stack.Screen name="stream" component={UploadStreamScreen} options={{headerTitle: "Start Stream"}} />
+              <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit", headerShown: false}} />
+              <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
+              <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
+              <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
+              <Stack.Screen name="stream" component={UploadStreamScreen} options={{headerTitle: "Start Stream"}} />
         </Stack.Navigator>
       </NavigationContainer>
    
   );
 }
-
 
 function App() {
   return (<Router>
@@ -98,7 +98,7 @@ function App() {
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to={"/sign-in"}>Login</Link>
+                <Link className="nav-link" to={"/sign-in"}>Sign in</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
@@ -108,14 +108,14 @@ function App() {
         </div>
       </nav>
 
-      <div className="auth-wrapper">
-        <div className="auth-inner">
+      <div className="outer">
+        <div className="inner">
           <Switch>
             <Route exact path='/' component={Login} />
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={Register} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/home" component={HomeScreen} />
+            <Route path="/forgot-password" component={ForgotPassword} />
+            <Route path="/update-profile" component={UpdateProfile} />
           </Switch>
         </div>
       </div>
