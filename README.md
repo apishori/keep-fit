@@ -1,4 +1,4 @@
-# keep-fit
+# KeepFit README
 
 ## Backend
 
@@ -11,6 +11,7 @@ pip install django
 pip install djangorestframework
 pip install Pillow 
 `
+
 
 To run the server:
 
@@ -29,6 +30,7 @@ python manage.py runserver
 Set-up:
 
 `npm install --global expo-cli`
+
 
 Run:
 
