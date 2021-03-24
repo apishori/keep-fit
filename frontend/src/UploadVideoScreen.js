@@ -7,29 +7,30 @@ import {useNavigation ,useTheme} from '@react-navigation/native';
 
 const UploadVideoScreen = () => {
 	const navigation = useNavigation();
+	const [postCategory, setCategory] = useState('');
+	const [postTitle, setTitle] = useState('');
+
   	return(
   	<View style={{flex:1}}>
 		<View style={styles.videosWrapper}>
 			<Text style = {styles.sectionTitle}>Upload Exercise</Text>
 			<View style = {styles.form}>
 			<Input
-				label='Exercise Title'
+				onChangeText={title => setTitle(title)}
+				label='Exercise Info'
 				placeholder='Enter exercise title'
 			/>
 			<Input
+				onChangeText={category => setCategory(category)}
 				label='Category'
 				placeholder='Enter category'
 			/>
-			<Button
-			  title="Record Exercise"
-			  type="clear"
-			  onPress={()=>navigation.navigate('camera')}
-			  >
-			</Button>
+			
 			
 			</View>
 			<Button
-			  title="Post Exercise"
+			  title="Record Exercise"
+			  onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
 			/>
 
 		</View>

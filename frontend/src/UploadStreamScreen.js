@@ -3,10 +3,14 @@ import { StyleSheet, Text, View,Dimensions, Animated} from 'react-native';
 import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
 import { Input,Button } from 'react-native-elements';
+import axios from 'axios';
+
+//mux token id: 7415d128-78b3-45d6-8b8d-44598e658c72
 
 
 const UploadStreamScreen = () => {
-  return(
+	const API_KEY = `AIzaSyBwd-mFKhqlx0BbbH1YlH6dpaofQpuQ7E4`
+	return(
     <View style={{flex:1}}>
 		<View style={styles.videosWrapper}>
 			<Text style = {styles.sectionTitle}>Stream</Text>
@@ -19,16 +23,11 @@ const UploadStreamScreen = () => {
 				label='Category'
 				placeholder='Enter category'
 			/>
-			<Button
-			  title="Select Video"
-			  type="clear">
-			</Button>
-			
 			</View>
 			<Button
-			  title="Post Exercise"
+			  title="Start Stream"
+			  // onPress={}
 			/>
-
 		</View>
     </View>
   )
