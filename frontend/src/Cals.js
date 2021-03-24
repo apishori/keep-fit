@@ -1,24 +1,63 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Pressable } from 'react-native';
+import axios from 'axios';
 
 const Stack = createStackNavigator();
+const exerciseData = [
+	{
+		id: 0,
+		category: 'Run',
+		MET: 9.8
+	},
+	{
+		id: 1,
+		category: 'Yoga',
+		MET: 2.5
+	},
+	{
+		id: 2,
+		category: 'Home cardio',
+		MET: 4.0
+	},
+	{
+		id: 3,
+		category: 'Tennis',
+		MET: 8.0
+	},
+	{
+		id: 4,
+		category: 'Swimming',
+		MET: 5.8
+	},
+	{
+		id: 5,
+		category: 'Basketball',
+		MET: 6.5
+	},
+	{
+		id: 6,
+		category: 'Jump rope',
+		MET: 8.0
+	},
+	{
+		id: 7,
+		category: 'Hiking',
+		MET: 7.3
+	},
+	{
+		id: 8,
+		category: 'Other',
+		MET: 4.0
+	}
+];
 
 const ExerciseList= () => {
 	const navigation = useNavigation();
-	const EXERCISEDATA = [
-		{
-			name: 'Swimming'
-		},
-		{
-			name: 'Biking'
-		},
-		{
-			name: 'Running'
-		},
-	];
+	console.log(navigation)
+	//const [category, setCategory] = useState('Other');
+	const [exerciseID, setExerciseID] = useState(8);
 	
 	const ItemSeperator = () => (
 			<View
@@ -30,10 +69,10 @@ const ExerciseList= () => {
 	const Item = ({ item }) => (
 		<Pressable
 			style={styles.goTo}
-			onPress={() => setExerciseID(1)}
+			onPress={() => setExerciseID(item.id)}
 		>
 			<Text>
-				{item.name}
+				{item.category}
 			</Text>
 		</Pressable>
 	);
@@ -53,14 +92,17 @@ const ExerciseList= () => {
 	return (
         <>
             <FlatList
-                data={EXERCISEDATA}
+                data={exerciseData}
                 renderItem={renderItem}
 				ItemSeparatorComponent={ItemSeperator}
 				style={styles.exerciseList}
+				keyExtractor={ (item, index) => index.toString() }
             />
 			<Button
 				title='Go to counter'
-				onPress={() => navigation.navigate('counter')} // TODO: add params later
+				onPress={() => navigation.navigate('counter', {
+					id: {exerciseID}
+				})} // TODO: add params later
 			/>
         </>	
 	);
@@ -134,12 +176,24 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 	);
 };
 
-const CalorieCounter = () => {
+const CalorieCounter = ({ route }) => {
 	const navigation = useNavigation();
+	const index = route.params.id.exerciseID;
+	const MET = exerciseData[index].MET;
+
+	const getExerciseData = () => {
+		axios.get(`http://127.0.0.1:8000/posts/search/?title=`)
+		.then(data => {
+			console.log(data);
+			setExerciseData(data);
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+	};
 
 	const [timeInHours, setTimeInHours] = useState(0); // dummy val
-	// TODO: get MET values & might have to use gender as well
-	const caloriesBurned = /*weight * MET **/ timeInHours;
+	const caloriesBurned = /*weight */ MET * timeInHours;
 	
 	return (
 		<View
@@ -150,7 +204,7 @@ const CalorieCounter = () => {
 				setTimeInHours={setTimeInHours}
 			/>
 			<Text>
-				Exercise: {}
+				Exercise: {exerciseData[index].category}
 				<Button
 					title='Back to exercise list'
 					onPress={() => navigation.navigate('exerciseList')} //goBack()}
@@ -168,8 +222,6 @@ const CalorieCounter = () => {
 };
 
 function Cals() {
-	const [exerciseID, setExercise] = useState(-1);
-
 	return (
 		<Stack.Navigator>
 			<Stack.Screen
