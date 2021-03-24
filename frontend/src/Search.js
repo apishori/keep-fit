@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useState, useNavigation } from 'react';
 import { StyleSheet, Text, TextInput, Button, FlatList, View, Modal, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import VideoCard from './components/VideoCard';
 
 const SearchResults = () => {
@@ -28,24 +29,6 @@ const SearchResults = () => {
         fetchData;
     }, [])
 */
-	/*const SEARCHRESULTDATA = [
-		{
-			title:	'title0',
-			exercise: 'Swimming',
-			nickname: 'nickname0'
-		},
-		{
-			title: 'title1',
-			exercise: 'Biking',
-			nickname: 'nickname1'
-		},
-		{
-			title: 'title2',
-			exercise: 'Running',
-			nickname: 'nickname2'
-		},
-	];
-*/	
 	const renderItem = ({ item }) => {
 		return <View/>/*(
 			<VideoCard 
@@ -151,34 +134,31 @@ const SearchMenu = () => {
 	const [status, setStatus] = useState('No results');
 	const [didSearch, setDidSearch] = useState(false);
 
-	const dispatch = useDispatch();
-	const cardData = useSelector(state=> {
-        return state.cardData;
-    });
-	const [loading,setLoading] = useState(false);
-
-	const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
-/*
 	const adminLogin = () => {
-		setLoading(true)
-		fetch('http://127.0.0.1:8000/admin/')
-		.then(res=>res.json())
-		.then(data=> {
-			setLoading(false)
-            dispatch({type:"add", payload:data.items})
+		const LOGIN = {
+			username: 'jahn',
+			password: 'jahn123'
+		};
+		const ADMINLOGIN = `http://127.0.0.1:8000/users/login/`;
+
+		axios.post(ADMINLOGIN, LOGIN)
+		.then(data => {
+			console.log(data);
+			console.log('logged in');
+			fetchData();
 		})
 		.catch((error) => {
 			console.error(error);
 		});
 	};
-*/
+
 	const fetchData = () => {
-		setLoading(true)
-		fetch(USER_SEARCH)
-		.then(res=>res.json())
-		.then(data=> {
-			setLoading(false)
-            dispatch({type:"add", payload:data.items})
+		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
+		//const POST_SEARCH = `http://127.0.0.1:8000/users/search/?query=`;
+
+		axios.get(USER_SEARCH)
+		.then(data => {
+			console.log(data);
 		})
 		.catch((error) => {
 			console.error(error);
@@ -204,8 +184,7 @@ const SearchMenu = () => {
 	};
 
 	function SearchFor() {
-		//adminLogin();
-		fetchData();
+		adminLogin();
 		setDidSearch(true);
 		setNumOfResults(3);
 	};
@@ -271,7 +250,7 @@ const styles = StyleSheet.create({
 		margin: 5,
     },
     searchInput: {
-        //flex: 0.,
+        flex: 0.3,
     },
 	searchType: {
 		// max width

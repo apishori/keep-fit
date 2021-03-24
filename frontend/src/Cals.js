@@ -30,16 +30,11 @@ const ExerciseList= () => {
 	const Item = ({ item }) => (
 		<Pressable
 			style={styles.goTo}
+			onPress={() => setExerciseID(1)}
 		>
-			<Text
-					//styles={styles.}
-			>
+			<Text>
 				{item.name}
 			</Text>
-            <Button
-                title='Go to counter'
-                onPress={() => navigation.navigate('counter')} // TODO: add params later
-            />
 		</Pressable>
 	);
 
@@ -56,14 +51,18 @@ const ExerciseList= () => {
 	};
 
 	return (
-        //<View style={styles.ExerciseList}>
+        <>
             <FlatList
                 data={EXERCISEDATA}
                 renderItem={renderItem}
 				ItemSeparatorComponent={ItemSeperator}
 				style={styles.exerciseList}
-            />	
-        //</View>	
+            />
+			<Button
+				title='Go to counter'
+				onPress={() => navigation.navigate('counter')} // TODO: add params later
+			/>
+        </>	
 	);
 };
 
@@ -111,8 +110,12 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 	const timeFormat = new Intl.NumberFormat(undefined, { minimumIntegerDigits: 2 });
 	
 	return (
-		<View>
-			<Text>
+		<View
+			style={{flex:0.25}}
+		>
+			<Text
+				style={styles.time}
+			>
 				{timeFormat.format(hours)}:{timeFormat.format(minutes)}:{timeFormat.format(seconds)}
 			</Text>
 			<Button
@@ -139,24 +142,28 @@ const CalorieCounter = () => {
 	const caloriesBurned = /*weight * MET **/ timeInHours;
 	
 	return (
-		<>
+		<View
+			style={styles.counter}
+		>
 			<Timer
 				timeInHours={timeInHours}
 				setTimeInHours={setTimeInHours}
 			/>
 			<Text>
 				Exercise: {}
+				<Button
+					title='Back to exercise list'
+					onPress={() => navigation.navigate('exerciseList')} //goBack()}
+				/>
+			</Text>
+			<Text>
 				Calories burnt so far: {caloriesBurned.toFixed(4)}
 				<Button
 					title='Reset calories'
 					onPress={() => setTimeInHours(0)}
 				/>
 			</Text>
-			<Button
-				title='Back to exercise list'
-				onPress={() => navigation.goBack()}
-			/>
-		</>
+		</View>
 	);
 };
 
@@ -166,10 +173,14 @@ function Cals() {
 	return (
 		<Stack.Navigator>
 			<Stack.Screen
-				name='exerciseList' component={ExerciseList} options={{headerShown:false}}
+				name='exerciseList'
+				component={ExerciseList}
+				options={{headerShown:false}}
 			/>
 			<Stack.Screen
-				name='counter' component={CalorieCounter} options={{headerShown:false}}
+				name='counter'
+				component={CalorieCounter}
+				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>
 	);
@@ -178,7 +189,7 @@ function Cals() {
 const styles = StyleSheet.create({
     exerciseList: {
         flex: 6,
-		padding: 15
+		margin: 15
     },
     itemSeparator: {
 		height: 1,
@@ -188,6 +199,20 @@ const styles = StyleSheet.create({
         /*flex: ,*/
 		flexDirection: 'row'
     },
+	counter: {
+		flex: 1,
+		margin: 10
+	},
+	timer: {
+		flex: 1,
+		flexDirection: 'column'
+	},
+	time: {
+		flex: 0.2,
+		fontSize: 24,
+		textAlign: 'center',
+		textAlignVertical: 'center'
+	}
 });
 
 export default Cals;
