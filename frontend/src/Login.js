@@ -29,6 +29,9 @@ const Login = () => {
         .then(data => {
             console.log(data);
             console.log('logged in');
+            //setLoginID(username);
+            navigation.navigate('home');
+            setIsVisible(!isVisible);
         })
         .catch(error => {
             console.error(error); 
@@ -36,14 +39,13 @@ const Login = () => {
         })
     }
 
-    useEffect (() => { 
-        getLogin(); 
-    });
+    /*useEffect (() => { 
+        getLogin();
+    });*/
 
     const [isVisible, setIsVisible] = useState(true);
     const LoggedIn = () => {
-        navigation.navigate('home');
-        setIsVisible(!isVisible);
+        getLogin();
     }
 
     return(
@@ -77,7 +79,9 @@ const Login = () => {
                 style = {{paddingBottom:24}}
               />
               <Button 
-                    title="Forgot Password">
+                    title="Forgot Password"
+                    onPress={() => navigation.navigate('forgotpw')}
+              >
               </Button>
               </View>
             </View>
