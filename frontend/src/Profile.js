@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import VideoCard from './components/VideoCard'
 import Constant from 'expo-constants'
 import {useSelector,useDispatch} from 'react-redux'
-import { StyleSheet, Image, FlatList, Text, View, button } from 'react-native';
+import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
 
 const Profile = () =>{
 	const [value,setValue] = useState("")
@@ -118,7 +118,15 @@ const Profile = () =>{
        			style={styles.circular} />
 				<Text style = {styles.profileTitle}>Ayushi Gupta</Text>
 				<Text style = {styles.followersTitle}>6000 Followers | 2 Following</Text>
-				<button type="submit" className="btn btn-primary btn-block">Delete Profile</button><button type="submit" className="btn btn-primary btn-block">Update Profile</button>
+				<Button
+					title='Delete Profile'
+				></Button>
+				<Button
+					title='Update Profile'
+				></Button>
+				<Button
+					title='Sign Out'
+				></Button>
 			</View>
 		</View>
 	)
@@ -136,20 +144,20 @@ const styles = StyleSheet.create({
 		padding: 7,
 	},
 	sectionTitle: {
-	    fontSize: 24,
-	    fontWeight: 'bold'
+	    fontSize: 24,
+	    fontWeight: 'bold'
 	},
 	videosWrapper: {
 	flex: 1,
-	    paddingTop: 24,
-	    paddingHorizontal: 16,
+	    paddingTop: 24,
+	    paddingHorizontal: 16,
 	},
 	streamsWrapper: {
-	    paddingTop: 24,
-	    paddingHorizontal: 16,
+	    paddingTop: 24,
+	    paddingHorizontal: 16,
 	},
 	items: {
-	    marginTop: 16,
+	    marginTop: 16,
 	},
 	sectionTitle: {
 	fontSize: 24,
