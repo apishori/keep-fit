@@ -153,7 +153,7 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 	
 	return (
 		<View
-			style={{flex:0.25}}
+			style={{flex:0.25, margin:24}}
 		>
 			<Text
 				style={styles.time}
@@ -241,7 +241,7 @@ function Cals() {
 const styles = StyleSheet.create({
     exerciseList: {
         flex: 6,
-		margin: 15
+		margin: 24,
     },
     itemSeparator: {
 		height: 1,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     },
 	counter: {
 		flex: 1,
-		margin: 10
+		margin: 24
 	},
 	timer: {
 		flex: 1,

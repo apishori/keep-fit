@@ -70,13 +70,16 @@ const Login = () => {
               />
 
               </View>
+              <View style = {{paddingLeft:24,paddingRight:24}}>
               <Button
                 title="Sign In"
                 onPress={()=> LoggedIn()}
+                style = {{paddingBottom:24}}
               />
               <Button 
                     title="Forgot Password">
               </Button>
+              </View>
             </View>
             </View>
 
@@ -90,6 +93,7 @@ const Login = () => {
             fontSize: 24,
             textAlign: "center",
             fontWeight: 'bold',
+            marginTop:32
             
          },
          videosWrapper: {
@@ -99,7 +103,9 @@ const Login = () => {
         form:{
             paddingTop: 32,
             paddingBottom: 24,
-            alignItems:"flex-start"
+            alignItems:"flex-start",
+            paddingLeft:24,
+             paddingRight:24
         }
     })
    

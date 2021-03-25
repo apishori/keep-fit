@@ -8,7 +8,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './Login';
 import StreamPlayer from './StreamPlayer';
 import VideoPlayer from './VideoPlayer';
-import StreamButton from './components/StreamButton'
+import UploadStreamScreen from './UploadStreamScreen';
+import StreamButton from './components/StreamButton';
+import RecordCameraScreen from './RecordCameraScreen';
 import axios from 'axios';
 
 const Stack = createStackNavigator();
@@ -30,7 +32,7 @@ const HomeScreen = () => {
 		axios.get(POST_LIST)
 		.then(res => {
 			var videoId
-			console.log(res.data)
+			// console.log(res.data)
 			for(var ids of res.data){
 				id_mapping.set( ids.video, ids.id)
 				var result = res.data.map(function(val) {
@@ -39,7 +41,7 @@ const HomeScreen = () => {
 			}
 			const YOUTUBE_API_CALL = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
 			
-			console.log(YOUTUBE_API_CALL)
+			// console.log(YOUTUBE_API_CALL)
 			
 			setLoading(true)
 			fetch(YOUTUBE_API_CALL)
@@ -50,7 +52,7 @@ const HomeScreen = () => {
 			})	
 		})
 		.catch(error => {
-			console.log(error); 
+			// console.log(error); 
 		});
 	}
 
@@ -200,11 +202,22 @@ const HomeScreen = () => {
 			<Stack.Screen
 				name='streamplayer'
 				component={StreamPlayer}
-				title="Watch Stream"
+				options={{ title: 'Watch Stream' }}
 			/>
 			<Stack.Screen
 				name='videoplayer'
+				options={{ title: 'Watch Exercise' }}
 				component={VideoPlayer}
+			/>
+			<Stack.Screen
+				name='stream'
+				options={{ title: 'Start Stream' }}
+				component={UploadStreamScreen}
+			/>
+			<Stack.Screen
+				name='camera'
+				options={{ title: 'Record Exercise' }}
+				component={RecordCameraScreen}
 			/>
 		</Stack.Navigator>
 	)
