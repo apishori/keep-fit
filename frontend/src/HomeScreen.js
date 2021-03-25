@@ -5,7 +5,10 @@ import Streams from './components/Streams'
 import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useSelector,useDispatch} from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
-import Login from './Login';
+import Registration from './Registration';
+import Profile from './Profile';
+import Login from './Login'
+import ForgotPassword from './ForgotPassword'
 import StreamPlayer from './StreamPlayer';
 import VideoPlayer from './VideoPlayer';
 import UploadStreamScreen from './UploadStreamScreen';
