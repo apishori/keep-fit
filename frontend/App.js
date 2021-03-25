@@ -1,13 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, View,Button } from 'react-native';
+import {StyleSheet, Text, View, Button, Modal } from 'react-native';
 import { useState } from 'react';
 import HomeScreen from "./src/HomeScreen";
 import Profile from "./src/Profile";
 import Search from "./src/Search";
 import Cals from "./src/Cals";
-import UploadStreamScreen from "./src/UploadStreamScreen";
-import VideoPlayer from "./src/VideoPlayer";
 import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
 import {reducer} from './src/reducer'
@@ -15,14 +13,8 @@ import {Provider,useSelector} from 'react-redux'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStore,combineReducers} from 'redux'
-import Routers from './src/Router'
 import {NavigationContainer,DefaultTheme,useNavigation,DarkTheme,useTheme} from '@react-navigation/native'
-import { render } from 'react-dom';
-window.React = React
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Login from "./src/Login";
-import Register from "./src/Registration";
-import "./src/components/index.css";
 
 const rooReducer = combineReducers({
   cardData:reducer
@@ -91,51 +83,19 @@ export function Navigation() {
 function App() {
   return (
     <Provider store={store}>
+      <Modal
+          animationType='slide'
+          transparent={false}
+          visible={true}
+        >
+          <View>
+            <Login/>
+          </View>
+        </Modal>
         <Navigation />
     </Provider>
   );
 }
-/*else {
-  return (
-    <Login/>
-  );
-}*/
-
-  /*return (
-    
-  
-  <Router>
-    <div className="App">
-      <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-        <div className="container">
-          <Link className="navbar-brand" to={"/sign-in"}></Link>
-          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to={"/sign-in"}>Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      <div className="auth-wrapper">
-        <div className="auth-inner">
-          <Switch>
-            <Route exact path='/' component={Login} />
-            <Route path="/sign-in" component={Login} />
-            <Route path="/sign-up" component={Register} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/home" component={HomeScreen} />
-          </Switch>
-        </div>
-      </div>
-    </div></Router>
-  );
-}*/
 
 export default App;
 
