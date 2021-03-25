@@ -6,7 +6,11 @@ import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} f
 import {useSelector,useDispatch} from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './Login';
-import StreamButton from './components/StreamButton'
+import StreamPlayer from './StreamPlayer';
+import VideoPlayer from './VideoPlayer';
+import UploadStreamScreen from './UploadStreamScreen';
+import StreamButton from './components/StreamButton';
+import RecordCameraScreen from './RecordCameraScreen';
 import axios from 'axios';
 
 const Stack = createStackNavigator();
@@ -23,20 +27,21 @@ const HomeScreen = () => {
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
 	const [id_mapping,setid_mapping] = useState(new Map())
 
-	const fetchData = () =>{
+	const fetchData = () => {
 		const POST_LIST = `http://localhost:8000/posts/`; 
 		axios.get(POST_LIST)
 		.then(res => {
 			var videoId
+			// console.log(res.data)
 			for(var ids of res.data){
 				id_mapping.set( ids.video, ids.id)
-
 				var result = res.data.map(function(val) {
-				  return val.video;
+					return val.video;
 				}).join('%2C');
 			}
 			const YOUTUBE_API_CALL = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
-			console.log(id_mapping)
+			
+			// console.log(YOUTUBE_API_CALL)
 			
 			setLoading(true)
 			fetch(YOUTUBE_API_CALL)
@@ -47,7 +52,7 @@ const HomeScreen = () => {
 			})	
 		})
 		.catch(error => {
-			console.log(error);
+			// console.log(error); 
 		});
 	}
 
@@ -193,6 +198,41 @@ const HomeScreen = () => {
 				name='home'
 				component={Home}
 				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='profile'
+				component={Profile}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='register'
+				component={Registration}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='forgotpw'
+				component={ForgotPassword}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='streamplayer'
+				component={StreamPlayer}
+				options={{ title: 'Watch Stream' }}
+			/>
+			<Stack.Screen
+				name='videoplayer'
+				options={{ title: 'Watch Exercise' }}
+				component={VideoPlayer}
+			/>
+			<Stack.Screen
+				name='stream'
+				options={{ title: 'Start Stream' }}
+				component={UploadStreamScreen}
+			/>
+			<Stack.Screen
+				name='camera'
+				options={{ title: 'Record Exercise' }}
+				component={RecordCameraScreen}
 			/>
 		</Stack.Navigator>
 	)
