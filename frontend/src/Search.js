@@ -5,16 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import VideoCard from './components/VideoCard';
 
-const SearchResults = () => {
+const SearchResults = ({ searchAmong }) => { 
+	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
+	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
 	const dispatch = useDispatch()
 	const cardData = useSelector(state=>{
         return state.cardData
       })
 	const [loading,setLoading] = useState(false)
 
-	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`
-	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
-/*
 	const fetchData = () =>{
 		setLoading(true)
 		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
@@ -28,15 +27,28 @@ const SearchResults = () => {
 	useEffect(() => {
         fetchData;
     }, [])
-*/
+
 	const renderItem = ({ item }) => {
-		return <View/>/*(
-			<VideoCard 
-				videoId={item.id.videoId}
-				title={item.snippet.title}
-				channel={item.snippet.channelTitle}
-			/>
-		);*/
+		if (searchAmong === 'users') {
+			console.log('display user result')
+			return (
+				<View>
+					<Text>
+						user stuff
+					</Text>
+				</View>
+			);
+		}
+		else {
+			console.log('display video result')
+			return <View/>/*(
+				<VideoCard 
+					videoId={item.id.videoId}
+					title={item.snippet.title}
+					channel={item.snippet.channelTitle}
+				/>
+			);*/
+		}
 	};
 
 	return (
@@ -53,32 +65,7 @@ const SearchResults = () => {
         </View>
 	);
 };
-/*
-const requestData = ({}) => {
-	const dispatch = useDispatch();
-	const cardData = useSelector(state=> {
-        return state.cardData;
-      });
-	const [loading,setLoading] = useState(false);
 
-	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
-	const YOUTUBE_API = `http://127.0.0.1:8000/users/search/?query=${API_KEY}`;
-
-	const fetchData = () => {
-		setLoading(true)
-		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
-		.then(res=>res.json())
-		.then(data=> {
-			setLoading(false)
-            dispatch({type:"add", payload:data.items})
-		});
-	};
-
-	useEffect(() => {
-        
-    }, []);
-};
-*/
 const SearchStatus = ({ status }) => {
 	return <Text>{status}</Text>;
 };
@@ -87,13 +74,13 @@ const DropdownMenu = ({ renderItem }) => {
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 	const SEARCHTYPES = [
 		{
-			type: 'user'
+			type: 'users'
 		},
 		{
-			type: 'title'
+			type: 'posts'
 		},
 		{
-			type: 'exercise'
+			type: 'streams'
 		}
 	];
 
@@ -129,48 +116,65 @@ const DropdownMenu = ({ renderItem }) => {
 
 const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
-	const [searchAmong, setSearchAmong] = useState('exercises');
+	const [oldTerm, setOldTerm] = useState('');
+	const [searchAmong, setSearchAmong] = useState('users');
 	const [numOfResults, setNumOfResults] = useState(0);
 	const [status, setStatus] = useState('No results');
 	const [didSearch, setDidSearch] = useState(false);
 
-	const adminLogin = () => {
-		const LOGIN = {
-			username: 'jahn',
-			password: 'jahn123'
-		};
-		const ADMINLOGIN = `http://127.0.0.1:8000/users/login/`;
-
-		axios.post(ADMINLOGIN, LOGIN)
-		.then(data => {
-			console.log(data);
-			console.log('logged in');
-			fetchData();
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-	};
-
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
-		//const POST_SEARCH = `http://127.0.0.1:8000/users/search/?query=`;
-
-		axios.get(USER_SEARCH)
+		const POST_SEARCH = `http://127.0.0.1:8000/posts/search/?title=${searchTerm}`;
+		const STREAM_SEARCH = `http://127.0.0.1:8000/streams/search/?title=${searchTerm}`;
+/*
+		const NEWPOST = {
+			video: 'asdfvae',
+			title: 'title',
+			category: 'RUN'
+		}
+		axios.post(`http://127.0.0.1:8000/posts/create/`, NEWPOST)
 		.then(data => {
 			console.log(data);
-		})
-		.catch((error) => {
-			console.error(error);
 		});
+*/
+		if (searchAmong === 'users') {
+			axios.get(USER_SEARCH)
+			.then(data => {
+				console.log(data);
+				setNumOfResults(data.data.length);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
+		else if (searchAmong === 'posts') {
+			axios.get(POST_SEARCH)
+			.then(data => {
+				console.log(data);
+				setNumOfResults(data.data.length);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
+		else if (searchAmong === 'streams') {
+			axios.get(STREAM_SEARCH)
+			.then(data => {
+				console.log(data);
+				setNumOfResults(data.data.length);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
 	};
 
 	useEffect(() => {
 		if (didSearch) {
-			setStatus(numOfResults + ' results for "' + searchTerm + '" in ' + searchAmong);
-			
+			setOldTerm(searchTerm);
 			setDidSearch(false);
 		}
+		setStatus(numOfResults + ' results for "' + oldTerm + '" in ' + searchAmong);
 	});
 
 	const renderItem = ({ item }) => {
@@ -184,12 +188,12 @@ const SearchMenu = () => {
 	};
 
 	function SearchFor() {
-		adminLogin();
+		fetchData();
 		setDidSearch(true);
-		setNumOfResults(3);
 	};
 
 	return (
+		<>
 		<View
 			style={styles.searchMenu}
 		>
@@ -222,17 +226,19 @@ const SearchMenu = () => {
 				style={styles.searchStatus}
 			/>
 		</View>
+		<SearchResults
+			style={{flex: 0.8}}
+			searchAmong={searchAmong}
+		/>
+		</>
 	);
 };
 
 const Search = () => {
-	return(
+	return (
 		<>
 			<SearchMenu
 				style={{flex:0.2}}
-			/>
-			<SearchResults
-				style={{flex: 0.8}}
 			/>
 		</>
 	);

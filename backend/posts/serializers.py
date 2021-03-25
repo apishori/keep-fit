@@ -12,7 +12,7 @@ class PostSerializer(serializers.ModelSerializer):
     likes = serializers.IntegerField(source='likes.count', read_only=True)
     class Meta:
         model = Post
-        fields = ['video', 'title', 'author', 'category', 'created_at', 'calorie_bpm_count', 'likes']
+        fields = ['video', 'title', 'author', 'category', 'created_at', 'calorie_bpm_count', 'likes', 'id']
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -26,5 +26,3 @@ class PostSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.category = validated_data.get('category', instance.category)
         return instance
-
-        

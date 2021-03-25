@@ -1,11 +1,30 @@
-import React from 'react';
+import React, {useState, useEffect}  from 'react';
 import { StyleSheet, Text, View,Dimensions, Animated} from 'react-native';
 import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
+import {Button} from 'react-native-elements';
+import axios from 'axios';
+
+// import { useState } from 'React';
 
 const VideoPlayer = ({route})=>{
-  
-  const {videoId,title} = route.params
+
+  const [buttonText, setButtonText] = useState("Like Exercise ❤️");
+  var {videoId,title,postId} = route.params
+
+  const changeText = (text) => {
+    setButtonText(text)
+    const postIdInt = parseInt(postId)
+    const ToggleLikeView = `http://localhost:8000/posts/like/${postIdInt}/`;
+
+    axios.get(ToggleLikeView)
+    .then(res => {
+    })
+    .catch(error => {
+      // console.log(error);
+    });
+  };
+
   return(
 
     <View style={{ flex:1}}>
@@ -32,6 +51,16 @@ const VideoPlayer = ({route})=>{
         <Text></Text>
       </View>
            
+      <View style={{align:"center", margin: 16}}>
+        <Button
+          buttonStyle={{borderColor:"#ef476f", borderWidth:2, backgroundColor:'white'}}
+          titleStyle={{color:"#ef476f"}}
+          type="outline"
+          title={buttonText}
+          onPress={() => changeText(buttonText === 'Like Exercise ❤️' ? 'Unlike Exercise 💔' : 'Like Exercise ❤️')}>
+        </Button>
+      </View>
+
     </View>
    )
 }

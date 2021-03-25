@@ -5,6 +5,7 @@ import Streams from './components/Streams'
 import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useSelector,useDispatch} from 'react-redux'
 import StreamButton from './components/StreamButton'
+import axios from 'axios';
 
 const HomeScreen = () => {
 	const [value,setValue] = useState("")
@@ -14,19 +15,38 @@ const HomeScreen = () => {
       })
 	const [loading,setLoading] = useState(false)
 
-	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`
+	const API_KEY = `AIzaSyBwd-mFKhqlx0BbbH1YlH6dpaofQpuQ7E4`
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
-
+	const [id_mapping,setid_mapping] = useState(new Map())
 
 	const fetchData = () =>{
-		setLoading(true)
-		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
-		.then(res=>res.json())
-		.then(data=>{
-			setLoading(false)
-            dispatch({type:"add",payload:data.items})
+		const POST_LIST = `http://localhost:8000/posts/`; 
+		axios.get(POST_LIST)
+		.then(res => {
+			var videoId
+			for(var ids of res.data){
+				id_mapping.set( ids.video, ids.id)
+
+				var result = res.data.map(function(val) {
+				  return val.video;
+				}).join('%2C');
+			}
+			const YOUTUBE_API_CALL = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
+			console.log(id_mapping)
+			
+			setLoading(true)
+			fetch(YOUTUBE_API_CALL)
+			.then(res2=>res2.json())
+			.then(data=>{
+				setLoading(false)
+	            dispatch({type:"add",payload:data.items})
+			})	
 		})
+		.catch(error => {
+			console.log(error);
+		});
 	}
+
 	
 	const streamData = [
 	  {
@@ -141,13 +161,15 @@ const HomeScreen = () => {
 			<FlatList
 	           data={cardData}
 	           renderItem={({item})=>{
+	           		// console.log("map2" + id_mapping.get(item.id))
 	               return <VideoCard 
-	                videoId={item.id.videoId}
+	                videoId={item.id}
 	                title={item.snippet.title}
 	                channel={item.snippet.channelTitle}
+	                postId = {id_mapping.get(item.id)}
 	               />
 		           }}
-		       keyExtractor={item=>item.id.videoId}
+		       keyExtractor={item=>item.id}
 		       style={{paddingTop:16}}
 		    />
 		</View>

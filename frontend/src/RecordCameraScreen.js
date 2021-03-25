@@ -73,13 +73,30 @@ const RecordCameraScreen = ({route}) => {
 
   const __savePhoto = () => {
     const video_id = 'glxrwC9zsHY';
-    axios.post('http://127.0.0.1:8000/posts/create/', {
-          video: 'glxrwC9zsHY',
-          title: 'Test Title',
-          category: 'YOGA'
-        })
-    .then((data)=>{
+    const adminLogin = () => {
+    const LOGIN = {
+      "username": 'sam2',
+      "password": 'sam123'
+    };
+    const ADMINLOGIN = `http://127.0.0.1:8000/users/login/`;
+
+    axios.post(ADMINLOGIN, LOGIN)
+      .then(data => {
+        console.log(data);
+        console.log('logged in');
+        fetchData();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    };
+    axios.post("http://192.168.1.79:19000/posts/create/", {
+          "video": "glxrwC9zsHY",
+          "title": "Test title",
+          "category": "Y"
+        }).then((data) => {
       console.log(data)
+      console.log("HERE")
     })
     .catch((error)=>{
       console.error(error);
