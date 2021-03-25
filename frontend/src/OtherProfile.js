@@ -12,10 +12,8 @@ const Profile = () =>{
         return state.cardData
       })
 	const [loading,setLoading] = useState(false)
-
 	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
-
 	const fetchData = () =>{
 		setLoading(true)
 		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
@@ -106,7 +104,6 @@ const Profile = () =>{
             dispatch({type:"add",payload:data.items})
 		})
 	}
-
 	useEffect(() => {
         fetchData();
     }, [])*/
@@ -114,11 +111,11 @@ const Profile = () =>{
 	return(
 		<View style={{flex:1}}>
 			<View style={styles.profileSection}>
-				<Image source={{uri: 'https://media-exp1.licdn.com/dms/image/C4E03AQFOExWHLp-fwA/profile-displayphoto-shrink_400_400/0/1610884484774?e=1622073600&v=beta&t=F3Cm5Pgcbt6HyQ-dJ7DGNyZ1OgklFU-5Crn1U1mf6BU'}}
+				<Image source={{uri: 'https://media-exp1.licdn.com/dms/image/C5603AQFaXMkVGB7_mg/profile-displayphoto-shrink_400_400/0/1589559563580?e=1622073600&v=beta&t=_ghYQzgpKxc4OLaU1hKmoi1WwKcQ233i-kvYG0SUC3I'}}
        			style={styles.circular} />
-				<Text style = {styles.profileTitle}>Ayushi Gupta</Text>
-				<Text style = {styles.followersTitle}>6000 Followers | 2 Following</Text>
-				<button type="submit" className="btn btn-primary btn-block">Delete Profile</button><button type="submit" className="btn btn-primary btn-block">Update Profile</button><button type="submit" className="btn btn-primary btn-block">Sign Out</button>
+				<Text style = {styles.profileTitle}>Abhaya Krishnan-Jha</Text>
+				<Text style = {styles.followersTitle}>50000 Followers | 2900 Following</Text>
+				<button type="submit" className="btn btn-primary btn-block">Follow</button>
 			</View>
 		</View>
 	)
@@ -136,20 +133,20 @@ const styles = StyleSheet.create({
 		padding: 7,
 	},
 	sectionTitle: {
-	    fontSize: 24,
-	    fontWeight: 'bold'
+	    fontSize: 24,
+	    fontWeight: 'bold'
 	},
 	videosWrapper: {
 	flex: 1,
-	    paddingTop: 24,
-	    paddingHorizontal: 16,
+	    paddingTop: 24,
+	    paddingHorizontal: 16,
 	},
 	streamsWrapper: {
-	    paddingTop: 24,
-	    paddingHorizontal: 16,
+	    paddingTop: 24,
+	    paddingHorizontal: 16,
 	},
 	items: {
-	    marginTop: 16,
+	    marginTop: 16,
 	},
 	sectionTitle: {
 	fontSize: 24,

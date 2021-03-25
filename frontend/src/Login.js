@@ -1,59 +1,91 @@
 import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import Root, { Navigation } from "./Router";
 import App from "./Router";
 import { withRouter, Route } from "react-dom";
 import { push } from 'react-redux';
+import Constant from 'expo-constants'
+import { WebView } from 'react-native-webview';
+import { Input, Button } from 'react-native-elements';
 import axios from "axios";
+import {useNavigation ,useTheme} from '@react-navigation/native';
+import {NavigationContainer,DefaultTheme,DarkTheme} from '@react-navigation/native'
 
-class Login extends Component { 
-    handleClick(){
-        async (dispatch) => {
-            try {
-                const response = await axios.post('login/', { username: this.state.username, password: this.state.password });
-                console.log('Returned data:', response);
-            } catch (e) {
-                console.log(`Axios request failed: ${e}`);
-            }
-        }
+
+const Login = () => { 
+    
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const getLogin = () => {
+        const LOGIN = {
+            "username": username,
+            "password": password
+        };
+
+        const ADMINLOGIN = 'http://127.0.0.1:8000/users/login/';
+
+        axios.post(ADMINLOGIN, LOGIN)
+        .then(data => {
+            console.log(data);
+            console.log('logged in');
+        })
+        .catch(error => {
+            console.error(error); 
+            console.log('log in error');
+        })
     }
-    render() {
-        return (
-            <form>
 
-                <h3>Log in</h3>
+    useEffect (() => { 
+        getLogin(); 
+    });
 
-                <div className="form-group">
-                    <label>Username</label>
-                    <input name = "username" type="text" className="form-control" placeholder="Enter username" />
-                </div>
+    return(
+        <View style={{flex:1}}>
+          <View style={styles.Username}>
+              <Text style = {styles.sectionTitle}>Log In</Text>
+              <View style = {styles.form}>
+              <Input
+                  onChangeText={username => setUsername(username)}
+                  label='Username'
+                  placeholder='Enter username'
+              />
+              <Input
+                  secureTextEntry={true}
+                  onChangeText={password => setPassword(password)}
+                  label='Password'
+                  placeholder='Enter password'
+              />
 
-                <div className="form-group">
-                    <label>Password</label>
-                    <input name = "password" type="password" className="form-control" placeholder="Enter password" />
-                </div>
-
-                <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                    </div>
-                </div>
-                <button type="submit" className="btn btn-dark btn-lg btn-block" onClick={() => {this.handleClick()}}>Sign in</button>
-                <p className="forgot-password text-right">
+              </View>
+              <Button
+                title="Sign In"
+                onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
+              />
+              <p className="forgot-password text-right">
                     Forgot <a href="forgot-password">password?</a>
                 </p>
-            </form>
-        );
-    }
-}
-  
-export default Login;
+          </View>
+      </View>
+    )
+  }
 
-const styles = StyleSheet.create({
-    login: {
-        paddingRight: 500,
-        paddingLeft: 500,
-    }
-})
-
+    const styles = StyleSheet.create({
+        sectionTitle: {
+            fontSize: 24,
+            textAlign: "center",
+            fontWeight: 'bold',
+            
+         },
+         videosWrapper: {
+            paddingTop: 48,
+            paddingHorizontal: 16,
+        },
+        form:{
+            paddingTop: 32,
+            paddingBottom: 24,
+            alignItems:"flex-start"
+        }
+    })
+   
+    export default Login
