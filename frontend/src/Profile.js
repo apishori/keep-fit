@@ -170,10 +170,11 @@ const styles = StyleSheet.create({
 		alignItems:'center',
 		justifyContent:'center',
 		backgroundColor: '#fff',
-		padding: 20,
-		marginRight: '20%',
-		marginLeft: '20%',
-		borderRadius: 20
+		padding: 32,
+		marginRight: '10%',
+		marginLeft: '10%',
+		borderRadius: 20,
+		marginTop: '20%',
 	},
 	profileTitle: {
 		textAlign:'center',

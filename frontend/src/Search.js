@@ -60,7 +60,7 @@ const SearchResults = ({ searchAmong }) => {
                 data={cardData}
                 renderItem={renderItem}
 				keyExtractor={item=>item.id.videoId}
-		   		style={{paddingTop:16, flex:1}}
+		   		style={{paddingTop:0, flex:1}}
             />	
         </View>
 	);

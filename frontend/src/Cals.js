@@ -1,8 +1,9 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, FlatList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
+import {Button} from 'react-native-elements';
 
 const Stack = createStackNavigator();
 const exerciseData = [
@@ -100,6 +101,7 @@ const ExerciseList= () => {
             />
 			<Button
 				title='Go to counter'
+				style={{margin:24}}
 				onPress={() => navigation.navigate('counter', {
 					id: {exerciseID}
 				})} // TODO: add params later
@@ -153,7 +155,7 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 	
 	return (
 		<View
-			style={{flex:0.25}}
+			style={{flex:.5, margin:24}}
 		>
 			<Text
 				style={styles.time}
@@ -163,14 +165,17 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 			<Button
 				title='Start'
 				onPress={() => setIsTiming(true)}
+				style={{marginTop:24}}
 			/>
 			<Button
 				title='Pause'
 				onPress={() => setIsTiming(false)}
+				style={{marginTop:8}}
 			/>
 			<Button
 				title='Stop'
 				onPress={() => resetTimer()}
+				style={{marginTop:8}}
 			/>
 		</View>
 	);
@@ -208,6 +213,7 @@ const CalorieCounter = ({ route }) => {
 				<Button
 					title='Back to exercise list'
 					onPress={() => navigation.navigate('exerciseList')} //goBack()}
+					type="clear"
 				/>
 			</Text>
 			<Text>
@@ -215,6 +221,7 @@ const CalorieCounter = ({ route }) => {
 				<Button
 					title='Reset calories'
 					onPress={() => setTimeInHours(0)}
+					type="clear"
 				/>
 			</Text>
 		</View>
@@ -241,7 +248,7 @@ function Cals() {
 const styles = StyleSheet.create({
     exerciseList: {
         flex: 6,
-		margin: 15
+		margin: 24,
     },
     itemSeparator: {
 		height: 1,
@@ -253,14 +260,16 @@ const styles = StyleSheet.create({
     },
 	counter: {
 		flex: 1,
-		margin: 10
+		marginTop: 64,
+		padding:24,
 	},
 	timer: {
 		flex: 1,
-		flexDirection: 'column'
+		flexDirection: 'column',
+		padding: 24,
 	},
 	time: {
-		flex: 0.2,
+		flex: 0,
 		fontSize: 24,
 		textAlign: 'center',
 		textAlignVertical: 'center'
