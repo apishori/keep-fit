@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
 		justifyContent:'center',
 		backgroundColor: '#fff',
 		padding: 20,
-		marginRight: 500,
-		marginLeft: 500,
+		marginRight: '20%',
+		marginLeft: '20%',
 		borderRadius: 20
 	},
 	profileTitle: {
