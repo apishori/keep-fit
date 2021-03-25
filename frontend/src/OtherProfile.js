@@ -114,8 +114,14 @@ const Profile = () =>{
 				<Image source={{uri: 'https://media-exp1.licdn.com/dms/image/C5603AQFaXMkVGB7_mg/profile-displayphoto-shrink_400_400/0/1589559563580?e=1622073600&v=beta&t=_ghYQzgpKxc4OLaU1hKmoi1WwKcQ233i-kvYG0SUC3I'}}
        			style={styles.circular} />
 				<Text style = {styles.profileTitle}>Abhaya Krishnan-Jha</Text>
-				<Text style = {styles.followersTitle}>50000 Followers | 2900 Following</Text>
-				<button type="submit" className="btn btn-primary btn-block">Follow</button>
+				<Text style = {styles.followersTitle}>50000 Followers | 2900Following</Text>
+				<Button
+                    buttonStyle={{borderColor:"#ef476f", borderWidth:2, backgroundColor:'white'}}
+                    titleStyle={{color:"#ef476f"}}
+                    type="outline"
+                    title={buttonText}
+                    onPress={() => changeText(buttonText === 'Follow User' ? 'Unfollow User' : 'Follow User')}>
+                    </Button>
 			</View>
 		</View>
 	)
