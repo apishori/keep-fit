@@ -56,7 +56,7 @@ const exerciseData = [
 
 const ExerciseList= () => {
 	const navigation = useNavigation();
-	console.log(navigation)
+	//console.log(navigation)
 	//const [category, setCategory] = useState('Other');
 	const [exerciseID, setExerciseID] = useState(8);
 	
