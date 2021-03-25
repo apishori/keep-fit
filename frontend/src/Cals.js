@@ -253,14 +253,16 @@ const styles = StyleSheet.create({
     },
 	counter: {
 		flex: 1,
-		margin: 24
+		marginTop: 64,
+		padding:24
 	},
 	timer: {
 		flex: 1,
-		flexDirection: 'column'
+		flexDirection: 'column',
+		padding: 24,
 	},
 	time: {
-		flex: 0.2,
+		flex: 0,
 		fontSize: 24,
 		textAlign: 'center',
 		textAlignVertical: 'center'
