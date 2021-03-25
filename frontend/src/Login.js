@@ -27,15 +27,15 @@ const Login = () => {
 
         axios.post(ADMINLOGIN, LOGIN)
         .then(data => {
-            console.log(data);
-            console.log('logged in');
+            //console.log(data);
+            //console.log('logged in');
             //setLoginID(username);
-            navigation.navigate('home');
+            navigation.navigate('home', {loginID: username});
             setIsVisible(!isVisible);
         })
         .catch(error => {
-            console.error(error); 
-            console.log('log in error');
+            //console.error(error); 
+            //console.log('log in error');
         })
     }
 

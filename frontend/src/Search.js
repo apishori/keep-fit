@@ -28,8 +28,7 @@ const SearchResults = ({ searchAmong }) => {
         fetchData;
     }, [])
 
-	const renderItem = ({ item }) => {
-		if (searchAmong === 'users') {
+	const renderItemUser = ({ item }) => {
 			console.log('display user result')
 			return (
 				<View>
@@ -38,8 +37,9 @@ const SearchResults = ({ searchAmong }) => {
 					</Text>
 				</View>
 			);
-		}
-		else {
+	}
+
+	const renderItem = ({ item }) => {
 			console.log('display video result')
 			return (
 				<VideoCard 
@@ -48,8 +48,7 @@ const SearchResults = ({ searchAmong }) => {
 					channel={item.snippet.channelTitle}
 				/>
 			);
-		}
-	};
+	}
 
 	return (
 		
@@ -123,6 +122,7 @@ const SearchMenu = () => {
 	const [numOfResults, setNumOfResults] = useState(0);
 	const [status, setStatus] = useState('No results');
 	const [didSearch, setDidSearch] = useState(false);
+	const [searchData, setSearchData] = useState();
 
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
@@ -142,11 +142,13 @@ const SearchMenu = () => {
 		if (searchAmong === 'users') {
 			axios.get(USER_SEARCH)
 			.then(data => {
-				console.log(data);
+				//console.log(data);
+				setSearchData(data.data);
+				console.log(searchData)
 				setNumOfResults(data.data.length);
 			})
 			.catch((error) => {
-				console.error(error);
+				//console.error(error);
 			});
 		}
 		else if (searchAmong === 'posts') {
