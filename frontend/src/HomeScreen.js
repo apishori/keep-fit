@@ -4,8 +4,12 @@ import Constant from 'expo-constants'
 import Streams from './components/Streams'
 import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useSelector,useDispatch} from 'react-redux'
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from './Login';
 import StreamButton from './components/StreamButton'
 import axios from 'axios';
+
+const Stack = createStackNavigator();
 
 const HomeScreen = () => {
 	const [value,setValue] = useState("")
@@ -133,51 +137,65 @@ const HomeScreen = () => {
         fetchData();
     }, [])
 
-	return (
-		<View style={{flex:1}}>
-			<View style={styles.streamsWrapper}>
-				<Text style = {styles.sectionTitle}>Livestreams</Text>
-				
-				<View style={{flexDirection: 'row', paddingTop:16}}>
-					<StreamButton />
-					<FlatList
-						horizontal={true}
-			           data={streamData}
-			           renderItem={({item})=>{
-			               return <Streams 
-			                videoId={item.id.videoId}
-			                title={item.snippet.title}
-			                channel={item.snippet.channelTitle}
-			               />
-				           }}
-				       keyExtractor={item=>item.id.videoId}
-				       style={{flexDirection: 'row'}}
-				    />
+	const Home = () => {
+		return (
+			<View style={{flex:1}}>
+				<View style={styles.streamsWrapper}>
+					<Text style = {styles.sectionTitle}>Livestreams</Text>
+					
+					<View style={{flexDirection: 'row', paddingTop:16}}>
+						<StreamButton />
+						<FlatList
+							horizontal={true}
+						   data={streamData}
+						   renderItem={({item})=>{
+							   return <Streams 
+								videoId={item.id.videoId}
+								title={item.snippet.title}
+								channel={item.snippet.channelTitle}
+							   />
+							   }}
+						   keyExtractor={item=>item.id.videoId}
+						   style={{flexDirection: 'row'}}
+						/>
+					</View>
 				</View>
-			</View>
-
-		<View style={styles.videosWrapper}>
-			<Text style = {styles.sectionTitle}>Videos</Text>
-			<FlatList
-	           data={cardData}
-	           renderItem={({item})=>{
-	           		// console.log("map2" + id_mapping.get(item.id))
-	               return <VideoCard 
-	                videoId={item.id}
-	                title={item.snippet.title}
-	                channel={item.snippet.channelTitle}
-	                postId = {id_mapping.get(item.id)}
-	               />
-		           }}
-		       keyExtractor={item=>item.id}
-		       style={{paddingTop:16}}
-		    />
-		</View>
-		</View>
-
-		
-	)
 	
+			<View style={styles.videosWrapper}>
+				<Text style = {styles.sectionTitle}>Videos</Text>
+				<FlatList
+				   data={cardData}
+				   renderItem={({item})=>{
+						   // console.log("map2" + id_mapping.get(item.id))
+					   return <VideoCard 
+						videoId={item.id}
+						title={item.snippet.title}
+						channel={item.snippet.channelTitle}
+						postId = {id_mapping.get(item.id)}
+					   />
+					   }}
+				   keyExtractor={item=>item.id}
+				   style={{paddingTop:16}}
+				/>
+			</View>
+			</View>
+		)
+	}
+	
+	return (
+		<Stack.Navigator>
+			<Stack.Screen
+				name='login'
+				component={Login}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='home'
+				component={Home}
+				options={{headerShown:false}}
+			/>
+		</Stack.Navigator>
+	)
 }
 
 

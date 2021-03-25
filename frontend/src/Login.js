@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import Root, { Navigation } from "./Router";
 import App from "./Router";
 import { withRouter, Route } from "react-dom";
@@ -13,7 +13,7 @@ import {NavigationContainer,DefaultTheme,DarkTheme} from '@react-navigation/nati
 
 
 const Login = () => { 
-    
+    const navigation = useNavigation();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -40,9 +40,21 @@ const Login = () => {
         getLogin(); 
     });
 
+    const [isVisible, setIsVisible] = useState(true);
+    const LoggedIn = () => {
+        navigation.navigate('home');
+        setIsVisible(!isVisible);
+    }
+
     return(
-        <View style={{flex:1}}>
-          <View style={styles.Username}>
+        <>
+        <Modal
+          animationType='slide'
+          transparent={false}
+          visible={isVisible}
+        >
+            <View style={{flex:1}}>
+            <View style={styles.Username}>
               <Text style = {styles.sectionTitle}>Log In</Text>
               <View style = {styles.form}>
               <Input
@@ -60,13 +72,16 @@ const Login = () => {
               </View>
               <Button
                 title="Sign In"
-                onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
+                onPress={()=> LoggedIn()}
               />
-              <p className="forgot-password text-right">
-                    Forgot <a href="forgot-password">password?</a>
-                </p>
-          </View>
-      </View>
+              <Button 
+                    title="Forgot Password">
+              </Button>
+            </View>
+            </View>
+
+        </Modal>
+      </>
     )
   }
 

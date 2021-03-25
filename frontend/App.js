@@ -23,7 +23,6 @@ const rooReducer = combineReducers({
 const store = createStore(rooReducer)
 const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
-localStorage.setItem('loginID', -1);
 
 /*const RootHome = ()=>{
 
@@ -79,11 +78,7 @@ export function Navigation() {
    
   );
 }
-
-function App() {
-  return (
-    <Provider store={store}>
-      <Modal
+      /*<Modal
           animationType='slide'
           transparent={false}
           visible={true}
@@ -91,7 +86,11 @@ function App() {
           <View>
             <Login/>
           </View>
-        </Modal>
+        </Modal>*/
+function App() {
+  return (
+    <Provider store={store}>
+
         <Navigation />
     </Provider>
   );
