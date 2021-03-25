@@ -47,7 +47,7 @@ const Login = () => {
     }
 
     return(
-        <>
+        <> 
         <Modal
           animationType='slide'
           transparent={false}

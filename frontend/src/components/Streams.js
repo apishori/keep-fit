@@ -7,7 +7,7 @@ const Streams = (props) => {
 	const navigation = useNavigation();
 
 	return (
-		<TouchableOpacity onPress={()=>navigation.navigate("videoplayer",{videoId:props.videoId,title:props.title})}>
+		<TouchableOpacity onPress={()=>navigation.navigate("streamplayer",{videoId:props.videoId,title:props.title})}>
 			<View style={{
 							flexDirection:'column',
 							alignItems:'center',
