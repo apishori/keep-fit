@@ -41,13 +41,13 @@ const SearchResults = ({ searchAmong }) => {
 		}
 		else {
 			console.log('display video result')
-			return <View/>/*(
+			return (
 				<VideoCard 
 					videoId={item.id.videoId}
 					title={item.snippet.title}
 					channel={item.snippet.channelTitle}
 				/>
-			);*/
+			);
 		}
 	};
 
@@ -100,6 +100,7 @@ const DropdownMenu = ({ renderItem }) => {
 					style={styles.dropdownList}
 				/>
 				<Button
+					title='Select'
 					onPress={() => setIsDropdownVisible(!isDropdownVisible)}
 					style={styles.hideDDButton}
 				/>
@@ -107,6 +108,7 @@ const DropdownMenu = ({ renderItem }) => {
 			</View>
 		</Modal>
 		<Button
+			title="Show"
 			onPress={() => setIsDropdownVisible(true)}
 			style={styles.showDDButton}
 		/>
@@ -217,6 +219,7 @@ const SearchMenu = () => {
 					renderItem={renderItem}
 				/>
 				<Button
+					title='Search'
 					onPress={() => SearchFor()}
 					style={styles.searchSubmitButton}
 				/>
