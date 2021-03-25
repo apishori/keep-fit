@@ -5,7 +5,7 @@ import {useNavigation ,useTheme} from '@react-navigation/native';
 
 const Streams = (props) => {
 	const navigation = useNavigation();
-
+	
 	return (
 		<TouchableOpacity onPress={()=>navigation.navigate("streamplayer",{videoId:props.videoId,title:props.title})}>
 			<View style={{
