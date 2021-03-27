@@ -17,14 +17,17 @@ const LoginWrapper = () => {
             <Stack.Screen
                 name='login'
                 component={Login}
+                options={{headerShown:false}}
             />
             <Stack.Screen
                 name='register'
                 component={Registration}
+                options={{headerShown:false}}
             />
             <Stack.Screen
                 name='forgotpw'
                 component={ForgotPassword}
+                options={{headerShown:false}}
             />
         </Stack.Navigator>
     )
@@ -33,12 +36,6 @@ const LoginWrapper = () => {
 const Login = () => { 
     const navigation = useNavigation();
     const dispatch = useDispatch()
-    //const [login, setLogin] = useState('')
-    /*const loginID = useSelector(state => {
-        console.log(state)
-        return state.loginData;
-    })*/
-    const [isVisible, setIsVisible] = useState(true);
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -59,8 +56,6 @@ const Login = () => {
         .then(data => {
             //console.log('logged in');
             dispatch({ type: 'setLogin', payload: username })
-            //setIsVisible(!isVisible);
-            //setLogin(username);
             navigation.navigate('Keep-Fit');
         })
         .catch(error => {
@@ -76,19 +71,7 @@ const Login = () => {
     const forgotPW = () => {
         navigation.navigate('forgotpw')
     }
-/*
-    useEffect(() => {
-        if (login == '') {
-            //navigation.navigate('profile')
-            setIsVisible(true)
-        }
-    })
-     <Modal
-                animationType='slide'
-                transparent={false}
-                visible={isVisible}
-            >
-  */      
+
     return(
         <> 
            
@@ -151,4 +134,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Login
+export default LoginWrapper
