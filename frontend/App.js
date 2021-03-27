@@ -59,10 +59,10 @@ export function Navigation() {
     }}
     >
       <Tabs.Screen name="home" component={HomeScreen} />
-      <Tabs.Screen name="profile" component={Profile} />
       <Tabs.Screen name="search" component={Search} />
       <Tabs.Screen name="upload" component={UploadVideoScreen} />
       <Tabs.Screen name="cals" component={Cals} />
+      <Tabs.Screen name="profile" component={Profile} />
     </Tabs.Navigator>
       //</NavigationContainer>
    
