@@ -24,7 +24,7 @@ const ForgotPassword = () => {
             "password": password
         };
 
-        const UPDATEPASSWORD = 'http://127.0.0.1:8000/users/update_password/';
+        const UPDATEPASSWORD = `http://127.0.0.1:8000/users/update_password/`;
 
         axios.post(UPDATEPASSWORD, CHANGEPASS)
         .then(data => {

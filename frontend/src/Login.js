@@ -1,19 +1,45 @@
 import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
-import Root, { Navigation } from "./Router";
-import App from "./Router";
-import { withRouter, Route } from "react-dom";
-import { push } from 'react-redux';
-import Constant from 'expo-constants'
-import { WebView } from 'react-native-webview';
+import { push, useDispatch, useSelector, useStore } from 'react-redux';
 import { Input, Button } from 'react-native-elements';
 import axios from "axios";
 import {useNavigation ,useTheme} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import {NavigationContainer,DefaultTheme,DarkTheme} from '@react-navigation/native'
+import Registration from './Registration'
+import ForgotPassword from "./ForgotPassword";
 
+const Stack = createStackNavigator()
+
+const LoginWrapper = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name='login'
+                component={Login}
+            />
+            <Stack.Screen
+                name='register'
+                component={Registration}
+            />
+            <Stack.Screen
+                name='forgotpw'
+                component={ForgotPassword}
+            />
+        </Stack.Navigator>
+    )
+}
 
 const Login = () => { 
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+    //const [login, setLogin] = useState('')
+    /*const loginID = useSelector(state => {
+        console.log(state)
+        return state.loginData;
+    })*/
+    const [isVisible, setIsVisible] = useState(true);
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -26,35 +52,46 @@ const Login = () => {
         const ADMINLOGIN = 'http://127.0.0.1:8000/users/login/';
 
         axios.post(ADMINLOGIN, LOGIN)
+        .then(() => {
+            setUsername('')
+            setPassword('')
+        })
         .then(data => {
-            //console.log(data);
             //console.log('logged in');
-            //setLoginID(username);
-            navigation.navigate('home', {loginID: username});
-            setIsVisible(!isVisible);
+            dispatch({ type: 'setLogin', payload: username })
+            //setIsVisible(!isVisible);
+            //setLogin(username);
+            navigation.navigate('Keep-Fit');
         })
         .catch(error => {
-            //console.error(error); 
+            console.error(error); 
             //console.log('log in error');
         })
     }
 
-    /*useEffect (() => { 
-        getLogin();
-    });*/
-
-    const [isVisible, setIsVisible] = useState(true);
     const LoggedIn = () => {
         getLogin();
     }
 
+    const forgotPW = () => {
+        navigation.navigate('forgotpw')
+    }
+/*
+    useEffect(() => {
+        if (login == '') {
+            //navigation.navigate('profile')
+            setIsVisible(true)
+        }
+    })
+     <Modal
+                animationType='slide'
+                transparent={false}
+                visible={isVisible}
+            >
+  */      
     return(
         <> 
-        <Modal
-          animationType='slide'
-          transparent={false}
-          visible={isVisible}
-        >
+           
             <View style={{flex:1}}>
             <View style={styles.Username}>
               <Text style = {styles.sectionTitle}>Log In</Text>
@@ -63,12 +100,14 @@ const Login = () => {
                   onChangeText={username => setUsername(username)}
                   label='Username'
                   placeholder='Enter username'
+                  value={username}
               />
               <Input
                   secureTextEntry={true}
                   onChangeText={password => setPassword(password)}
                   label='Password'
                   placeholder='Enter password'
+                  value={password}
               />
 
               </View>
@@ -80,37 +119,36 @@ const Login = () => {
               />
               <Button 
                     title="Forgot Password"
-                    onPress={() => navigation.navigate('forgotpw')}
+                    onPress={() => forgotPW()}
               >
               </Button>
               </View>
             </View>
             </View>
 
-        </Modal>
       </>
     )
   }
 
-    const styles = StyleSheet.create({
-        sectionTitle: {
-            fontSize: 24,
-            textAlign: "center",
-            fontWeight: 'bold',
-            marginTop:32
-            
-         },
-         videosWrapper: {
-            paddingTop: 48,
-            paddingHorizontal: 16,
-        },
-        form:{
-            paddingTop: 32,
-            paddingBottom: 24,
-            alignItems:"flex-start",
-            paddingLeft:24,
-             paddingRight:24
-        }
-    })
-   
-    export default Login
+const styles = StyleSheet.create({
+    sectionTitle: {
+        fontSize: 24,
+        textAlign: "center",
+        fontWeight: 'bold',
+        marginTop:32
+        
+     },
+     videosWrapper: {
+        paddingTop: 48,
+        paddingHorizontal: 16,
+    },
+    form:{
+        paddingTop: 32,
+        paddingBottom: 24,
+        alignItems:"flex-start",
+        paddingLeft:24,
+         paddingRight:24
+    }
+})
+
+export default Login

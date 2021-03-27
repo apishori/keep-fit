@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {StyleSheet, Text, View, Button, Modal } from 'react-native';
 import { useState } from 'react';
 import HomeScreen from "./src/HomeScreen";
@@ -8,8 +8,11 @@ import Search from "./src/Search";
 import Cals from "./src/Cals";
 import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
-import {reducer} from './src/reducer'
-import {Provider,useSelector} from 'react-redux'
+import reducer from './src/reducer'
+import loginReducer from './src/loginReducer' 
+import resultReducer from './src/resultReducer'
+import searchReducer from './src/searchReducer'
+import {Provider,useSelector,configureStore} from 'react-redux'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStore,combineReducers} from 'redux'
@@ -17,32 +20,19 @@ import {NavigationContainer,DefaultTheme,useNavigation,DarkTheme,useTheme} from 
 import Login from "./src/Login";
 
 const rooReducer = combineReducers({
-  cardData:reducer
+  cardData:reducer,
+  loginData:loginReducer,
+  result:resultReducer,
+  searchType:searchReducer,
 })
-
 const store = createStore(rooReducer)
 const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
 
-/*const RootHome = ()=>{
-
-  return(
-
-  )
-}*/
-
-        /*<Stack.Navigator>
-          <Stack.Screen name="rootHome" component={RootHome} options={{headerTitle: "KeepFit", headerShown: false}} />
-          <Stack.Screen name="search" component={Search} options={{headerTitle: "Search"}} />
-          <Stack.Screen name="videoplayer" component={VideoPlayer} options={{headerTitle: "Exercise"}} />
-          <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
-          <Stack.Screen name="stream" component={UploadStreamScreen} options={{headerTitle: "Start Stream"}} />
-        </Stack.Navigator>*/
-
 export function Navigation() {
   const {colors} = useTheme();
   return ( 
-      <NavigationContainer>
+      //<NavigationContainer>
     <Tabs.Navigator
       screenOptions={({ route }) => ({
       tabBarIcon: ({ color }) => {
@@ -69,34 +59,78 @@ export function Navigation() {
     }}
     >
       <Tabs.Screen name="home" component={HomeScreen} />
+      <Tabs.Screen name="profile" component={Profile} />
       <Tabs.Screen name="search" component={Search} />
       <Tabs.Screen name="upload" component={UploadVideoScreen} />
       <Tabs.Screen name="cals" component={Cals} />
-      <Tabs.Screen name="profile" component={Profile} />
     </Tabs.Navigator>
-      </NavigationContainer>
+      //</NavigationContainer>
    
   );
 }
-      /*<Modal
-          animationType='slide'
-          transparent={false}
-          visible={true}
+
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+              name='login'
+              component={Login} 
+          />
+          <Stack.Screen
+              name='Keep-Fit'
+              component={App}
+              options={{headerShown:false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  )
+}
+
+function App() {
+  /*const login = useSelector(state => {
+    return state.loginData;
+  })*/
+
+  //useEffect(() => {
+    //if (login != '') {
+      return (
+        <Navigation />
+      );
+    //}
+    /*else {
+      return (
+        <Modal
+            animationType='slide'
+            transparent={false}
+            visible={true}
         >
           <View>
             <Login/>
           </View>
-        </Modal>*/
-function App() {
-  return (
-    <Provider store={store}>
+        </Modal>
+      );
+    }*/
+  //})
 
-        <Navigation />
-    </Provider>
-  );
+  /*return (
+    <View>
+      {() => }
+    </View>
+  )*/
+
 }
-
-export default App;
+/*<NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name='login'
+              component={Login} 
+            />
+          </Stack.Navigator>
+          </NavigationContainer>*/
+export default AppWrapper;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,115 +1,27 @@
 import React, {useState, useEffect} from 'react';
-import VideoCard from './components/VideoCard'
-import Constant from 'expo-constants'
 import {useSelector,useDispatch} from 'react-redux'
 import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import { createStackNavigator } from '@react-navigation/stack';
+import Registration from './Registration';
+import Login from './Login'
+import ForgotPassword from './ForgotPassword'
+import UpdateProfile from './UpdateProfile'
+//import DeleteProfile from './DeleteProfile'
 
-const Profile = () =>{
+const Stack = createStackNavigator()
+
+const ProfileView = () =>{
 	const [value,setValue] = useState("")
 	const [name,setName] = useState("")
-	/*const dispatch = useDispatch()
-	const cardData = useSelector(state=>{
-        return state.cardData
-      })
-	const [loading,setLoading] = useState(false)
 
-	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`
-	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
-
-	const fetchData = () =>{
-		setLoading(true)
-		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
-		.then(res=>res.json())
-		.then(data=>{
-			setLoading(false)
-            dispatch({type:"add",payload:data.items})
-		})
-	}*/
-	
-	const streamData = [
-	  {
-	      "kind": "youtube#searchResult",
-	      "etag": "f-DJyUbk5bdYRDfiSUbzZ_mda1k",
-	      "id": {
-	        "kind": "youtube#video",
-	        "videoId": "5qap5aO4i9A"
-	      },
-	      "snippet": {
-	        "publishedAt": "2020-02-22T19:51:37Z",
-	        "channelId": "UCSJ4gkVC6NrvII8umztf0Ow",
-	        "title": "lofi hip hop radio - beats to relax/study to",
-	        "description": "Thank you for listening, I hope you will have a good time here :) Listen to the playlist on Spotify, Apple music and more → https://bit.ly/chilledcow-playlists ...",
-	        "thumbnails": {
-	          "default": {
-	            "url": "https://i.ytimg.com/vi/5qap5aO4i9A/default_live.jpg",
-	            "width": 120,
-	            "height": 90
-	          },
-	          "medium": {
-	            "url": "https://i.ytimg.com/vi/5qap5aO4i9A/mqdefault_live.jpg",
-	            "width": 320,
-	            "height": 180
-	          },
-	          "high": {
-	            "url": "https://i.ytimg.com/vi/5qap5aO4i9A/hqdefault_live.jpg",
-	            "width": 480,
-	            "height": 360
-	          }
-	        },
-	        "channelTitle": "ChilledCow",
-	        "liveBroadcastContent": "live",
-	        "publishTime": "2020-02-22T19:51:37Z"
-	      }
-	    },
-	    {
-      "kind": "youtube#searchResult",
-      "etag": "H8Dl3gIIC5qiAUqxCH6m9VqrdSE",
-      "id": {
-        "kind": "youtube#video",
-        "videoId": "DWcJFNfaw9c"
-      },
-      "snippet": {
-        "publishedAt": "2020-02-25T19:00:14Z",
-        "channelId": "UCSJ4gkVC6NrvII8umztf0Ow",
-        "title": "lofi hip hop radio - beats to sleep/chill to",
-        "description": "Welcome to the sleepy lofi hip hop radio. This playlist contains the smoothest lofi hip hop beats, perfect to help you chill or fall asleep Listen to the playlist on ...",
-        "thumbnails": {
-          "default": {
-            "url": "https://i.ytimg.com/vi/DWcJFNfaw9c/default_live.jpg",
-            "width": 120,
-            "height": 90
-          },
-          "medium": {
-            "url": "https://i.ytimg.com/vi/DWcJFNfaw9c/mqdefault_live.jpg",
-            "width": 320,
-            "height": 180
-          },
-          "high": {
-            "url": "https://i.ytimg.com/vi/DWcJFNfaw9c/hqdefault_live.jpg",
-            "width": 480,
-            "height": 360
-          }
-        },
-        "channelTitle": "ChilledCow",
-        "liveBroadcastContent": "live",
-        "publishTime": "2020-02-25T19:00:14Z"
-      }
-    }
-	];
-
-	/*const fetchStream = () =>{
-		setLoading(true)
-		fetch(YOUTUBE_API)
-		.then(res=>res.json())
-		.then(data=>{
-			setLoading(false)
-            dispatch({type:"add",payload:data.items})
-		})
+	const navigation = useNavigation()
+	const dispatch = useDispatch()
+		
+	const logOut = () => {
+		dispatch({ type: 'setLogin', payload: '' })
+		navigation.navigate('login')
 	}
-
-	useEffect(() => {
-        fetchData();
-    }, [])*/
 
 	return(
 		<View style={{flex:1}}>
@@ -120,16 +32,76 @@ const Profile = () =>{
 				<Text style = {styles.followersTitle}>6000 Followers | 2 Following</Text>
 				<Button
 					title='Delete Profile'
+					onPress={() => navigation.navigate('delete')}
 				></Button>
 				<Button
 					title='Update Profile'
+					onPress={() => navigation.navigate('update')}
 				></Button>
 				<Button
 					title='Sign Out'
+					onPress={() => logOut()}
 				></Button>
 			</View>
 		</View>
 	)
+}
+
+const Profile = () => {
+	const login = useSelector(state => {
+		console.log(state)
+		return state.loginData
+	})
+	console.log(login)
+	/*if (login == '') {
+		return (
+			<Stack.Navigator>
+				<Stack.Screen
+					name='login'
+					component={Login}
+					options={{headerShown:false}}
+				/>
+				<Stack.Screen
+					name='profile'
+					component={ProfileView}
+					options={{headerShown:false}}
+				/>
+				<Stack.Screen
+					name='register'
+					component={Registration}
+					options={{headerShown:false}}
+				/>
+				<Stack.Screen
+					name='forgotpw'
+					component={ForgotPassword}
+					options={{headerShown:false}}
+				/>
+			</Stack.Navigator>
+		)
+	}*/
+	//else {
+		return (
+			<Stack.Navigator>
+				<Stack.Screen
+					name='profile'
+					component={ProfileView}
+					options={{headerShown:false}}
+				/>
+				<Stack.Screen
+					name='update'
+					component={UpdateProfile}
+					options={{headerShown:false}}
+				/>
+				
+			</Stack.Navigator>
+		)
+	//}
+	/*
+	<Stack.Screen
+					name='delete'
+					component={DeleteProfile}
+					options={{headerShown:false}}
+				/>*/
 }
 
 const styles = StyleSheet.create({

@@ -1,14 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import VideoCard from './components/VideoCard'
-import Constant from 'expo-constants'
 import Streams from './components/Streams'
 import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useSelector,useDispatch} from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
-import Registration from './Registration';
-import Profile from './Profile';
-import Login from './Login'
-import ForgotPassword from './ForgotPassword'
 import StreamPlayer from './StreamPlayer';
 import VideoPlayer from './VideoPlayer';
 import UploadStreamScreen from './UploadStreamScreen';
@@ -55,7 +50,7 @@ const HomeScreen = () => {
 			})	
 		})
 		.catch(error => {
-			// console.log(error); 
+			// console.error(error); 
 		});
 	}
 
@@ -142,7 +137,9 @@ const HomeScreen = () => {
 	}
 
 	useEffect(() => {
-        fetchData();
+		if (loading) {
+			fetchData();
+		}
     }, [])
 
 	const Home = () => {
@@ -193,28 +190,8 @@ const HomeScreen = () => {
 	return (
 		<Stack.Navigator>
 			<Stack.Screen
-				name='login'
-				component={Login}
-				options={{headerShown:false}}
-			/>
-			<Stack.Screen
 				name='home'
 				component={Home}
-				options={{headerShown:false}}
-			/>
-			<Stack.Screen
-				name='profile'
-				component={Profile}
-				options={{headerShown:false}}
-			/>
-			<Stack.Screen
-				name='register'
-				component={Registration}
-				options={{headerShown:false}}
-			/>
-			<Stack.Screen
-				name='forgotpw'
-				component={ForgotPassword}
 				options={{headerShown:false}}
 			/>
 			<Stack.Screen
