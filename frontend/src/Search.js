@@ -14,13 +14,13 @@ const DropdownMenu = ({ renderItem }) => {
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 	const SEARCHTYPES = [
 		{
-			type: 'users'
+			type: 'among users'
 		},
 		{
-			type: 'posts'
+			type: 'among posts'
 		},
 		{
-			type: 'streams'
+			type: 'among streams'
 		}
 	];
 
