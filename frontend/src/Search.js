@@ -61,14 +61,13 @@ const Results = () => {
 		console.log(state)
 		return state.searchType;
 	})
-
-	if (searchAmong === 'users') {
+	console.log(searchAmong)
+	if (searchAmong == 'users') {
+		console.log('returning user result')
 		return <UserResult/>;	
 	}
-	else if (searchAmong === 'posts' || searchAmong === 'streams') {
-		return <PostResult/>;
-	}
-	else {
+	else { //if (searchAmong === 'posts' || searchAmong === 'streams') {
+		//return <PostResult/>;
 		return <View/>;
 	}
 }
@@ -122,46 +121,40 @@ const PostResult = () => {
 	);
 };
 
-const UserResult = () => { 
-	//useEffect(() => {
-	
-	/*const resultdata = [
-		{
-			username: 'jahn'
-		}
-	]*/
-
-	//});
+const UserResult = () => {
+	const [data, setData] = useState(null)
 	const resultdata = useSelector(state => {
-		console.log(state)
-		setData(state.result)
+		//console.log(state)
 		return state.result;
 	})
 	console.log(resultdata)
-	
 	const renderItem = ({ item }) => {
-		//console.log('display user result')
-			return (
+		console.log('display user result')
+		return (
 				<View>
 					<Text>
 						{item.username}
 					</Text>
 				</View>
-			);
+		);
 	}
-			
-	return (
-		<View
-			style={{flex:1}}
-		>
-			<FlatList
-				data={resultData}
-				renderItem={renderItem}
-				keyExtractor={item=>item.username}
-				style={{paddingTop:0, flex:1}}
-			/>		
-		</View>
-	);
+	if (resultdata != null) {
+		return (
+			<View
+				style={{flex:1}}
+			>
+				<FlatList
+					data={resultdata.userResult}
+					renderItem={renderItem}
+					keyExtractor={item=>item.username}
+					style={{paddingTop:0, flex:1}}
+				/>		
+			</View>
+		);
+	}
+	else {
+		return null;
+	}
 };
 	
 
@@ -169,10 +162,10 @@ const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [oldTerm, setOldTerm] = useState('');
 	const [searchAmong, setSearchAmong] = useState('users');
+	const [oldSearchAmong, setOldSearchAmong] = useState('users');
 	const [numOfResults, setNumOfResults] = useState(0);
 	const [status, setStatus] = useState('No results');
 	const [didSearch, setDidSearch] = useState(false);
-	//const [resultData, setData] = useState([]);
 
 	const dispatch = useDispatch()
 
@@ -184,20 +177,22 @@ const SearchMenu = () => {
 		if (searchAmong === 'users') {
 			axios.get(USER_SEARCH)
 			.then(data => {
-				dispatch({ type: 'clearResult' })
-				console.log(data.data);
-				dispatch({ type: 'storeResult', payload: data.data })
-				setNumOfResults(data.data.length);
+			dispatch({ type: 'clearResult' });
+			//console.log(data.data);
+			dispatch({ type: 'storeUserResult', payload: data.data });
+			setNumOfResults(data.data.length);
 			})
 			.catch((error) => {
-				//console.error(error);
+			console.error(error);
 			});
 		}
 		else if (searchAmong === 'posts') {
 			axios.get(POST_SEARCH)
 			.then(data => {
-				console.log(data);
-				setNumOfResults(data.data.length);
+			dispatch({ type: 'clearResult' });
+			//console.log(data.data);
+			//dispatch({ type: 'storeResult', payload: data.data });
+			setNumOfResults(data.data.length);
 			})
 			.catch((error) => {
 				console.error(error);
@@ -206,27 +201,31 @@ const SearchMenu = () => {
 		else if (searchAmong === 'streams') {
 			axios.get(STREAM_SEARCH)
 			.then(data => {
-				console.log(data);
-				setNumOfResults(data.data.length);
+			dispatch({ type: 'clearResult' });
+			//console.log(data.data);
+			//dispatch({ type: 'storeResult', payload: data.data });
+			setNumOfResults(data.data.length);
 			})
 			.catch((error) => {
-				//console.error(error);
+				console.error(error);
 			});
 		}
+		
 	};
 
 	useEffect(() => {
 		if (didSearch) {
 			setOldTerm(searchTerm);
+			setOldSearchAmong(searchAmong)
 			setDidSearch(false);
 		}
-		setStatus(numOfResults + ' results for "' + oldTerm + '" in ' + searchAmong);
+		setStatus(numOfResults + ' result(s) for "' + oldTerm + '" in ' + oldSearchAmong);
 	});
 
 	const renderItem = ({ item }) => {
 		return (
 			<Pressable
-				//onPress={() => dispatch('')}
+				onPress={() => setSearchAmong(item.type)}
 			>
 				<Text>{item.type}</Text>
 			</Pressable>
@@ -238,22 +237,20 @@ const SearchMenu = () => {
 		setDidSearch(true);
 	};
 
-/*<SearchResults
-			style={{flex: 0.8}}
-			searchAmong={searchAmong}
-		/>*/
 	return (
 		<>
 		<View
 			style={styles.searchMenu}
 		>
 			<View style={styles.searchBar}>
-				<TextInput
-					onChangeText={searchTerm => setSearchTerm(searchTerm)}
-					placeholder='Search'
-					style={styles.searchInput}
-				>
-				</TextInput>
+				<View>
+					<TextInput
+						onChangeText={searchTerm => setSearchTerm(searchTerm)}
+						placeholder='Search'
+						style={styles.searchInput}
+					>
+					</TextInput>
+				</View>
 				<View
 					style={{justifyContent: 'center'}}
 				>
@@ -272,10 +269,13 @@ const SearchMenu = () => {
 					style={styles.searchSubmitButton}
 				/>
 			</View>
-			<SearchStatus
-				status={status}
-				style={styles.searchStatus}
-			/>
+			<View>
+				<SearchStatus
+					status={status}
+					style={styles.searchStatus}
+				/>
+			</View>
+			
 		</View>
 		
 		</>
@@ -284,12 +284,12 @@ const SearchMenu = () => {
 
 const Search = () => {
 	return (
-		<>
+		<View>
 			<SearchMenu
 				style={{flex:0.2}}
 			/>
 			<Results/>
-		</>
+		</View>
 	);
 };
 

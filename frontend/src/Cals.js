@@ -2,8 +2,10 @@ import React, { createContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import {Button} from 'react-native-elements';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 const Stack = createStackNavigator();
 const exerciseData = [
@@ -54,11 +56,11 @@ const exerciseData = [
 	}
 ];
 
-const ExerciseList= () => {
+export const ExerciseList= () => {
 	const navigation = useNavigation();
-	//console.log(navigation)
-	//const [category, setCategory] = useState('Other');
+	const dispatch = useDispatch();
 	const [exerciseID, setExerciseID] = useState(8);
+	//const exerciseID = useSelector(() => {})
 	
 	const ItemSeperator = () => (
 			<View
@@ -104,7 +106,7 @@ const ExerciseList= () => {
 				style={{margin:24}}
 				onPress={() => navigation.navigate('counter', {
 					id: {exerciseID}
-				})} // TODO: add params later
+				})}
 			/>
         </>	
 	);
@@ -183,23 +185,33 @@ const Timer = ({ timeInHours, setTimeInHours }) => {
 
 const CalorieCounter = ({ route }) => {
 	const navigation = useNavigation();
-	const index = route.params.id.exerciseID;
-	const MET = exerciseData[index].MET;
+	const index = useState(route.params.id.exerciseID)
+	const [MET, setMET] = useState(exerciseData[index[0]].MET);
+	const [timeInHours, setTimeInHours] = useState(0); // dummy val
+	const [weightLbs, setWeightLbs] = useState(0);
+	const user = useSelector(state => {
+		//console.log(state.loginData)
+		return state.loginData.loginID;
+	})
 
-	const getExerciseData = () => {
-		axios.get(`http://127.0.0.1:8000/posts/search/?title=`)
+	const getProfileData = () => {
+		axios.get(`http://127.0.0.1:8000/users/${user}`)
 		.then(data => {
 			console.log(data);
-			setExerciseData(data);
 		})
 		.catch((error) => {
 			console.error(error);
 		});
 	};
 
-	const [timeInHours, setTimeInHours] = useState(0); // dummy val
-	const caloriesBurned = /*weight */ MET * timeInHours;
-	
+	useEffect(() => {
+		if (weightLbs == 0) {
+			//getProfileData()
+		}
+	})
+
+	const [caloriesBurned, setCaloriesBurned] = useState(MET * timeInHours);
+
 	return (
 		<View
 			style={styles.counter}
@@ -208,14 +220,14 @@ const CalorieCounter = ({ route }) => {
 				timeInHours={timeInHours}
 				setTimeInHours={setTimeInHours}
 			/>
-			<Text>
-				Exercise: {exerciseData[index].category}
+				<Text>
+				Exercise: {exerciseData[index[0]].category}
 				<Button
 					title='Back to exercise list'
-					onPress={() => navigation.navigate('exerciseList')} //goBack()}
+					onPress={() => navigation.navigate('exerciseList')}
 					type="clear"
 				/>
-			</Text>
+				</Text>
 			<Text>
 				Calories burnt so far: {caloriesBurned.toFixed(4)}
 				<Button
@@ -224,6 +236,7 @@ const CalorieCounter = ({ route }) => {
 					type="clear"
 				/>
 			</Text>
+		
 		</View>
 	);
 };
