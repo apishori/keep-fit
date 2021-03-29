@@ -30,7 +30,6 @@ const HomeScreen = () => {
 		axios.get(POST_LIST)
 		.then(res => {
 			var videoId
-			// console.log(res.data)
 			for(var ids of res.data){
 				id_mapping.set( ids.video, ids.id)
 				var result = res.data.map(function(val) {
@@ -38,7 +37,6 @@ const HomeScreen = () => {
 				}).join('%2C');
 			}
 			const YOUTUBE_API_CALL = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
-			
 			// console.log(YOUTUBE_API_CALL)
 			
 			setLoading(true)
@@ -137,9 +135,7 @@ const HomeScreen = () => {
 	}
 
 	useEffect(() => {
-		if (loading) {
-			fetchData();
-		}
+		fetchData();
     }, [])
 
 	const Home = () => {
