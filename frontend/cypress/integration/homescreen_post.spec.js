@@ -5,7 +5,7 @@ describe('Homescreen Post Tests', () => {
 	cy.viewport('iphone-7')
 	cy.visit('http://localhost:19006/')
 
-	  // log in to test account first
+	// log in to test account first
 	cy.get(':nth-child(1) > .css-view-1dbjc4n > [data-testid=RNE__Input__text-input]')
 	  .type('TEST')
 	cy.get(':nth-child(2) > .css-view-1dbjc4n > [data-testid=RNE__Input__text-input]')
@@ -15,5 +15,17 @@ describe('Homescreen Post Tests', () => {
 
   it('can load posts', () => {
     cy.get('.r-flex-13awgt0.r-overflow-1udh08x')
+    .find(':nth-child(1)')
+    .find(':nth-child(2)')
+    .find(':nth-child(3)')
+  })
+
+  it('can go to post page', () => {
+  	// try first post
+    cy.get(':nth-child(1) > .r-cursor-1loqt21 > [style="margin-bottom: 10px;"]').click()
+    cy.get('[data-testid=header-back]').click()
+    // try second post
+    cy.get(':nth-child(2) > .r-cursor-1loqt21 > [style="margin-bottom: 10px;"]').click()
+    cy.get('[data-testid=header-back]').click()
   })
 })

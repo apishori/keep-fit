@@ -9,44 +9,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 const UploadVideoScreen = () => {
-	const navigation = useNavigation();
-	const [postCategory, setCategory] = useState('');
-	const [postTitle, setTitle] = useState('');
-	const post = () => {
-
-	}
-	const Home = () => {
-  	return(
-  	<View style={{flex:1}}>
-		<View style={styles.videosWrapper}>
-			<Text style = {styles.sectionTitle}>Upload Exercise</Text>
-			<View style = {styles.form}>
-			<Input
-				onChangeText={title => setTitle(title)}
-				label='Exercise Info'
-				placeholder='Enter exercise title'
-			/>
-			<Input
-				onChangeText={category => setCategory(category)}
-				label='Category'
-				placeholder='Enter category'
-			/>
-			<Button 
-				type="clear"
-				title="Record Exercise"
-				onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
-			/>
-			
-			</View>
-			<Button
-			  title="Post Exercise"
-			  onPress={()=>post}
-			/>
-
-		</View>
-    </View>
-  )}
-
   	return (
 		<Stack.Navigator>
 			<Stack.Screen
@@ -64,6 +26,46 @@ const UploadVideoScreen = () => {
 		</Stack.Navigator>
 	)
 }
+
+const Home = () => {
+	const navigation = useNavigation();
+	const [postCategory, setCategory] = useState('');
+	const [postTitle, setTitle] = useState('');
+	const post = () => {
+
+	}
+  	return(
+  	<View style={{flex:1}}>
+		<View style={styles.videosWrapper}>
+			<Text style = {styles.sectionTitle}>Upload Exercise</Text>
+			<View style = {styles.form}>
+			<Input
+				onChangeText={postTitle => setTitle(postTitle)}
+				label='Exercise Info'
+				placeholder='Enter exercise title'
+				value={postTitle}
+			/>
+			<Input
+				onChangeText={postCategory => setCategory(postCategory)}
+				label='Category'
+				placeholder='Enter category'
+				value={postCategory}
+			/>
+			<Button 
+				type="clear"
+				title="Record Exercise"
+				onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
+			/>
+			
+			</View>
+			<Button
+			  title="Post Exercise"
+			  onPress={()=>post}
+			/>
+
+		</View>
+    </View>
+  )}
 
 const styles = StyleSheet.create({
 	sectionTitle: {
