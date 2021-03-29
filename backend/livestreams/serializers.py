@@ -6,10 +6,18 @@ from users.serializers import UserSerializer
 
 class LivestreamSerializer(serializers.ModelSerializer):
 	video = serializers.CharField(read_only=True, label='API-Key')
+	# video_APIKey = serializers.CharField(read_only=True, label='API-Key')
+	# Fix with regression testing when able
 	author = UserSerializer(read_only=True)
 	class Meta:
 		model = Livestream
 		fields = ['stream_id', 'video_APIKey', 'title', 'author', 'start_time', 'category', 'calorie_bpm_count']
+
+	def validate(self, data):
+		if (data['title'] == ''): 
+			raise serializers.ValidationError({"post":"Title cannot be left empy"})
+		else:
+			return data
 
 	def create(self, validated_data):
 		request = self.context.get('request')
