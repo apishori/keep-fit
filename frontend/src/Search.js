@@ -133,7 +133,7 @@ const UserResult = () => {
 		return (
 				<View>
 					<Text>
-						{item.username}
+						User: {item.username}
 					</Text>
 				</View>
 		);
