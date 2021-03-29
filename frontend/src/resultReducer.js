@@ -1,7 +1,7 @@
 const initialState = null
 
 const resultReducer = (state=initialState,action) => {
-    if (action.type === 'storeResult') {
+    if (action.type === 'storeUserResult') {
         return { ...state, userResult: action.payload }
     }
     else if (action.type === 'clearResult') {

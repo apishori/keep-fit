@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
 from .models import Follow, Profile, User
@@ -61,13 +62,22 @@ class UserRegisterSerializer(UserSerializer):
         validate_password(value)
         return value
 
+    def validate(self, data):
+        username = self.context.get('request').data.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return data
+        raise serializers.ValidationError({"user":"This user already exists"})
+        
+
     def create(self, validated_data):
         user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            username=self.context.get('request').data.get('username'),
+            email=validated_data.get('email'),
+            password=validated_data.get('password'),
+            first_name=validated_data.get('first_name'),
+            last_name=validated_data.get('last_name')
         )
         user.save()
 

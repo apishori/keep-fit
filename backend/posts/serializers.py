@@ -13,7 +13,13 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['video', 'title', 'author', 'category', 'created_at', 'calorie_bpm_count', 'likes', 'id']
-
+    
+    def validate(self, data):
+        if (data['title'] == ''): 
+            raise serializers.ValidationError({"post":"Title cannot be left empy"})
+        else:
+            return data
+            
     def create(self, validated_data):
         request = self.context.get('request')
         post = Post(video=request.data["video"], title=validated_data["title"], 

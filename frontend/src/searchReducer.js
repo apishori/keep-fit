@@ -1,4 +1,4 @@
-const initialState = 'user'
+const initialState = 'users'
 
 const searchReducer = (state=initialState,action) => {
     if (action.type === 'setType') {
