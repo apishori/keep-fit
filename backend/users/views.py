@@ -57,7 +57,7 @@ class UserView(APIView):
     def get(self, request, username, format=None):
         user = get_object_or_404(User, username__iexact=username)
         serializer = UserSerializer(user, context={'request':self.request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, username, format=None):
         user = get_object_or_404(User, username__iexact=username)
@@ -97,7 +97,7 @@ class UserSearchView(APIView):
         if query:
             users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
         serializer = UserSerializer(users, many=True, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UpdatePasswordView(APIView):
     permission_classes = (permissions.AllowAny,)
