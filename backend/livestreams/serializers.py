@@ -5,8 +5,7 @@ from users.serializers import UserSerializer
 
 
 class LivestreamSerializer(serializers.ModelSerializer):
-	video = serializers.CharField(read_only=True, label='API-Key')
-	# video_APIKey = serializers.CharField(read_only=True, label='API-Key')
+	video_APIKey = serializers.CharField(read_only=True, label='API-Key')
 	# Fix with regression testing when able
 	author = UserSerializer(read_only=True)
 	class Meta:
