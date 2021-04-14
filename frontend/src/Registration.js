@@ -1,16 +1,9 @@
-import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
-import Root, { Navigation } from "./Router";
-import App from "./Router";
-import { withRouter, Route } from "react-dom";
-import { push } from 'react-redux';
-import Constant from 'expo-constants'
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { Input, Button } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from "axios";
-import {useNavigation ,useTheme} from '@react-navigation/native';
-import {NavigationContainer,DefaultTheme,DarkTheme} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 
 const SignUp = () => {
 
@@ -24,6 +17,8 @@ const SignUp = () => {
         const [sex, setSex] = useState('')
         const [birthday, setBirthday] = useState('')
         const [profilePic, setPic] = useState('')
+
+        const navigation = useNavigation()
 
         const getReg = () => {
             const REG = {
@@ -44,56 +39,55 @@ const SignUp = () => {
             axios.post(ADMINLOGIN, REG)
             .then(data => {
                 console.log(data);
-                console.log('logged in');
+                console.log('registered');
             })
             .catch(error => {
                 console.error(error); 
-                console.log('log in error');
+                console.log('register error');
             })
         }
     
-        useEffect (() => { 
-            getReg(); 
+        useEffect (() => {
+
         });
 
         return (
           //  <View style={styles.login}>
           <View style={{flex:1}}>
-          <View style={styles.Username}>
               <Text style = {styles.sectionTitle}>Sign Up</Text>
               <View style = {styles.form}>
-              <Input
+              <TextInput
                   onChangeText={username => setUsername(username)}
                   label='Username'
                   placeholder='Enter username'
               />
-              <Input
+              <TextInput
                   onChangeText={first => setFirst(first)}
                   label='First Name'
                   placeholder='Enter first name'
               />
-              <Input
+              <TextInput
                   onChangeText={last => setLast(last)}
                   label='Last Name'
                   placeholder='Enter last name'
               />
-              <Input
+              <TextInput
                   onChangeText={email => setEmail(email)}
                   label='Email'
                   placeholder='Enter email'
               />
-               <Input
+              <TextInput
                   secureTextEntry={true}
                   onChangeText={password => setPassword(password)}
                   label='Password'
                   placeholder='Enter password'
               />
-              <Input
+              <TextInput
                   onChangeText={weight => setWeight(weight)}
                   label='Weight'
                   placeholder='Enter weight'
               />
-              <Input
+              <TextInput
                   onChangeText={height => setHeight(height)}
                   label='Height'
                   placeholder='Enter height'
@@ -111,23 +105,26 @@ const SignUp = () => {
                         onChangeItem={item => setSex(item.value)}
                         placeholder="Select Sex"
                         dropDownStyle={{backgroundColor: '#fafafa'}}/>
-              <Input
+              <TextInput
                   type = "date"
                   onChangeText={birthday=> setBirthday(birthday)}
                   label='Birthday'
                   placeholder="format='YYYY-MM-DD'"
               />
-              <Input
+              <TextInput
                   onChangeText={profilePic => setPic(profilePic)}
                   label='Profile Pic'
                   placeholder='Enter file name'
               />
-                <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
-                <p className="forgot-password text-right">
-                    Already registered <a href="#">sign in?</a>
-                </p>
+                <Button
+                    title="Sign Up"
+                    onPress={() => getReg()}
+                />
+                <Button
+                    title="Already registered? Sign In"
+                    onPress={() => navigation.navigate('login')}
+                />
            </View>
-        </View>
         </View>
         )
     };

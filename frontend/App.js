@@ -75,7 +75,8 @@ const AppWrapper = () => {
         <Stack.Navigator>
           <Stack.Screen
               name='login'
-              component={Login} 
+              component={Login}
+              options={{headerShown:false}}
           />
           <Stack.Screen
               name='Keep-Fit'

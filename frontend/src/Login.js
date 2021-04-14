@@ -105,6 +105,11 @@ const Login = () => {
                     onPress={() => forgotPW()}
               >
               </Button>
+              <Button 
+                    title="Sign Up"
+                    onPress={() => navigation.navigate('register')}
+              >
+              </Button>
               </View>
             </View>
             </View>

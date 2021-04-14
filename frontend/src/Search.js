@@ -1,76 +1,21 @@
 import React, { useEffect } from 'react';
-import { useState, useNavigation } from 'react';
-import { StyleSheet, Text, TextInput, Button, FlatList, View, Modal, Pressable } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, TextInput, Button, FlatList, View, Modal, Pressable, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import VideoCard from './components/VideoCard';
 import OtherProfile from './OtherProfile';
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import DropDownPicker from 'react-native-dropdown-picker';
+import VideoPlayer from './VideoPlayer';
+import StreamPlayer from './StreamPlayer';
+
+const Stack = createStackNavigator();
 
 const SearchStatus = ({ status }) => {
 	return <Text>{status}</Text>;
 };
-
-const DropdownMenu = ({ renderItem }) => {
-	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-	const SEARCHTYPES = [
-		{
-			type: 'users'
-		},
-		{
-			type: 'posts'
-		},
-		{
-			type: 'streams'
-		}
-	];
-
-	return (
-		<>
-		<Modal
-			animationType='slide'
-			transparent={true}
-			visible={isDropdownVisible}
-			onRequestClose={() => setIsDropdownVisible(!isDropdownVisible)}
-		>
-			<View style={styles.modalView}>
-				<View style={styles.dropdownView}>
-				<FlatList
-					data={SEARCHTYPES}
-					renderItem={renderItem}
-					style={styles.dropdownList}
-				/>
-				<Button
-					title='Select'
-					onPress={() => setIsDropdownVisible(!isDropdownVisible)}
-					style={styles.hideDDButton}
-				/>
-				</View>
-			</View>
-		</Modal>
-		<Button
-			title="Show"
-			onPress={() => setIsDropdownVisible(true)}
-			style={styles.showDDButton}
-		/>
-		</>
-	);
-};
-
-const Results = () => {
-	const searchAmong = useSelector(state => {
-		console.log(state)
-		return state.searchType;
-	})
-	console.log(searchAmong)
-	if (searchAmong == 'users') {
-		console.log('returning user result')
-		return <UserResult/>;	
-	}
-	else { //if (searchAmong === 'posts' || searchAmong === 'streams') {
-		//return <PostResult/>;
-		return <View/>;
-	}
-}
 
 const PostResult = () => { 
 	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
@@ -123,40 +68,65 @@ const PostResult = () => {
 
 const UserResult = () => {
 	const [data, setData] = useState(null)
+	const navigation = useNavigation()
 	const resultdata = useSelector(state => {
 		//console.log(state)
 		return state.result;
 	})
-	console.log(resultdata)
+
 	const renderItem = ({ item }) => {
 		console.log('display user result')
 		return (
-				<View>
-					<Text>
-						User: {item.username}
-					</Text>
-				</View>
+			<>
+				<Pressable
+						onPress={() => navigation.navigate('profile')}
+					>
+						<Image
+							style={{flex: 0.3}}
+						/>
+						<Text
+							style={{flex: 0.5}}
+						>
+							{item.username}
+						</Text>
+
+				</Pressable>
+			</>
 		);
 	}
 	if (resultdata != null) {
 		return (
-			<View
-				style={{flex:1}}
-			>
 				<FlatList
 					data={resultdata.userResult}
 					renderItem={renderItem}
 					keyExtractor={item=>item.username}
 					style={{paddingTop:0, flex:1}}
-				/>		
-			</View>
+				/>
 		);
 	}
 	else {
 		return null;
 	}
 };
-	
+
+const Results = () => {
+	const searchAmong = useSelector(state => {
+		return state.searchType;
+	})
+	if (searchAmong == 'users') {
+		return (
+			<View
+				style={styles.results}
+			>
+				<UserResult/>
+			</View>
+		);
+	}
+	else { //if (searchAmong === 'posts' || searchAmong === 'streams') {
+		//return <PostResult/>;
+		return <View/>;
+	}
+}
 
 const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -215,22 +185,12 @@ const SearchMenu = () => {
 
 	useEffect(() => {
 		if (didSearch) {
-			setOldTerm(searchTerm);
+			setOldTerm(searchTerm)
 			setOldSearchAmong(searchAmong)
-			setDidSearch(false);
+			setDidSearch(false)
 		}
-		setStatus(numOfResults + ' result(s) for "' + oldTerm + '" in ' + oldSearchAmong);
+		setStatus(numOfResults + ' result(s) for "' + oldTerm + '" in ' + oldSearchAmong)
 	});
-
-	const renderItem = ({ item }) => {
-		return (
-			<Pressable
-				onPress={() => setSearchAmong(item.type)}
-			>
-				<Text>{item.type}</Text>
-			</Pressable>
-		);
-	};
 
 	function SearchFor() {
 		fetchData();
@@ -238,30 +198,29 @@ const SearchMenu = () => {
 	};
 
 	return (
-		<>
 		<View
-			style={styles.searchMenu}
+			style={{zIndex: 10}}
 		>
 			<View style={styles.searchBar}>
-				<View>
-					<TextInput
-						onChangeText={searchTerm => setSearchTerm(searchTerm)}
-						placeholder='Search'
-						style={styles.searchInput}
-					>
-					</TextInput>
-				</View>
-				<View
-					style={{justifyContent: 'center'}}
+				<TextInput
+					onChangeText={searchTerm => setSearchTerm(searchTerm)}
+					placeholder='Search'
+					style={styles.searchInput}
 				>
-					<Text
-						style={styles.searchType}
-					>
-						in: {searchAmong}
-					</Text>
-				</View>
-				<DropdownMenu
-					renderItem={renderItem}
+				</TextInput>
+				<DropDownPicker
+					items={[
+						{label: 'users', value: 'users', selected: true},
+						{label: 'posts', value: 'posts'},
+						{label: 'streams', value: 'streams'}
+					]}
+					containerStyle={{height: 40}}
+					style={{backgroundColor: '#fafafa'}}
+					itemStyle={{
+						justifyContent: 'flex-start'
+					}}
+					onChangeItem={item => setSearchAmong(item.value)}
+					dropDownStyle={{backgroundColor: '#fafafa'}}
 				/>
 				<Button
 					title='Search'
@@ -269,57 +228,80 @@ const SearchMenu = () => {
 					style={styles.searchSubmitButton}
 				/>
 			</View>
-			<View>
+			<View
+				style={styles.searchStatus}
+			>
 				<SearchStatus
 					status={status}
-					style={styles.searchStatus}
 				/>
 			</View>
-			
 		</View>
-		
-		</>
+	);
+};
+
+const SearchWrapper = () => {
+	return (
+		<View
+			style={{flex:1}}
+		>
+			<SearchMenu
+				style={styles.searchMenu}
+			/>
+			<Results
+				style={styles.results}
+			/>
+		</View>
 	);
 };
 
 const Search = () => {
 	return (
-		<View>
-			<SearchMenu
-				style={{flex:0.2}}
+		<Stack.Navigator>
+			<Stack.Screen
+				name='search'
+				component={SearchWrapper}
+				options={{headerShown:false}}
 			/>
-			<Results/>
-		</View>
+			<Stack.Screen
+					name='profile'
+					component={OtherProfile}
+					options={{headerShown:false}}
+			/>
+			<Stack.Screen
+					name='video'
+					component={VideoPlayer}
+					options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='stream'
+				component={StreamPlayer}
+				options={{headerShown:false}}
+			/>
+		</Stack.Navigator>
 	);
 };
 
 const styles = StyleSheet.create({
 	searchMenu: {
-		flex: 1,
-		margin: 15
+		flex: 0.2,
+		margin: '2%'
 	},
     searchBar: {
-		flex: 0.2,
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		margin: 5,
+		alignItems: 'center',
+		zIndex: 10
     },
     searchInput: {
-        flex: 0.3,
+        flex: 0.5,
     },
 	searchType: {
-		// max width
-		width: 85
+		flex: 0.15,
 	},
-	modalView: {
-		height: '20%',
-		width: '75%',
-		backgroundColor: 'gray',
-		justifyContent: "center",
-		alignItems: "center",
+	results: {
+		flex: 0.8,
 		margin: '2%',
-		borderRadius: 4,
-		borderColor: "rgba(0, 0, 0, 0.1)"
+		flexDirection: 'column',
 	},
 	dropdownView: {
 		flex: 1,
@@ -330,18 +312,17 @@ const styles = StyleSheet.create({
 	},
 	showDDButton: {
 		flex: 0.2,
-		//maxHeight: '40%',
 	},
 	hideDDButton: {
 		marginTop: 5,
-		maxHeight: '40%',
 	},
 	searchSubmitButton: {
-        maxHeight: '40%',
+		flex: 0.1,
 		marginLeft: 5
     },
 	searchStatus: {
-		margin: 3
+		flex: 0.1,
+		margin: '2%'
 	}
 });
 

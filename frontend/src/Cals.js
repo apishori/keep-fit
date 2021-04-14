@@ -1,11 +1,9 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, Pressable, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import {Button} from 'react-native-elements';
-import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 const Stack = createStackNavigator();
 const exerciseData = [
