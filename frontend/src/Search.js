@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, Button, FlatList, View, Modal, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, FlatList, View, Pressable, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import VideoCard from './components/VideoCard';
@@ -67,29 +67,36 @@ const PostResult = () => {
 };
 
 const UserResult = () => {
-	const [data, setData] = useState(null)
-	const navigation = useNavigation()
 	const resultdata = useSelector(state => {
 		//console.log(state)
 		return state.result;
 	})
 
+	const navigation = useNavigation()
+	const dispatch = useDispatch()
+
+	const ShowOtherProfile = ( otherUser ) => {
+		// console.log(otherUser.otherUser)
+		navigation.navigate('profile', {otherUser})
+	}
+
 	const renderItem = ({ item }) => {
-		console.log('display user result')
+		// console.log(item)
 		return (
 			<>
 				<Pressable
-						onPress={() => navigation.navigate('profile')}
-					>
+					onPress={() => ShowOtherProfile({otherUser: item.username})}
+				>
+					{/* <View> */}
 						<Image
-							style={{flex: 0.3}}
+							source={{uri: item.profile.profile_pic.image}}
+							style={styles.circular}
 						/>
 						<Text
-							style={{flex: 0.5}}
 						>
 							{item.username}
 						</Text>
-
+					{/* </View> */}
 				</Pressable>
 			</>
 		);
@@ -303,15 +310,15 @@ const styles = StyleSheet.create({
 		margin: '2%',
 		flexDirection: 'column',
 	},
-	dropdownView: {
-		flex: 1,
-		margin: '2%',
-	},
-	dropdownList: {
-		flex: 0.8,
-	},
-	showDDButton: {
-		flex: 0.2,
+	circular: {
+		width: 100,
+		height: 100,
+		borderColor: '#ddd',
+		borderWidth: 2,
+		borderRadius: 60,
+		alignItems:'center',
+		justifyContent:'center',
+		padding: 7,
 	},
 	hideDDButton: {
 		marginTop: 5,

@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View } from 'react-native';
 import { push, useDispatch, useSelector, useStore } from 'react-redux';
 import { Input, Button } from 'react-native-elements';
 import axios from "axios";
