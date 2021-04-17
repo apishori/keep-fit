@@ -1,12 +1,27 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import axios from 'axios';
 import DropDownPicker from 'react-native-dropdown-picker';
+import * as ImagePicker from 'expo-image-picker';
 
-export default class UpdateProfile extends Component {
-    render() {
-        return (
-          //  <View style={styles.login}>
-            <form>
+const UpdateProfile = () => {
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+          setPic(result.uri);
+        }
+    };
+
+    return(
+          <View>
                 <h3>Update Profile</h3>
 
                 <div className="form-group">
@@ -49,18 +64,16 @@ export default class UpdateProfile extends Component {
                     <input type="date" className="form-control" placeholder="Birthday" />
                 </div>
 
-                <div className="form-group">
-                    <label>Profile Picture</label>
-                    <div>
-                        <input type="file" className="form-group" placeholder="Image" />
-                    </div> 
-                </div>
-
-                <button type="submit" className="btn btn-primary btn-block">Update Profile</button>
-            </form>
-           //</View>
-        );
-    }
+                <Button
+                onPress={() => pickImage()}
+                title='Upload profile image'
+                />
+                <Button
+                title="Update Profile"
+                //onPress={() => }
+                />
+           </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -70,4 +83,4 @@ const styles = StyleSheet.create({
     }
 })
 
-
+export default UpdateProfile

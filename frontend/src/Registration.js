@@ -4,9 +4,9 @@ import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from "axios";
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 const SignUp = () => {
-
         const [username, setUsername] = useState('')
         const [password, setPassword] = useState('')
         const [first, setFirst] = useState('')
@@ -47,9 +47,24 @@ const SignUp = () => {
             })
         }
     
-        useEffect (() => {
+        /*useEffect (() => {
 
-        });
+        });*/
+
+        const pickImage = async () => {
+            let result = await ImagePicker.launchImageLibraryAsync({
+              mediaTypes: ImagePicker.MediaTypeOptions.All,
+              allowsEditing: true,
+              aspect: [4, 3],
+              quality: 1,
+            });
+        
+            console.log(result);
+        
+            if (!result.cancelled) {
+              setPic(result.uri);
+            }
+        };
 
         return (
           //  <View style={styles.login}>
@@ -108,22 +123,21 @@ const SignUp = () => {
               <TextInput
                   type = "date"
                   onChangeText={birthday=> setBirthday(birthday)}
-                  label='Birthday'
-                  placeholder="format='YYYY-MM-DD'"
+                label='Birthday'
+                placeholder="format='YYYY-MM-DD'"
               />
-              <TextInput
-                  onChangeText={profilePic => setPic(profilePic)}
-                  label='Profile Pic'
-                  placeholder='Enter file name'
+              <Button
+                onPress={() => pickImage()}
+                title='Upload profile image'
               />
-                <Button
-                    title="Sign Up"
-                    onPress={() => getReg()}
-                />
-                <Button
-                    title="Already registered? Sign In"
-                    onPress={() => navigation.navigate('login')}
-                />
+              <Button
+                title="Sign Up"
+                onPress={() => getReg()}
+              />
+              <Button
+                title="Already registered? Sign In"
+                onPress={() => navigation.navigate('login')}
+              />
            </View>
         </View>
         )
@@ -152,4 +166,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SignUp; 
+export default SignUp;
