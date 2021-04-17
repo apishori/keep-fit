@@ -1,24 +1,63 @@
 import React, {useState, useEffect} from 'react';
 import VideoCard from './components/VideoCard'
 import {useSelector,useDispatch} from 'react-redux'
+import axios from 'axios';
 import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
-const OtherProfile = () =>{
-	const [value,setValue] = useState("")
-	const [name,setName] = useState("")
+const OtherProfile = ({ route }) => {
+	const [profilePicSrc, setProfilePic] = useState("")
+	const [name, setName] = useState("")
+	const [username, setUsername] = useState("")
+	const [numFollowers, setNumFollowers] = useState(0)
+	const [numFollowing, setNumFollowing] = useState(0)
+	const otherUser = route.params.otherUser.otherUser
+
+	const navigation = useNavigation()
+	const dispatch = useDispatch()
+
+	const loadProfile = () => {
+		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${otherUser}`
+
+		axios.get(USER_SEARCH)
+			.then(result => {
+				for (let i = 0; i < result.data.length; i++) {
+					if (result.data[i].username == otherUser) {
+						const data = result.data[i]
+						console.log(data)
+						setUsername(data.username)
+						setName(data.full_name)
+						setProfilePic(data.profile.profile_pic.image)
+						//setNumFollowers(data.)
+						//setNumFollowing(data.)
+						i = result.data.length
+					}
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
+
+	useEffect (() => {
+		if (username == "") {
+			loadProfile()
+		}
+	});
 
 	return(
 		<View style={{flex:1}}>
 			<View style={styles.profileSection}>
-				<Image source={{uri: 'https://media-exp1.licdn.com/dms/image/C5603AQFaXMkVGB7_mg/profile-displayphoto-shrink_400_400/0/1589559563580?e=1622073600&v=beta&t=_ghYQzgpKxc4OLaU1hKmoi1WwKcQ233i-kvYG0SUC3I'}}
+				<Image source={{uri: profilePicSrc}}
        			style={styles.circular} />
-				<Text style = {styles.profileTitle}>Abhaya Krishnan-Jha</Text>
-				<Text style = {styles.followersTitle}>50000 Followers | 2900Following</Text>
+				<Text style = {styles.profileTitle}>{name}</Text>
+				<Text>{username}</Text>
+				<Text style = {styles.followersTitle}>{numFollowers} Followers | {numFollowing} Following</Text>
 				<Button
                     buttonStyle={{borderColor:"#ef476f", borderWidth:2, backgroundColor:'white'}}
                     titleStyle={{color:"#ef476f"}}
-                    type="outline"
-                    title={buttonText}
+                    type='outline'
+                    title='buttonText'
                     onPress={() => changeText(buttonText === 'Follow User' ? 'Unfollow User' : 'Follow User')}>
                     </Button>
 			</View>
@@ -65,9 +104,10 @@ const styles = StyleSheet.create({
 		justifyContent:'center',
 		backgroundColor: '#fff',
 		padding: 20,
-		marginRight: 500,
-		marginLeft: 500,
-		borderRadius: 20
+		marginRight: '10%',
+		marginLeft: '10%',
+		borderRadius: 20,
+		marginTop: '20%',
 	},
 	profileTitle: {
 		textAlign:'center',

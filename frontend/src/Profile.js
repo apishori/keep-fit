@@ -1,35 +1,72 @@
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {useSelector,useDispatch} from 'react-redux'
 import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { createStackNavigator } from '@react-navigation/stack';
-import Registration from './Registration';
-import Login from './Login'
 import ForgotPassword from './ForgotPassword'
 import UpdateProfile from './UpdateProfile'
 //import DeleteProfile from './DeleteProfile'
 
 const Stack = createStackNavigator()
 
-const ProfileView = () =>{
-	const [value,setValue] = useState("")
-	const [name,setName] = useState("")
+const ProfileView = () => {
+	const [profileData, setProfileData] = useState()
+	const [profilePicSrc, setProfilePic] = useState("")
+	const [name, setName] = useState("")
+	const [username, setUsername] = useState("")
+	const [numFollowers, setNumFollowers] = useState(0)
+	const [numFollowing, setNumFollowing] = useState(0)
+	const login = useSelector(state => {
+		return state.loginData.loginID;
+	})
 
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
-		
+
+	const loadProfile = () => {
+		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${login}`
+
+		axios.get(USER_SEARCH)
+			.then(result => {
+				for (let i = 0; i < result.data.length; i++) {
+					if (result.data[i].username == login) {
+						const data = result.data[i]
+						console.log(data)
+						setUsername(data.username)
+						setName(data.full_name)
+						setProfilePic(data.profile.profile_pic.image)
+						//setNumFollowers(data.)
+						//setNumFollowing(data.)
+						i = result.data.length
+					}
+				}
+				
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
+
 	const logOut = () => {
 		dispatch({ type: 'setLogin', payload: '' })
 		navigation.navigate('login')
 	}
 
+	useEffect (() => {
+		if (username == "") {
+			loadProfile()
+		}
+	});
+	
 	return(
 		<View style={{flex:1}}>
 			<View style={styles.profileSection}>
-				<Image source={{uri: 'https://media-exp1.licdn.com/dms/image/C4E03AQFOExWHLp-fwA/profile-displayphoto-shrink_400_400/0/1610884484774?e=1622073600&v=beta&t=F3Cm5Pgcbt6HyQ-dJ7DGNyZ1OgklFU-5Crn1U1mf6BU'}}
+				<Image source={{uri: profilePicSrc}}
        			style={styles.circular} />
-				<Text style = {styles.profileTitle}>Ayushi Gupta</Text>
-				<Text style = {styles.followersTitle}>6000 Followers | 2 Following</Text>
+				<Text style = {styles.profileTitle}>{name}</Text>
+				<Text>{username}</Text>
+				<Text style = {styles.followersTitle}>{numFollowers} Followers | {numFollowing} Following</Text>
 				<Button
 					title='Delete Profile'
 					onPress={() => navigation.navigate('delete')}
@@ -37,6 +74,10 @@ const ProfileView = () =>{
 				<Button
 					title='Update Profile'
 					onPress={() => navigation.navigate('update')}
+				></Button>
+				<Button
+					title='Change Password'
+					onPress={() => navigation.navigate('changepw')}
 				></Button>
 				<Button
 					title='Sign Out'
@@ -48,60 +89,25 @@ const ProfileView = () =>{
 }
 
 const Profile = () => {
-	const login = useSelector(state => {
-		console.log(state)
-		return state.loginData
-	})
-	console.log(login)
-	/*if (login == '') {
-		return (
-			<Stack.Navigator>
-				<Stack.Screen
-					name='login'
-					component={Login}
-					options={{headerShown:false}}
-				/>
-				<Stack.Screen
-					name='profile'
-					component={ProfileView}
-					options={{headerShown:false}}
-				/>
-				<Stack.Screen
-					name='register'
-					component={Registration}
-					options={{headerShown:false}}
-				/>
-				<Stack.Screen
-					name='forgotpw'
-					component={ForgotPassword}
-					options={{headerShown:false}}
-				/>
-			</Stack.Navigator>
-		)
-	}*/
-	//else {
-		return (
-			<Stack.Navigator>
-				<Stack.Screen
-					name='profile'
-					component={ProfileView}
-					options={{headerShown:false}}
-				/>
-				<Stack.Screen
-					name='update'
-					component={UpdateProfile}
-					options={{headerShown:false}}
-				/>
-				
-			</Stack.Navigator>
-		)
-	//}
-	/*
-	<Stack.Screen
-					name='delete'
-					component={DeleteProfile}
-					options={{headerShown:false}}
-				/>*/
+	return (
+		<Stack.Navigator>
+			<Stack.Screen
+				name='profile'
+				component={ProfileView}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='update'
+				component={UpdateProfile}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='changepw'
+				component={ForgotPassword}
+				options={{headerShown:false}}
+			/>
+		</Stack.Navigator>
+	)
 }
 
 const styles = StyleSheet.create({
