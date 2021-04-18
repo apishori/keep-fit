@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     }
 
     useEffect (() => { 
-        getUpdatedPassword(); 
+        //getUpdatedPassword(); 
     });
 
 
@@ -68,7 +68,7 @@ const ForgotPassword = () => {
               </View>
               <Button
                 title="Create New Password"
-                //onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
+                onPress={() => getUpdatedPassword()}
               />
   
           </View>
