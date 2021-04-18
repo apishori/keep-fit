@@ -7,10 +7,14 @@ import { useNavigation } from '@react-navigation/core';
 
 const OtherProfile = ({ route }) => {
 	const [profilePicSrc, setProfilePic] = useState("")
-	const [name, setName] = useState("")
+	const [first_name, setFirstName] = useState("")
+	const [last_name, setLastName] = useState("")
 	const [username, setUsername] = useState("")
 	const [numFollowers, setNumFollowers] = useState(0)
 	const [numFollowing, setNumFollowing] = useState(0)
+	const [height, setHeight] = useState(0)
+	const [weight, setWeight] = useState(0)
+	const [birthday, setBirthday] = useState("")
 	const otherUser = route.params.otherUser.otherUser
 
 	const navigation = useNavigation()
@@ -26,7 +30,13 @@ const OtherProfile = ({ route }) => {
 						const data = result.data[i]
 						console.log(data)
 						setUsername(data.username)
-						setName(data.full_name)
+						setHeight(data.height)
+						setWeight(data.weight)
+						setBirthday(data.birthday)
+						setFirstName(data.first_name)
+						setLastName(data.last_name)
+						setNumFollowers(1200)
+						setNumFollowing(200)
 						setProfilePic(data.profile.profile_pic.image)
 						//setNumFollowers(data.)
 						//setNumFollowing(data.)
@@ -50,8 +60,11 @@ const OtherProfile = ({ route }) => {
 			<View style={styles.profileSection}>
 				<Image source={{uri: profilePicSrc}}
        			style={styles.circular} />
-				<Text style = {styles.profileTitle}>{name}</Text>
-				<Text>{username}</Text>
+				<Text style = {styles.profileTitle}>{first_name} {last_name}</Text>
+				<Text style = {styles.followersTitle}>Nickname: {username}</Text>
+				<Text style = {styles.followersTitle}>Height: {height} </Text>
+				<Text style = {styles.followersTitle}>Weight: {weight} </Text>
+				<Text style = {styles.followersTitle}>Birthday: {birthday} </Text>
 				<Text style = {styles.followersTitle}>{numFollowers} Followers | {numFollowing} Following</Text>
 				<Button
                     buttonStyle={{borderColor:"#ef476f", borderWidth:2, backgroundColor:'white'}}

@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/core';
 import { createStackNavigator } from '@react-navigation/stack';
 import ForgotPassword from './ForgotPassword'
 import UpdateProfile from './UpdateProfile'
+import Login from "./Login"
 //import DeleteProfile from './DeleteProfile'
 
 const Stack = createStackNavigator()
@@ -13,10 +14,15 @@ const Stack = createStackNavigator()
 const ProfileView = () => {
 	const [profileData, setProfileData] = useState()
 	const [profilePicSrc, setProfilePic] = useState("")
-	const [name, setName] = useState("")
+	const [first_name, setFirstName] = useState("")
+	const [last_name, setLastName] = useState("")
 	const [username, setUsername] = useState("")
 	const [numFollowers, setNumFollowers] = useState(0)
 	const [numFollowing, setNumFollowing] = useState(0)
+	const [height, setHeight] = useState(0)
+	const [weight, setWeight] = useState(0)
+	const [birthday, setBirthday] = useState("")
+
 	const login = useSelector(state => {
 		return state.loginData.loginID;
 	})
@@ -33,11 +39,15 @@ const ProfileView = () => {
 					if (result.data[i].username == login) {
 						const data = result.data[i]
 						console.log(data)
+						setNumFollowers(100)
+						setNumFollowing(100)
 						setUsername(data.username)
-						setName(data.full_name)
+						setHeight(data.height)
+						setWeight(data.weight)
+						setBirthday(data.birthday)
+						setFirstName(data.first_name)
+						setLastName(data.last_name)
 						setProfilePic(data.profile.profile_pic.image)
-						//setNumFollowers(data.)
-						//setNumFollowing(data.)
 						i = result.data.length
 					}
 				}
@@ -46,6 +56,17 @@ const ProfileView = () => {
 			.catch((error) => {
 				console.error(error);
 			});
+	}
+
+	const deleteProfile = () => {
+		const USER_SEARCH = `http://127.0.0.1:8000/users/${username}`
+		axios.delete(USER_SEARCH).then(data => {
+            console.log('deleted');
+        })
+		.catch((error) => {
+			console.error(error);
+		});
+		navigation.navigate('login')
 	}
 
 	const logOut = () => {
@@ -64,12 +85,15 @@ const ProfileView = () => {
 			<View style={styles.profileSection}>
 				<Image source={{uri: profilePicSrc}}
        			style={styles.circular} />
-				<Text style = {styles.profileTitle}>{name}</Text>
-				<Text>{username}</Text>
+				<Text style = {styles.profileTitle}>{first_name} {last_name}</Text>
+				<Text style = {styles.followersTitle}>Nickname: {username}</Text>
+				<Text style = {styles.followersTitle}>Height: {height} </Text>
+				<Text style = {styles.followersTitle}>Weight: {weight} </Text>
+				<Text style = {styles.followersTitle}>Birthday: {birthday} </Text>
 				<Text style = {styles.followersTitle}>{numFollowers} Followers | {numFollowing} Following</Text>
 				<Button
 					title='Delete Profile'
-					onPress={() => navigation.navigate('delete')}
+					onPress={() => deleteProfile()}
 				></Button>
 				<Button
 					title='Update Profile'
@@ -104,6 +128,11 @@ const Profile = () => {
 			<Stack.Screen
 				name='changepw'
 				component={ForgotPassword}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='login'
+				component={Login}
 				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>
