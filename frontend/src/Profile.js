@@ -38,7 +38,7 @@ const ProfileView = () => {
 				for (let i = 0; i < result.data.length; i++) {
 					if (result.data[i].username == login) {
 						const data = result.data[i]
-						console.log(data)
+						// console.log(data)
 						setNumFollowers(100)
 						setNumFollowing(100)
 						setUsername(data.username)
@@ -69,9 +69,16 @@ const ProfileView = () => {
 		navigation.navigate('login')
 	}
 
+	const UpdateProfile = () => {
+		navigation.navigate('changepw')
+	}
+
 	const logOut = () => {
 		dispatch({ type: 'setLogin', payload: '' })
-		navigation.navigate('login')
+		navigation.navigate(
+			'login',
+			{ screen: 'login' }
+		)
 	}
 
 	useEffect (() => {
@@ -101,7 +108,7 @@ const ProfileView = () => {
 				></Button>
 				<Button
 					title='Change Password'
-					onPress={() => navigation.navigate('changepw')}
+					onPress={() => UpdateProfile()}
 				></Button>
 				<Button
 					title='Sign Out'
@@ -128,11 +135,6 @@ const Profile = () => {
 			<Stack.Screen
 				name='changepw'
 				component={ForgotPassword}
-				options={{headerShown:false}}
-			/>
-			<Stack.Screen
-				name='login'
-				component={Login}
 				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>

@@ -34,7 +34,7 @@ const LoginWrapper = () => {
 }
 
 const Login = () => { 
-    const navigation = useNavigation();
+    const navigation = useNavigation()
     const dispatch = useDispatch()
 
     const [username, setUsername] = useState('')
@@ -44,9 +44,9 @@ const Login = () => {
         const LOGIN = {
             "username": username,
             "password": password
-        };
+        }
 
-        const ADMINLOGIN = 'http://127.0.0.1:8000/users/login/';
+        const ADMINLOGIN = 'http://127.0.0.1:8000/users/login/'
 
         axios.post(ADMINLOGIN, LOGIN)
         .then(() => {
@@ -54,9 +54,9 @@ const Login = () => {
             setPassword('')
         })
         .then(data => {
-            //console.log('logged in');
+            // console.log('logged in');
             dispatch({ type: 'setLogin', payload: username })
-            navigation.navigate('Keep-Fit');
+            navigation.navigate('Keep-Fit')
         })
         .catch(error => {
             console.error(error); 
