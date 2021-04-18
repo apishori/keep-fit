@@ -34,7 +34,7 @@ const SignUp = () => {
                 "profile_pic": profilePic
             };
     
-            const ADMINLOGIN = 'http://127.0.0.1:8000/users/register/';
+            const ADMINLOGIN = `http://127.0.0.1:8000/users/register/`;
     
             axios.post(ADMINLOGIN, REG)
             .then(data => {
