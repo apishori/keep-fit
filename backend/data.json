@@ -1,0 +1,211 @@
+[
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$UEfdAAFv5TX7$LqYvL0XMHMYcdYksi3qrJiKpJlPgd0hAQwROxDWbd48=",
+        "last_login": "2021-04-19T18:27:56.794Z",
+        "is_superuser": true,
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-04-19T18:04:28Z",
+        "username": "AdminUser",
+        "email": "admin@usc.edu",
+        "first_name": "Admin",
+        "last_name": "User",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$KtZaTdBvlqvu$tUK6xV1WESMXzOes95O+/BmO7mI0myUQ4xCblI6Jg+o=",
+        "last_login": null,
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-04-19T18:05:15Z",
+        "username": "TestUser",
+        "email": "test@usc.edu",
+        "first_name": "Test",
+        "last_name": "User",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$nboTm1y8MgMB$dH0hq7Oq7Ja+aT6Nrc5dNx6I1CLf17wGeNlzJi7IKSY=",
+        "last_login": null,
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-04-19T18:05:40Z",
+        "username": "OtherUser",
+        "email": "other@usc.edu",
+        "first_name": "Other",
+        "last_name": "User",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.profile",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "profile_pic": "profile_default.jpg",
+        "height": 70,
+        "weight": 170,
+        "sex": "M",
+        "birthday": "2021-04-19",
+        "created_at": "2021-04-19T18:05:59Z"
+    }
+},
+{
+    "model": "users.profile",
+    "pk": 2,
+    "fields": {
+        "user": 3,
+        "profile_pic": "profile_default.jpg",
+        "height": 65,
+        "weight": 150,
+        "sex": "F",
+        "birthday": "2021-04-19",
+        "created_at": "2021-04-19T18:06:16Z"
+    }
+},
+{
+    "model": "users.profile",
+    "pk": 3,
+    "fields": {
+        "user": 2,
+        "profile_pic": "profile_default.jpg",
+        "height": 75,
+        "weight": 165,
+        "sex": "O",
+        "birthday": "2021-04-19",
+        "created_at": "2021-04-19T18:06:43Z"
+    }
+},
+{
+    "model": "users.follow",
+    "pk": 1,
+    "fields": {
+        "user1": 1,
+        "user2": 3,
+        "created_at": "2021-04-19T18:07:05Z"
+    }
+},
+{
+    "model": "users.follow",
+    "pk": 2,
+    "fields": {
+        "user1": 3,
+        "user2": 1,
+        "created_at": "2021-04-19T18:07:10Z"
+    }
+},
+{
+    "model": "users.follow",
+    "pk": 3,
+    "fields": {
+        "user1": 2,
+        "user2": 1,
+        "created_at": "2021-04-19T18:07:15Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "1d23ea4a55af5a6eca9fbcc0daec6795dfbb9387",
+    "fields": {
+        "user": 3,
+        "created": "2021-04-19T18:07:59.541Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "8072e5e6e2480efe703c194fc63f13ef0910cd0c",
+    "fields": {
+        "user": 2,
+        "created": "2021-04-19T18:08:02.629Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "bef4450d99c163185beca6a63dbb94ce007891af",
+    "fields": {
+        "user": 1,
+        "created": "2021-04-19T18:07:55.746Z"
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 1,
+    "fields": {
+        "video": "1f8yoFFdkcY",
+        "title": "Workout 1: Abs",
+        "author": 1,
+        "category": "HC",
+        "created_at": "2021-04-19T18:28:02Z"
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 2,
+    "fields": {
+        "video": "sTANio_2E0Q",
+        "title": "Workout 2: Yoga",
+        "author": 3,
+        "category": "Y",
+        "created_at": "2021-04-19T18:28:43Z"
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 3,
+    "fields": {
+        "video": "HRGU3igMytM",
+        "title": "Workout 3: Basketball",
+        "author": 2,
+        "category": "B",
+        "created_at": "2021-04-19T18:29:11Z"
+    }
+},
+{
+    "model": "posts.like",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "post": 3
+    }
+},
+{
+    "model": "posts.like",
+    "pk": 2,
+    "fields": {
+        "user": 3,
+        "post": 3
+    }
+},
+{
+    "model": "posts.like",
+    "pk": 3,
+    "fields": {
+        "user": 2,
+        "post": 3
+    }
+},
+{
+    "model": "posts.like",
+    "pk": 4,
+    "fields": {
+        "user": 3,
+        "post": 2
+    }
+}
+]
