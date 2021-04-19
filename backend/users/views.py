@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,7 +17,8 @@ class LoginUserView(APIView):
         user = authenticate(request, username=request.data['username'], password=request.data['password'])
         if user is not None:
             login(request, user)
-            return Response(status=status.HTTP_200_OK)
+            token = Token.objects.get(user=user)
+            return Response({"token":token.key}, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -28,7 +30,7 @@ class LogoutUserView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class ToggleFollowView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, username, format=None):
         following = False
@@ -52,7 +54,7 @@ class ToggleFollowView(APIView):
         return Response(data)
 
 class UserView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, username, format=None):
         user = get_object_or_404(User, username__iexact=username)
@@ -85,11 +87,14 @@ class RegisterUserView(APIView):
         serializer = UserRegisterSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            token = Token.objects.create(user=user)
+            data = serializer.data
+            data["token"] = token.key
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSearchView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         query = request.GET.get('query')
@@ -100,7 +105,7 @@ class UserSearchView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UpdatePasswordView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         username = request.data.get('username', None)

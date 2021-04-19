@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from rest_framework.authtoken import views as auth_views
 
 urlpatterns = [
     #User Endpoints
@@ -8,6 +9,7 @@ urlpatterns = [
     path('register/', views.RegisterUserView.as_view(), name='register-user'),
     path('search/', views.UserSearchView.as_view(), name='search-user'),
     path('update_password/', views.UpdatePasswordView.as_view(), name='update-password'),
+    path('token/', auth_views.obtain_auth_token, name='obtain-token'),
 
     #Follow Endpoints
     path('follow/<str:username>/', views.ToggleFollowView.as_view(), name='toggle-follow'),

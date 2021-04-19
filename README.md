@@ -30,7 +30,7 @@ To run the server:
 
 Set-up:
 
-`npm install --global expo-cli`
+`npm install expo-cli`
 
 
 Run:
