@@ -48,8 +48,8 @@ const ProfileView = () => {
 					if (result.data[i].username == login) {
 						const data = result.data[i]
 						console.log(data)
-						setNumFollowers(100)
-						setNumFollowing(100)
+						setNumFollowers(data.followers)
+						setNumFollowing(data.followings)
 						setUsername(data.username)
 						setHeight(data.height)
 						setWeight(data.weight)
