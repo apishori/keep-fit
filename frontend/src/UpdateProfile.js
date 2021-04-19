@@ -1,5 +1,5 @@
 import React, { useState, Component } from "react";
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import axios from 'axios';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -12,14 +12,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator()
 
 const UpdateProfile = () => {
-    const [profilePicSrc, setProfilePic] = useState("")
-	const [first, setFirstName] = useState("")
-    //const [username, setUsername] = useState("")
-	const [last, setLastName] = useState("")
+    const [profilePicSrc, setProfilePic] = useState('')
+	const [first, setFirstName] = useState('')
+	const [last, setLastName] = useState('')
     const [height, setHeight] = useState(0)
-    const [sex, setSex] = useState("")
+    const [sex, setSex] = useState('')
 	const [weight, setWeight] = useState(0)
-	const [birthday, setBirthday] = useState("")
+	const [birthday, setBirthday] = useState('')
+    const [username, setUsername] = useState("")
+
+    const login = useSelector(state => {
+        return state.loginData.loginID;
+    })
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
@@ -41,8 +45,8 @@ const UpdateProfile = () => {
     const updateProfile = () => {
         const UPDATE = {
             "first_name": first,
-            //"username": username,
             "last_name": last,
+            "username": username,
             "weight": weight,
             "height": height,
             "sex": sex,
@@ -50,9 +54,9 @@ const UpdateProfile = () => {
             "profile_pic": profilePicSrc
         };
 
-        const UPDATEPROFILE = 'http://127.0.0.1:8000/users/${username}';
+        const UPDATEPROFILE = `http://127.0.0.1:8000/users/${login}/`;
     
-            axios.post(UPDATEPROFILE, UPDATE)
+            axios.put(UPDATEPROFILE, UPDATE)
             .then(data => {
                 console.log(data);
                 console.log('updated');
@@ -65,32 +69,70 @@ const UpdateProfile = () => {
     }
 
     return(
-          <View>
-                <h3>Update Profile</h3>
+        <View style={{flex:1}}>
+            <Text style = {styles.sectionTitle}>Update Profile</Text>
+              <View style = {styles.form}>
 
-            {/*<div className="form-group">
-                    <label>Username</label>
-                    <input onChange={username => setUsername(username)} type="text" className="form-control" placeholder="Username" />
-                 </div> */}
+              <TextInput
+                  onChangeText={first => setFirstName(first)}
+                  label='First Name'
+                  placeholder='Enter first name'
+              />
 
-                <div className="form-group">
+            <TextInput
+                  onChangeText={last => setLastName(last)}
+                  label='Last Name'
+                  placeholder='Enter last name'
+              />
+
+            <TextInput
+                  onChangeText={weight => setWeight(weight)}
+                  label='Weight'
+                  placeholder='Enter weight'
+              />
+              <TextInput
+                  onChangeText={height => setHeight(height)}
+                  label='Height'
+                  placeholder='Enter height'
+              />
+
+            <DropDownPicker items={[
+                            {label: 'Female', value: 'F'},
+                            {label: 'Male', value: 'M'},
+                            {label: 'Other', value: 'O'}
+                        ]}
+                        containerStyle={{height: 40}}
+                        style={{backgroundColor: '#fafafa'}}
+                        itemStyle={{
+                            justifyContent: 'flex-start'
+                        }}
+                        onChangeItem={item => setSex(item.value)}
+                        placeholder="Select Sex"
+                        dropDownStyle={{backgroundColor: '#fafafa'}}/>
+              <TextInput
+                  type = "date"
+                  onChangeText={birthday=> setBirthday(birthday)}
+                label='Birthday'
+                placeholder="format='YYYY-MM-DD'"
+              />
+               {/* <div className="form-group">
                     <label>First name</label>
-                    <input onChange={first => setFirstName(first)} type="text" className="form-control" placeholder="First name" />
+                    <input type="text" onChangeText={first => setFirstName(first)} type="text" className="form-control" placeholder="First name" />
                 </div>
 
                 <div className="form-group">
                     <label>Last name</label>
-                    <input type="text" className="form-control" placeholder="Last name" />
+                    <input type="text" onChangeText={last => setLastName(last)} className="form-control" placeholder="Last name" />
                 </div>
 
                 <div className="form-group">
                     <label>Weight</label>
-                    <input type="number" className="form-control" placeholder="Weight" />
+                    <input type="number" onChangeText={weight => setWeight(weight)}className="form-control" placeholder="Weight" />
                 </div>
 
                 <div className="form-group">
                     <label>Height</label>
-                    <input type="number" className="form-control" placeholder="Height" />
+                    <input type="number" onChangeText={height => setLastName(height)} className="form-control" placeholder="Height" />
                 </div>
 
                 <div className="form-group">
@@ -104,14 +146,15 @@ const UpdateProfile = () => {
                         itemStyle={{
                             justifyContent: 'flex-start'
                         }}
+                        onChangeItem={item => setSex(item.value)}
                         placeholder="Select"
                         dropDownStyle={{backgroundColor: '#fafafa'}}/>
                 </div>
 
                 <div className="form-group">
                     <label>Birthday</label>
-                    <input type="date" className="form-control" placeholder="Birthday" />
-                </div>
+                    <input type="date" onChangeText={birthday=> setBirthday(birthday)} className="form-control" placeholder="Birthday" />
+                    </div> */}
 
                 <Button
                 onPress={() => pickImage()}
@@ -122,6 +165,7 @@ const UpdateProfile = () => {
                 onPress={() => updateProfile()}
                 />
            </View>
+        </View>
     );
 }
 
@@ -143,6 +187,21 @@ const styles = StyleSheet.create({
     login: {
         paddingRight: 500,
         paddingLeft: 500,
+    },
+    sectionTitle: {
+        fontSize: 24,
+        textAlign: "center",
+        fontWeight: 'bold',
+        
+     },
+     videosWrapper: {
+        paddingTop: 48,
+        paddingHorizontal: 16,
+    },
+    form:{
+        paddingTop: 32,
+        paddingBottom: 24,
+        alignItems:"flex-start"
     }
 })
 

@@ -33,12 +33,18 @@ const ProfileView = () => {
 	const loadProfile = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${login}`
 
-		axios.get(USER_SEARCH)
+		axios.request({
+			url: USER_SEARCH,
+			method: "get",
+			data: login, 
+			headers: { 
+				"Authorization": `Token ${mytoken}`,
+			}})
 			.then(result => {
 				for (let i = 0; i < result.data.length; i++) {
 					if (result.data[i].username == login) {
 						const data = result.data[i]
-						// console.log(data)
+						console.log(data)
 						setNumFollowers(100)
 						setNumFollowing(100)
 						setUsername(data.username)
@@ -69,16 +75,9 @@ const ProfileView = () => {
 		navigation.navigate('login')
 	}
 
-	const UpdateProfile = () => {
-		navigation.navigate('changepw')
-	}
-
 	const logOut = () => {
 		dispatch({ type: 'setLogin', payload: '' })
-		navigation.navigate(
-			'login',
-			{ screen: 'login' }
-		)
+		navigation.navigate('login')
 	}
 
 	useEffect (() => {
@@ -108,7 +107,7 @@ const ProfileView = () => {
 				></Button>
 				<Button
 					title='Change Password'
-					onPress={() => UpdateProfile()}
+					onPress={() => navigation.navigate('changepw')}
 				></Button>
 				<Button
 					title='Sign Out'
@@ -135,6 +134,11 @@ const Profile = () => {
 			<Stack.Screen
 				name='changepw'
 				component={ForgotPassword}
+				options={{headerShown:false}}
+			/>
+			<Stack.Screen
+				name='login'
+				component={Login}
 				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>
