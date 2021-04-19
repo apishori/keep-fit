@@ -46,8 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
         instance.profile.weight=profile_data.get('weight', instance.profile.weight)
         instance.profile.sex=profile_data.get('sex', instance.profile.sex)
         instance.profile.birthday=profile_data.get('birthday', instance.profile.birthday)
-        if 'profile_pic' in profile_data:
-            image_data = profile_data.get('profile_pic', None)
+        if 'profile_picture' in profile_data:
+            image_data = profile_data.get('profile_picture', None)
             if image_data:
                 ext, imgstr = image_data.split(';base64,')
                 data = ContentFile(base64.b64decode(imgstr))  
@@ -101,7 +101,7 @@ class UserRegisterSerializer(UserSerializer):
             sex=profile_data['sex'],
             birthday=profile_data['birthday']
         )
-        image_data = self.context.get('request').data.get('profile_pic')
+        image_data = self.context.get('request').data.get('profile_picture')
         if image_data:
             ext, imgstr = image_data.split(';base64,')
             data = ContentFile(base64.b64decode(imgstr))  
