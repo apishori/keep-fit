@@ -30,7 +30,8 @@ class LogoutUserView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class ToggleFollowView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, username, format=None):
         following = False
@@ -94,7 +95,8 @@ class RegisterUserView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSearchView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, format=None):
         query = request.GET.get('query')
