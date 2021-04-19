@@ -46,6 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
         if 'profile_pic' in profile_data:
             instance.profile.profile_pic = profile_data.get('profile_pic', instance.profile.profile_pic)
         instance.profile.save()
+        instance.save()
         return instance
 
 class UserRegisterSerializer(UserSerializer):
