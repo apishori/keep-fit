@@ -20,33 +20,38 @@ const OtherProfile = ({ route }) => {
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
 
+	const token = useSelector(state => {
+		return state.loginToken.token
+	})
+	console.log(token)
+
 	const loadProfile = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${otherUser}`
 
-		axios.get(USER_SEARCH)
-			.then(result => {
-				for (let i = 0; i < result.data.length; i++) {
-					if (result.data[i].username == otherUser) {
-						const data = result.data[i]
-						console.log(data)
-						setUsername(data.username)
-						setHeight(data.height)
-						setWeight(data.weight)
-						setBirthday(data.birthday)
-						setFirstName(data.first_name)
-						setLastName(data.last_name)
-						setNumFollowers(1200)
-						setNumFollowing(200)
-						setProfilePic(data.profile.profile_pic.image)
-						//setNumFollowers(data.)
-						//setNumFollowing(data.)
-						i = result.data.length
-					}
+		axios.get(USER_SEARCH, { headers: {"Authorization": `Token ${token}`}})
+		.then(result => {
+			for (let i = 0; i < result.data.length; i++) {
+				if (result.data[i].username == otherUser) {
+					const data = result.data[i]
+					console.log(data)
+					setUsername(data.username)
+					setHeight(data.height)
+					setWeight(data.weight)
+					setBirthday(data.birthday)
+					setFirstName(data.first_name)
+					setLastName(data.last_name)
+					setNumFollowers(1200)
+					setNumFollowing(200)
+					setProfilePic(data.profile.profile_pic.image)
+					//setNumFollowers(data.)
+					//setNumFollowing(data.)
+					i = result.data.length
 				}
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+			}
+		})
+		.catch((error) => {
+			console.error(error);
+		});
 	}
 
 	useEffect (() => {
