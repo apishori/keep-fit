@@ -17,7 +17,8 @@ class LoginUserView(APIView):
         user = authenticate(request, username=request.data['username'], password=request.data['password'])
         if user is not None:
             login(request, user)
-            return Response(status=status.HTTP_200_OK)
+            token = Token.objects.get(user=user)
+            return Response({"token":token.key}, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -87,7 +88,9 @@ class RegisterUserView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             token = Token.objects.create(user=user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            data = serializer.data
+            data["token"] = token.key
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSearchView(APIView):
