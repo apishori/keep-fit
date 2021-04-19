@@ -13,6 +13,7 @@ import loginReducer from './src/loginReducer'
 import resultReducer from './src/resultReducer'
 import searchReducer from './src/searchReducer'
 import exerciseReducer from './src/exerciseReducer'
+import tokenReducer from './src/tokenReducer'
 import {Provider,useSelector,configureStore} from 'react-redux'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -23,6 +24,7 @@ import Login from "./src/Login";
 const rooReducer = combineReducers({
   cardData:reducer,
   loginData:loginReducer,
+  loginToken:tokenReducer,
   result:resultReducer,
   searchType:searchReducer,
   exercise:exerciseReducer,

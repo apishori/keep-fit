@@ -49,13 +49,15 @@ const Login = () => {
         const ADMINLOGIN = 'http://127.0.0.1:8000/users/login/'
 
         axios.post(ADMINLOGIN, LOGIN)
-        .then(() => {
-            setUsername('')
-            setPassword('')
-        })
         .then(data => {
             // console.log('logged in');
+            // console.log(data)
             dispatch({ type: 'setLogin', payload: username })
+            dispatch({ type: 'setToken', payload: data.data.token })
+
+            setUsername('')
+            setPassword('')
+
             navigation.navigate('Keep-Fit')
         })
         .catch(error => {
