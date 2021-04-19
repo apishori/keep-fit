@@ -25,9 +25,16 @@ const HomeScreen = () => {
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
 	const [id_mapping,setid_mapping] = useState(new Map())
 
+	const token = useSelector(state => {
+			return state.loginToken.token;
+	})
+
 	const fetchData = () => {
-		const POST_LIST = `http://localhost:8000/posts/`; 
-		axios.get(POST_LIST)
+		const POST_LIST = `http://127.0.0.1:8000/posts/`; 
+		axios.get(POST_LIST,
+				{headers: {
+					"Authorization": `Token ${token}`
+				}})
 		.then(res => {
 			var videoId
 			for(var ids of res.data){
@@ -37,7 +44,7 @@ const HomeScreen = () => {
 				}).join('%2C');
 			}
 			const YOUTUBE_API_CALL = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
-			// console.log(YOUTUBE_API_CALL)
+			console.log(YOUTUBE_API_CALL)
 			
 			setLoading(true)
 			fetch(YOUTUBE_API_CALL)
@@ -48,7 +55,7 @@ const HomeScreen = () => {
 			})	
 		})
 		.catch(error => {
-			// console.error(error); 
+			console.error("error displaying: " + error); 
 		});
 	}
 
