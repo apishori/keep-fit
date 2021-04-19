@@ -56,7 +56,7 @@ const UpdateProfile = () => {
             "height": height,
             "sex": sex,
             "birthday": birthday,
-            "profile_pic": profilePicSrc
+            // "profile_pic": profilePicSrc
         };
 
         const UPDATEPROFILE = `http://127.0.0.1:8000/users/${login}/`;
