@@ -105,7 +105,7 @@ class UserRegisterSerializer(UserSerializer):
         if image_data:
             ext, imgstr = image_data.split(';base64,')
             data = ContentFile(base64.b64decode(imgstr))  
-            file_name = f"{instance.username}_profile_pic.{ext.split('/')[-1]}"
+            file_name = f"{user.username}_profile_pic.{ext.split('/')[-1]}"
             profile.profile_pic.save(file_name, data, save=True)
         profile.save()
         return user
