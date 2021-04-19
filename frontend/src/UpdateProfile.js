@@ -24,6 +24,11 @@ const UpdateProfile = () => {
     const login = useSelector(state => {
         return state.loginData.loginID;
     })
+    
+    const token = useSelector(state => {
+		return state.loginToken.token;
+    })
+    
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
@@ -56,7 +61,13 @@ const UpdateProfile = () => {
 
         const UPDATEPROFILE = `http://127.0.0.1:8000/users/${login}/`;
     
-            axios.put(UPDATEPROFILE, UPDATE)
+             axios.request({
+                url: UPDATEPROFILE,
+                method: "put", 
+                data: UPDATE,
+                headers: { 
+                    "Authorization": `Token ${token}`
+			}})
             .then(data => {
                 console.log(data);
                 console.log('updated');
