@@ -140,8 +140,8 @@ const Home = () => {
 		axios.post(POST_CREATE, 
 		{
 			"video": "inpok4MKVLM",
-			"title": "Test2",
-			"category": "Y"
+			"title": postTitle,
+			"category": postCategory
 		},
 		{headers: {
 			"Authorization": `Token ${token}`
@@ -176,11 +176,11 @@ const Home = () => {
 				placeholder='Enter category'
 				value={postCategory}
 			/>
-			<Button 
+		{/*	<Button 
 				type="clear"
 				title="Record Exercise"
 				onPress={()=>navigation.navigate('camera',{title:postTitle,category:postCategory})}
-			/>
+			/>*/}
 			
 			</View>
 			<Button

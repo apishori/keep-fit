@@ -10,6 +10,7 @@ import UploadStreamScreen from './UploadStreamScreen';
 import StreamButton from './components/StreamButton';
 import RecordCameraScreen from './RecordCameraScreen';
 import axios from 'axios';
+import {Button } from 'react-native-elements';
 
 const Stack = createStackNavigator();
 
@@ -24,12 +25,15 @@ const HomeScreen = () => {
 	const API_KEY = `AIzaSyBwd-mFKhqlx0BbbH1YlH6dpaofQpuQ7E4`
 	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
 	const [id_mapping,setid_mapping] = useState(new Map())
+	const [name_mapping,setname_mapping] = useState(new Map())
+	const [author_mapping,setauthor_mapping] = useState(new Map())
 
 	const token = useSelector(state => {
 			return state.loginToken.token;
 	})
 
 	const fetchData = () => {
+		console.log("Updating HomeScreen")
 		const POST_LIST = `http://127.0.0.1:8000/posts/`; 
 		axios.get(POST_LIST,
 				{headers: {
@@ -38,7 +42,9 @@ const HomeScreen = () => {
 		.then(res => {
 			var videoId
 			for(var ids of res.data){
+				name_mapping.set(ids.video, ids.title)
 				id_mapping.set( ids.video, ids.id)
+				author_mapping.set( ids.video, ids.author.username)
 				var result = res.data.map(function(val) {
 					return val.video;
 				}).join('%2C');
@@ -171,18 +177,23 @@ const HomeScreen = () => {
 	
 			<View style={styles.videosWrapper}>
 				<Text style = {styles.sectionTitle}>Videos</Text>
+				<Button 
+					type="clear"
+					title="Refresh"
+					onPress={()=>fetchData()}
+				/>
 				<FlatList
 				   data={cardData}
 				   renderItem={({item})=>{
 						   // console.log("map2" + id_mapping.get(item.id))
 					   return <VideoCard 
 						videoId={item.id}
-						title={item.snippet.title}
-						channel={item.snippet.channelTitle}
+						title= {name_mapping.get(item.id)} // {item.snippet.title}
+						channel={author_mapping.get(item.id)}
 						postId = {id_mapping.get(item.id)}
 					   />
 					   }}
-				   keyExtractor={item=>item.id}
+				   keyExtractor={(item, index) => index.toString()}
 				   style={{paddingTop:16}}
 				/>
 			</View>
@@ -232,6 +243,7 @@ const styles = StyleSheet.create({
  	videosWrapper: {
 		flex: 1,
 	    paddingHorizontal: 16,
+	    alignItems:"flex-start"
 	},
 	streamsWrapper: {
 	    paddingTop: 24,
