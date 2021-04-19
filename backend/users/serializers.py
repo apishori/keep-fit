@@ -1,4 +1,7 @@
+import base64
+
 from django.contrib.auth.password_validation import validate_password
+from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 from .models import Follow, Profile, User
@@ -44,7 +47,12 @@ class UserSerializer(serializers.ModelSerializer):
         instance.profile.sex=profile_data.get('sex', instance.profile.sex)
         instance.profile.birthday=profile_data.get('birthday', instance.profile.birthday)
         if 'profile_pic' in profile_data:
-            instance.profile.profile_pic = profile_data.get('profile_pic', instance.profile.profile_pic)
+            image_data = profile_data.get('profile_pic', None)
+            if image_data:
+                ext, imgstr = image_data.split(';base64,')
+                data = ContentFile(base64.b64decode(imgstr))  
+                file_name = f"{instance.username}_profile_pic.{ext.split('/')[-1]}"
+                instance.profile.profile_pic.save(file_name, data, save=True)
         instance.profile.save()
         instance.save()
         return instance
@@ -93,9 +101,12 @@ class UserRegisterSerializer(UserSerializer):
             sex=profile_data['sex'],
             birthday=profile_data['birthday']
         )
-        profile.save()
-        if 'profile_pic' in profile_data:
-            profile.profile_pic = profile_data['profile_pic']
+        image_data = self.context.get('request').data.get('profile_pic')
+        if image_data:
+            ext, imgstr = image_data.split(';base64,')
+            data = ContentFile(base64.b64decode(imgstr))  
+            file_name = f"{instance.username}_profile_pic.{ext.split('/')[-1]}"
+            profile.profile_pic.save(file_name, data, save=True)
         profile.save()
         return user
 
