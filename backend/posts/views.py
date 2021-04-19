@@ -39,7 +39,8 @@ class PostView(APIView): #delete or edit post
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ToggleLikeView(APIView):   
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     
     def get(self, request, id, format=None):
         liked = False
@@ -65,7 +66,8 @@ class ToggleLikeView(APIView):
         return Response(data)
     
 class TitlePostListView(APIView): #getpost_by_title()
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
         query = request.GET.get('query')
@@ -76,7 +78,8 @@ class TitlePostListView(APIView): #getpost_by_title()
         return Response(serializer.data)
     
 class AuthorPostListView(APIView): #getpost_by_author()
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
         #my_likes = Like.objects.all().filter(user=request.user)
@@ -85,7 +88,8 @@ class AuthorPostListView(APIView): #getpost_by_author()
         return Response(serializer.data)
 
 class LikedPostListView(APIView): #getpost_by_mylikes()
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
         #my_likes = Like.objects.all().filter(user=request.user)
@@ -94,7 +98,8 @@ class LikedPostListView(APIView): #getpost_by_mylikes()
         return Response(serializer.data)    
 
 class PostListView(APIView): #getposts()
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
         serializer = PostSerializer(Post.objects.all(), many=True, context={'request':self.request})

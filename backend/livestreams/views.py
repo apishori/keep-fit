@@ -35,7 +35,8 @@ class EndStreamView(APIView): # end stream
 
 class JoinStreamView(APIView):  # join stream
 
-	permission_classes = (permissions.IsAuthenticated,)
+	#permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
 	def get(self, request, pk, format=None):
 		stream = get_object_or_404(Livestream, stream_id__iexact=request.data.stream_id)
@@ -44,7 +45,8 @@ class JoinStreamView(APIView):  # join stream
     
 class LeaveStreamView(APIView):  # leave stream
 
-	permission_classes = (permissions.IsAuthenticated,)
+	#permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
 	def get(self, request, format=None):
 		streams = Livestream.objects.all()
@@ -53,7 +55,8 @@ class LeaveStreamView(APIView):  # leave stream
     
 class TitleStreamListView(APIView):  # get_livestream_by_title()
 
-	permission_classes = (permissions.IsAuthenticated,)
+	#permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
 	def get(self, request, format=None):
 		query = request.GET.get('query')
@@ -66,7 +69,8 @@ class TitleStreamListView(APIView):  # get_livestream_by_title()
 
 class GetStreamsListView(APIView): # get_livestreams()
 
-	permission_classes = (permissions.IsAuthenticated,)
+	#permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
 	def get(self, request, format=None):
 		streams = Livestream.objects.all()

@@ -26,6 +26,10 @@ const ProfileView = () => {
 	const login = useSelector(state => {
 		return state.loginData.loginID;
 	})
+	const token = useSelector(state => {
+		return state.loginToken.token
+	})
+	console.log(token)
 
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
@@ -36,9 +40,8 @@ const ProfileView = () => {
 		axios.request({
 			url: USER_SEARCH,
 			method: "get",
-			data: login, 
 			headers: { 
-				"Authorization": `Token ${mytoken}`,
+				"Authorization": `Token ${token}`,
 			}})
 			.then(result => {
 				for (let i = 0; i < result.data.length; i++) {
@@ -77,7 +80,10 @@ const ProfileView = () => {
 
 	const logOut = () => {
 		dispatch({ type: 'setLogin', payload: '' })
-		navigation.navigate('login')
+		navigation.navigate(
+			'login',
+			{ screen: 'login' }
+		)
 	}
 
 	useEffect (() => {
@@ -134,11 +140,6 @@ const Profile = () => {
 			<Stack.Screen
 				name='changepw'
 				component={ForgotPassword}
-				options={{headerShown:false}}
-			/>
-			<Stack.Screen
-				name='login'
-				component={Login}
 				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>

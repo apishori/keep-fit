@@ -45,6 +45,8 @@ const SignUp = () => {
                 console.error(error); 
                 console.log('register error');
             })
+                
+            navigation.navigate('login')
         }
     
         /*useEffect (() => {
