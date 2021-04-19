@@ -23,7 +23,8 @@ const PostResult = () => {
 	const dispatch = useDispatch()
 	const cardData = useSelector(state=>{
 		return state.cardData
-	  })
+	})
+	  
 	const [loading,setLoading] = useState(false)
 
 	const fetchData = () =>{
@@ -71,7 +72,7 @@ const UserResult = () => {
 		//console.log(state)
 		return state.result;
 	})
-
+	// const [profilePic, setPic] = useState('../../backend/media/profile_default.jpg')
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
 
@@ -82,6 +83,11 @@ const UserResult = () => {
 
 	const renderItem = ({ item }) => {
 		// console.log(item)
+		let profilePic = '../../backend/media/profile_default.jpg'
+		if (item.profile) {
+			profilePic = item.profile.profile_pic.image
+		}
+
 		return (
 			<>
 				<Pressable
@@ -89,7 +95,8 @@ const UserResult = () => {
 				>
 					{/* <View> */}
 						<Image
-							source={{uri: item.profile.profile_pic.image}}
+							// source={{uri: item.profile.profile_pic.image}}
+							source={{uri: profilePic}}
 							style={styles.circular}
 						/>
 						<Text
@@ -145,6 +152,9 @@ const SearchMenu = () => {
 	const [didSearch, setDidSearch] = useState(false);
 
 	const dispatch = useDispatch()
+	const token = useSelector(state => {
+		return state.loginToken.token
+	})
 
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
@@ -152,7 +162,7 @@ const SearchMenu = () => {
 		const STREAM_SEARCH = `http://127.0.0.1:8000/livestreams/search/?query=${searchTerm}`;
 
 		if (searchAmong === 'users') {
-			axios.get(USER_SEARCH)
+			axios.get(USER_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(data => {
 			dispatch({ type: 'clearResult' });
 			//console.log(data.data);
