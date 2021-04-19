@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,7 +29,7 @@ class LogoutUserView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class ToggleFollowView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, username, format=None):
         following = False
@@ -52,7 +53,7 @@ class ToggleFollowView(APIView):
         return Response(data)
 
 class UserView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, username, format=None):
         user = get_object_or_404(User, username__iexact=username)
@@ -85,11 +86,12 @@ class RegisterUserView(APIView):
         serializer = UserRegisterSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.save()
+            token = Token.objects.create(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserSearchView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         query = request.GET.get('query')
@@ -100,7 +102,7 @@ class UserSearchView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UpdatePasswordView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         username = request.data.get('username', None)
