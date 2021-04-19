@@ -26,10 +26,12 @@ class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
     username = serializers.CharField(read_only=True)
     email = serializers.CharField(read_only=True)
+    followers = serializers.IntegerField(source='followers.count', read_only=True)
+    followings = serializers.IntegerField(source='followings.count', read_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'full_name', 'email', 'profile']
+        fields = ['username', 'first_name', 'last_name', 'full_name', 'email', 'profile', 'followers', 'followings']
 
     def update(self, instance, validated_data):
         instance.first_name=validated_data.get('first_name', instance.first_name)
