@@ -35,11 +35,9 @@ const OtherProfile = ({ route }) => {
 						setBirthday(data.birthday)
 						setFirstName(data.first_name)
 						setLastName(data.last_name)
-						setNumFollowers(1200)
-						setNumFollowing(200)
+						setNumFollowers(data.followers)
+						setNumFollowing(data.followings)
 						setProfilePic(data.profile.profile_pic.image)
-						//setNumFollowers(data.)
-						//setNumFollowing(data.)
 						i = result.data.length
 					}
 				}
