@@ -13,19 +13,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Like',
+            name='Livestream',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Post',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('video', models.CharField(max_length=255)),
-                ('title', models.CharField(blank=True, max_length=255, null=True)),
+                ('stream_id', models.CharField(max_length=255, unique=True)),
+                ('video_APIKey', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=255)),
+                ('start_time', models.DateTimeField(default=django.utils.timezone.now)),
                 ('category', models.CharField(choices=[('R', 'Run'), ('Y', 'Yoga'), ('HC', 'Home cardio'), ('T', 'Tennis'), ('S', 'Swimming'), ('B', 'Basketball'), ('C', 'Cycling'), ('J', 'Jump rope'), ('H', 'Hiking'), ('O', 'Other')], default='O', max_length=2)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
             ],
         ),
     ]
