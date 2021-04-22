@@ -56,7 +56,7 @@ const UpdateProfile = () => {
             "height": height,
             "sex": sex,
             "birthday": birthday,
-            // "profile_pic": profilePicSrc
+            "profile_picture": profilePicSrc
         };
 
         const UPDATEPROFILE = `http://127.0.0.1:8000/users/${login}/`;
@@ -69,14 +69,14 @@ const UpdateProfile = () => {
                     "Authorization": `Token ${token}`
 			}})
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 console.log('updated');
+                navigation.navigate('profile')
             })
             .catch(error => {
                 console.error(error); 
                 console.log('update error');
             })
-            navigation.navigate('profile')
     }
 
     return(
