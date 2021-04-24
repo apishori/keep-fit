@@ -31,7 +31,7 @@ const SignUp = () => {
                 "height": height,
                 "sex": sex,
                 "birthday": birthday,
-                "profile_picture": profilePic
+                "profile_pic": profilePic
             };
     
             const ADMINLOGIN = `http://127.0.0.1:8000/users/register/`;
@@ -40,12 +40,13 @@ const SignUp = () => {
             .then(data => {
                 console.log(data);
                 console.log('registered');
-                navigation.navigate('login')
             })
             .catch(error => {
                 console.error(error); 
                 console.log('register error');
             })
+                
+            navigation.navigate('login')
         }
     
         /*useEffect (() => {
