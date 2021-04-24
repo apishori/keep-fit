@@ -13,12 +13,12 @@ const Stack = createStackNavigator()
 
 const UpdateProfile = () => {
     const [profilePicSrc, setProfilePic] = useState('')
-	const [first, setFirstName] = useState('')
-	const [last, setLastName] = useState('')
+  const [first, setFirstName] = useState('')
+  const [last, setLastName] = useState('')
     const [height, setHeight] = useState(0)
     const [sex, setSex] = useState('')
-	const [weight, setWeight] = useState(0)
-	const [birthday, setBirthday] = useState('')
+  const [weight, setWeight] = useState(0)
+  const [birthday, setBirthday] = useState('')
     const [username, setUsername] = useState("")
 
     const login = useSelector(state => {
@@ -26,7 +26,7 @@ const UpdateProfile = () => {
     })
     
     const token = useSelector(state => {
-		return state.loginToken.token;
+    return state.loginToken.token;
     })
     
     const navigation = useNavigation()
@@ -56,7 +56,7 @@ const UpdateProfile = () => {
             "height": height,
             "sex": sex,
             "birthday": birthday,
-            // "profile_pic": profilePicSrc
+            "profile_picture": profilePicSrc
         };
 
         const UPDATEPROFILE = `http://127.0.0.1:8000/users/${login}/`;
@@ -67,16 +67,16 @@ const UpdateProfile = () => {
                 data: UPDATE,
                 headers: { 
                     "Authorization": `Token ${token}`
-			}})
+      }})
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 console.log('updated');
+                navigation.navigate('profile')
             })
             .catch(error => {
                 console.error(error); 
                 console.log('update error');
             })
-            navigation.navigate('profile')
     }
 
     return(
@@ -130,22 +130,18 @@ const UpdateProfile = () => {
                     <label>First name</label>
                     <input type="text" onChangeText={first => setFirstName(first)} type="text" className="form-control" placeholder="First name" />
                 </div>
-
                 <div className="form-group">
                     <label>Last name</label>
                     <input type="text" onChangeText={last => setLastName(last)} className="form-control" placeholder="Last name" />
                 </div>
-
                 <div className="form-group">
                     <label>Weight</label>
                     <input type="number" onChangeText={weight => setWeight(weight)}className="form-control" placeholder="Weight" />
                 </div>
-
                 <div className="form-group">
                     <label>Height</label>
                     <input type="number" onChangeText={height => setLastName(height)} className="form-control" placeholder="Height" />
                 </div>
-
                 <div className="form-group">
                     <label>Sex At Birth</label>
                     <DropDownPicker items={[
@@ -161,7 +157,6 @@ const UpdateProfile = () => {
                         placeholder="Select"
                         dropDownStyle={{backgroundColor: '#fafafa'}}/>
                 </div>
-
                 <div className="form-group">
                     <label>Birthday</label>
                     <input type="date" onChangeText={birthday=> setBirthday(birthday)} className="form-control" placeholder="Birthday" />
@@ -183,15 +178,15 @@ const UpdateProfile = () => {
 
 
 const Update = () => {
-	return (
-		<Stack.Navigator>
-			<Stack.Screen
-				name='profile'
-				component={ProfileView}
-				options={{headerShown:false}}
-			/>
-		</Stack.Navigator>
-	)
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name='profile'
+        component={ProfileView}
+        options={{headerShown:false}}
+      />
+    </Stack.Navigator>
+  )
 }
 
 const styles = StyleSheet.create({

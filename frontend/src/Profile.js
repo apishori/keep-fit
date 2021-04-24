@@ -2,11 +2,10 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {useSelector,useDispatch} from 'react-redux'
 import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useIsFocused } from '@react-navigation/core';
 import { createStackNavigator } from '@react-navigation/stack';
 import ForgotPassword from './ForgotPassword'
 import UpdateProfile from './UpdateProfile'
-import Login from "./Login"
 //import DeleteProfile from './DeleteProfile'
 
 const Stack = createStackNavigator()
@@ -34,6 +33,8 @@ const ProfileView = () => {
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
 
+	const isFocused = useIsFocused()
+
 	const loadProfile = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${login}`
 
@@ -47,7 +48,7 @@ const ProfileView = () => {
 				for (let i = 0; i < result.data.length; i++) {
 					if (result.data[i].username == login) {
 						const data = result.data[i]
-						console.log(data)
+						// console.log(data)
 						setNumFollowers(data.followers)
 						setNumFollowing(data.followings)
 						setUsername(data.username)
@@ -78,6 +79,10 @@ const ProfileView = () => {
 		navigation.navigate('login')
 	}
 
+	const updateProfile = async () => {
+		navigation.navigate('update')
+	}
+
 	const logOut = () => {
 		dispatch({ type: 'setLogin', payload: '' })
 		navigation.navigate(
@@ -87,10 +92,8 @@ const ProfileView = () => {
 	}
 
 	useEffect (() => {
-		if (username == "") {
-			loadProfile()
-		}
-	});
+		loadProfile();
+	}, [isFocused])
 	
 	return(
 		<View style={{flex:1}}>
@@ -109,7 +112,7 @@ const ProfileView = () => {
 				></Button>
 				<Button
 					title='Update Profile'
-					onPress={() => navigation.navigate('update')}
+					onPress={() => updateProfile()}
 				></Button>
 				<Button
 					title='Change Password'
