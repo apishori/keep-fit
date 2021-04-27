@@ -29,17 +29,6 @@ const HomeScreen = () => {
 	const [author_mapping,setauthor_mapping] = useState(new Map())
 	const [category_mapping,setcategory_mapping] = useState(new Map())
 
-	// RUN = 'R'
- //    YOGA = 'Y'
- //    HOME_CARDIO = 'HC'
- //    TENNIS = 'T'
- //    SWIMMING = 'S'
- //    BASKETBALL = 'B'
- //    CYCLING = 'C'
- //    JUMP_ROPE = 'J'
- //    HIKING = 'H'
- //    OTHER = 'O'
-
  	const category_dict = new Map()
  	category_dict.set("R","Running")
  	category_dict.set("Y","Yoga")
@@ -106,10 +95,14 @@ const HomeScreen = () => {
 		// const POST_LIST = `http://127.0.0.1:8000/posts/`; 
 		const POST_LIST = url; 
 		
-		axios.get(POST_LIST,
+
+		// look into this error: TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7fdf71e9d0a0>.
+		axios.get(POST_LIST
+				,
 				{headers: {
 					"Authorization": `Token ${token}`
-				}})
+				}}
+				)
 		.then(res => {
 			var videoId
 			for(var ids of res.data){
@@ -275,6 +268,16 @@ const HomeScreen = () => {
 					type="clear"
 					title="Category"
 					onPress={()=>setIsVisible(true)}
+				/>
+				<Button 
+					type="clear"
+					title="Liked Videos"
+					onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes`)}
+				/>
+				<Button 
+					type="clear"
+					title="My Uploads"
+					onPress={()=>fetchData(`http://127.0.0.1:8000/posts/byauthor`)}
 				/>
 				<FlatList
 				   data={cardData}

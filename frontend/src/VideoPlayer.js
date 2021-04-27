@@ -4,6 +4,7 @@ import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
 import {Button} from 'react-native-elements';
 import axios from 'axios';
+import {useSelector,useDispatch} from 'react-redux'
 
 // import { useState } from 'React';
 
@@ -11,13 +12,21 @@ const VideoPlayer = ({route})=>{
 
   const [buttonText, setButtonText] = useState("Like Exercise ❤️");
   var {videoId,title,postId} = route.params
+  const token = useSelector(state => {
+      return state.loginToken.token;
+  })
+
 
   const changeText = (text) => {
     setButtonText(text)
     const postIdInt = parseInt(postId)
     const ToggleLikeView = `http://localhost:8000/posts/like/${postIdInt}/`;
 
-    axios.get(ToggleLikeView)
+    axios.get(ToggleLikeView,
+      {headers: {
+          "Authorization": `Token ${token}`
+        }}
+        )
     .then(res => {
     })
     .catch(error => {
