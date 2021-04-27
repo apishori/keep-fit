@@ -34,6 +34,9 @@ const VideoCard = (props) => {
 			            <Text style={{ color:textcolor}}>
 			            	{props.channel}
 			            </Text>
+			            <Text style={{ color:textcolor}}>
+			            	{props.category}
+			            </Text>
 	         		</View>
 	    		</View>
     		</View>

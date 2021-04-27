@@ -20,6 +20,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStore,combineReducers} from 'redux'
 import {NavigationContainer,DefaultTheme,useNavigation,DarkTheme,useTheme} from '@react-navigation/native'
 import Login from "./src/Login";
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const rooReducer = combineReducers({
   cardData:reducer,
@@ -93,7 +94,9 @@ const AppWrapper = () => {
 
 function App() {
   return (
+  
     <Navigation />
+  
   );
 }
 

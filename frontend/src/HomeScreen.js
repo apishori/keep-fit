@@ -10,7 +10,7 @@ import UploadStreamScreen from './UploadStreamScreen';
 import StreamButton from './components/StreamButton';
 import RecordCameraScreen from './RecordCameraScreen';
 import axios from 'axios';
-import {Button } from 'react-native-elements';
+import {Button,BottomSheet,ListItem} from 'react-native-elements';
 
 const Stack = createStackNavigator();
 
@@ -27,14 +27,85 @@ const HomeScreen = () => {
 	const [id_mapping,setid_mapping] = useState(new Map())
 	const [name_mapping,setname_mapping] = useState(new Map())
 	const [author_mapping,setauthor_mapping] = useState(new Map())
+	const [category_mapping,setcategory_mapping] = useState(new Map())
+
+	// RUN = 'R'
+ //    YOGA = 'Y'
+ //    HOME_CARDIO = 'HC'
+ //    TENNIS = 'T'
+ //    SWIMMING = 'S'
+ //    BASKETBALL = 'B'
+ //    CYCLING = 'C'
+ //    JUMP_ROPE = 'J'
+ //    HIKING = 'H'
+ //    OTHER = 'O'
+
+ 	const category_dict = new Map()
+ 	category_dict.set("R","Running")
+ 	category_dict.set("Y","Yoga")
+ 	category_dict.set("HC","Home cardio")
+ 	category_dict.set("T","Tennis")
+ 	category_dict.set("S","Swimming")
+ 	category_dict.set("B","Basketball")
+ 	category_dict.set("C","Cycling")
+ 	category_dict.set("J","Jump rope")
+ 	category_dict.set("H","Hiking")
+ 	category_dict.set("O","Other")
 
 	const token = useSelector(state => {
 			return state.loginToken.token;
 	})
 
-	const fetchData = () => {
-		console.log("Updating HomeScreen")
-		const POST_LIST = `http://127.0.0.1:8000/posts/`; 
+	const [isVisible, setIsVisible] = useState(false);
+	const list = [
+	  { title: 'All categories',
+	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Running',
+	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/`) // change to category filter endpoint later
+	  },
+	  { title: 'Yoga',
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Home Cardio',
+		onPress: () => fetchData(`http://127.0.0.1:8000/posts/`),
+	  },
+	  { title: 'Tennis', 
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Swimming', 
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Basketball', 
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Cycling',
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Jump rope', 
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Hiking', 
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  { title: 'Other', 
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  },
+	  {
+	    title: 'Cancel',
+	    containerStyle: { backgroundColor: 'red' },
+	    titleStyle: { color: 'white' },
+	    onPress: () => setIsVisible(false),
+	  },
+	];
+
+	
+
+	const fetchData = (url) => {
+		setIsVisible(false)
+		// const POST_LIST = `http://127.0.0.1:8000/posts/`; 
+		const POST_LIST = url; 
+		
 		axios.get(POST_LIST,
 				{headers: {
 					"Authorization": `Token ${token}`
@@ -45,6 +116,7 @@ const HomeScreen = () => {
 				name_mapping.set(ids.video, ids.title)
 				id_mapping.set( ids.video, ids.id)
 				author_mapping.set( ids.video, ids.author.username)
+				category_mapping.set( ids.video, ids.category)
 				var result = res.data.map(function(val) {
 					return val.video;
 				}).join('%2C');
@@ -148,12 +220,29 @@ const HomeScreen = () => {
 	}
 
 	useEffect(() => {
-		fetchData();
+		fetchData(`http://127.0.0.1:8000/posts/`);
     }, [])
+
+    const selectCategory = () => {
+    	setIsVisible(true);
+    }
 
 	const Home = () => {
 		return (
+			
 			<View style={{flex:1}}>
+				<BottomSheet
+				  isVisible={isVisible}
+				  containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
+				>
+				  {list.map((l, i) => (
+				    <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
+				      <ListItem.Content>
+				        <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+				      </ListItem.Content>
+				    </ListItem>
+				  ))}
+				</BottomSheet>
 				<View style={styles.streamsWrapper}>
 					<Text style = {styles.sectionTitle}>Livestreams</Text>
 					
@@ -180,7 +269,12 @@ const HomeScreen = () => {
 				<Button 
 					type="clear"
 					title="Refresh"
-					onPress={()=>fetchData()}
+					onPress={()=>fetchData(`http://127.0.0.1:8000/posts/`)}
+				/>
+				<Button 
+					type="clear"
+					title="Category"
+					onPress={()=>setIsVisible(true)}
 				/>
 				<FlatList
 				   data={cardData}
@@ -190,6 +284,7 @@ const HomeScreen = () => {
 						videoId={item.id}
 						title= {name_mapping.get(item.id)} // {item.snippet.title}
 						channel={author_mapping.get(item.id)}
+						category = {category_dict.get(category_mapping.get(item.id))}
 						postId = {id_mapping.get(item.id)}
 					   />
 					   }}
