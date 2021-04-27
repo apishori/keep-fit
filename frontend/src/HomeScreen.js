@@ -10,7 +10,7 @@ import UploadStreamScreen from './UploadStreamScreen';
 import StreamButton from './components/StreamButton';
 import RecordCameraScreen from './RecordCameraScreen';
 import axios from 'axios';
-import {Button,BottomSheet,ListItem} from 'react-native-elements';
+import {Button,BottomSheet,ListItem,ButtonGroup} from 'react-native-elements';
 
 const Stack = createStackNavigator();
 
@@ -259,26 +259,32 @@ const HomeScreen = () => {
 	
 			<View style={styles.videosWrapper}>
 				<Text style = {styles.sectionTitle}>Videos</Text>
-				<Button 
-					type="clear"
-					title="Refresh"
-					onPress={()=>fetchData(`http://127.0.0.1:8000/posts/`)}
-				/>
-				<Button 
-					type="clear"
-					title="Category"
-					onPress={()=>setIsVisible(true)}
-				/>
-				<Button 
-					type="clear"
-					title="Liked Videos"
-					onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes`)}
-				/>
-				<Button 
-					type="clear"
-					title="My Uploads"
-					onPress={()=>fetchData(`http://127.0.0.1:8000/posts/byauthor`)}
-				/>
+				<View style={styles.buttonContainer}>
+					<Button 
+						// type="clear"
+						title="All"
+						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/`)}
+						style={styles.buttonOption}
+					/>
+					<Button 
+						// type="clear"
+						title="Category"
+						onPress={()=>setIsVisible(true)}
+						style={styles.buttonOption}
+					/>
+					<Button 
+						// type="clear"
+						title="Liked"
+						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes`)}
+						style={styles.buttonOption}
+					/>
+					<Button 
+						// type="clear"
+						title="My Uploads"
+						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/byauthor`)}
+						style={styles.buttonOption}
+					/>
+				</View>
 				<FlatList
 				   data={cardData}
 				   renderItem={({item})=>{
@@ -350,6 +356,17 @@ const styles = StyleSheet.create({
 	items: {
 	    marginTop: 16,
 	},
+	buttonContainer:{
+		flex: 0,
+	    flexDirection: 'row',
+	    justifyContent: 'space-between',
+	    // padding: 10
+	},
+	buttonOption:{
+		marginRight:8,
+		marginTop: 16,
+		marginBottom: 8,
+	}
 })
 
 export default HomeScreen

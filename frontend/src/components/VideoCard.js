@@ -11,7 +11,7 @@ const VideoCard = (props) => {
 
 	return (
 		<TouchableOpacity
-			onPress={()=>navigation.navigate("videoplayer",{videoId:props.videoId,title:props.title,postId:props.postId})}
+			onPress={()=>navigation.navigate("videoplayer",{videoId:props.videoId,title:props.title,postId:props.postId, authorId: props.channel})}
 		>
       		<View style={{marginBottom:10}}>
 	          <Image 

@@ -11,9 +11,13 @@ import {useSelector,useDispatch} from 'react-redux'
 const VideoPlayer = ({route})=>{
 
   const [buttonText, setButtonText] = useState("Like Exercise ❤️");
-  var {videoId,title,postId} = route.params
+  var {videoId,title,postId, authorId} = route.params
+
   const token = useSelector(state => {
       return state.loginToken.token;
+  })
+  const author = useSelector(state => {
+      return state.loginData.loginID;
   })
 
 
@@ -23,6 +27,25 @@ const VideoPlayer = ({route})=>{
     const ToggleLikeView = `http://localhost:8000/posts/like/${postIdInt}/`;
 
     axios.get(ToggleLikeView,
+      {headers: {
+          "Authorization": `Token ${token}`
+        }}
+        )
+    .then(res => {
+    })
+    .catch(error => {
+      // console.log(error);
+    });
+  };
+
+  const deletePost = () => {
+    
+    const postIdInt = parseInt(postId)
+    const deletePostURL = `http://localhost:8000/posts/${postIdInt}`;
+
+    console.log(token)
+
+    axios.get(deletePostURL,
       {headers: {
           "Authorization": `Token ${token}`
         }}
@@ -68,6 +91,17 @@ const VideoPlayer = ({route})=>{
           title={buttonText}
           onPress={() => changeText(buttonText === 'Like Exercise ❤️' ? 'Unlike Exercise 💔' : 'Like Exercise ❤️')}>
         </Button>
+      </View>
+
+      <View style={{align:"center", margin: 16}}>
+            {authorId == author ? 
+            <Button
+              buttonStyle={{backgroundColor:'#ef476f'}}
+              title="Delete Post"
+              onPress={() => {deletePost()}}
+              >
+          </Button>
+            : null }
       </View>
 
     </View>
