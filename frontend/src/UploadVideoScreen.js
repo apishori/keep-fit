@@ -40,6 +40,7 @@ const Home = () => {
 	const navigation = useNavigation();
 	const [postCategory, setCategory] = useState('');
 	const [postTitle, setTitle] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const token = useSelector(state => {
 			return state.loginToken.token;
@@ -132,8 +133,7 @@ const Home = () => {
 
 	const post = () => {
 		
-    	// api call
-    	uploadVideo();
+    	
     	console.log("TOKEN: " + token)
 			// send video id to server
         const POST_CREATE = `http://127.0.0.1:8000/posts/create/`; 
@@ -150,11 +150,14 @@ const Home = () => {
 		.then(res => {
 			console.log(res.data)
 			console.log("posted~!");
+			setErrorMessage('');
+
+			// api call
+    		uploadVideo();
 	
 		})
 		.catch(error => {
-			console.log("upload error:");
-			console.log(error); 
+			setErrorMessage('Please add a title and category');
 		})
 		
 		
@@ -166,7 +169,7 @@ const Home = () => {
 			<View style = {styles.form}>
 			<Input
 				onChangeText={postTitle => setTitle(postTitle)}
-				label='Exercise Info'
+				label='Exercise Title'
 				placeholder='Enter exercise title'
 				value={postTitle}
 			/>
@@ -187,7 +190,7 @@ const Home = () => {
 			  title="Post Exercise"
 			  onPress={()=>post()}
 			/>
-
+			<Text style={{marginTop:16}}>{errorMessage && <Text className="error"> {errorMessage} </Text>}</Text>
 		</View>
     </View>
   )}

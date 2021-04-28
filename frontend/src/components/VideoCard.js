@@ -35,10 +35,10 @@ const VideoCard = (props) => {
 			            	{props.channel}
 			            </Text>
 			            <Text style={{ color:textcolor}}>
-			            	{props.category}
+			            	Category: {props.category}
 			            </Text>
 			            <Text style={{ color:textcolor}}>
-			            	❤️ {props.likes}
+			            	❤️: {props.likes}
 			            </Text>
 	         		</View>
 	    		</View>
