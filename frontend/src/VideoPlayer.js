@@ -6,12 +6,10 @@ import {Button} from 'react-native-elements';
 import axios from 'axios';
 import {useSelector,useDispatch} from 'react-redux'
 
-// import { useState } from 'React';
-
 const VideoPlayer = ({route})=>{
 
   const [buttonText, setButtonText] = useState("Like Exercise ❤️");
-  var {videoId,title,postId, authorId} = route.params
+  var {videoId,title,postId, authorId,likes,category} = route.params
 
   const token = useSelector(state => {
       return state.loginToken.token;
@@ -19,7 +17,6 @@ const VideoPlayer = ({route})=>{
   const author = useSelector(state => {
       return state.loginData.loginID;
   })
-
 
   const changeText = (text) => {
     setButtonText(text)
@@ -45,8 +42,8 @@ const VideoPlayer = ({route})=>{
 
     console.log(token)
 
-    axios.get(deletePostURL,
-      {headers: {
+    axios.delete(deletePostURL,
+        {headers: {
           "Authorization": `Token ${token}`
         }}
         )
@@ -79,8 +76,11 @@ const VideoPlayer = ({route})=>{
          {title}
       </Text>
 
-      <View style={{borderBottomWidth:1}}>
-        <Text></Text>
+      <View style={{borderBottomWidth:1,width:Dimensions.get("screen").width - 50,
+           margin:9}}>
+        <Text style={{marginBottom:8}}>{author}</Text>
+        <Text style={{marginBottom:8}}>Category: {category}</Text>
+        <Text style={{marginBottom:8}}>❤️: {likes}</Text>
       </View>
            
       <View style={{align:"center", margin: 16}}>

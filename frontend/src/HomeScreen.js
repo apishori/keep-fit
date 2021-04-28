@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import VideoCard from './components/VideoCard'
+import VideoFeed from './components/VideoFeed'
 import Streams from './components/Streams'
 import {StyleSheet, Text, View, FlatList, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useSelector,useDispatch} from 'react-redux'
@@ -28,6 +29,7 @@ const HomeScreen = () => {
 	const [name_mapping,setname_mapping] = useState(new Map())
 	const [author_mapping,setauthor_mapping] = useState(new Map())
 	const [category_mapping,setcategory_mapping] = useState(new Map())
+	const [likes_mapping,setlikes_mapping] = useState(new Map())
 
  	const category_dict = new Map()
  	category_dict.set("R","Running")
@@ -44,6 +46,8 @@ const HomeScreen = () => {
 	const token = useSelector(state => {
 			return state.loginToken.token;
 	})
+
+	
 
 	const [isVisible, setIsVisible] = useState(false);
 	const list = [
@@ -110,6 +114,7 @@ const HomeScreen = () => {
 				id_mapping.set( ids.video, ids.id)
 				author_mapping.set( ids.video, ids.author.username)
 				category_mapping.set( ids.video, ids.category)
+				likes_mapping.set( ids.video, ids.likes)
 				var result = res.data.map(function(val) {
 					return val.video;
 				}).join('%2C');
@@ -288,18 +293,19 @@ const HomeScreen = () => {
 				<FlatList
 				   data={cardData}
 				   renderItem={({item})=>{
-						   // console.log("map2" + id_mapping.get(item.id))
 					   return <VideoCard 
 						videoId={item.id}
 						title= {name_mapping.get(item.id)} // {item.snippet.title}
 						channel={author_mapping.get(item.id)}
 						category = {category_dict.get(category_mapping.get(item.id))}
 						postId = {id_mapping.get(item.id)}
+						likes = {likes_mapping.get(item.id)}
 					   />
 					   }}
 				   keyExtractor={(item, index) => index.toString()}
 				   style={{paddingTop:16}}
 				/>
+				
 			</View>
 			</View>
 		)
