@@ -78,8 +78,8 @@ class TitlePostListView(APIView): #getpost_by_title()
         return Response(serializer.data)
     
 class AuthorPostListView(APIView): #getpost_by_author()
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
         #my_likes = Like.objects.all().filter(user=request.user)
@@ -88,8 +88,8 @@ class AuthorPostListView(APIView): #getpost_by_author()
         return Response(serializer.data)
 
 class LikedPostListView(APIView): #getpost_by_mylikes()
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
         #my_likes = Like.objects.all().filter(user=request.user)
