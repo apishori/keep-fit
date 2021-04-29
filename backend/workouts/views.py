@@ -19,11 +19,11 @@ class CreateWorkoutView(APIView): #create workout
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetWorkoutLogView(APIView): #get 
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.AllowAny,)
 
     def get(self, request, format=None):
-        serializer = WorkoutSerializer(Workout.objects.all(), many=True, context={'request':self.request})
+        serializer = WorkoutSerializer(Workout.objects.filter(author=request.user), many=True, context={'request':self.request})
         return Response(serializer.data)
 
 class CleanWorkoutLogView(APIView): #clear log
