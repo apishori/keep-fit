@@ -22,7 +22,8 @@ class CreatePostView(APIView): #create post
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostView(APIView): #delete or edit post
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def delete(self, request, id, format=None):
         post = get_object_or_404(Post, id=id)
