@@ -9,4 +9,5 @@ urlpatterns = [
     path('byauthor/', views.AuthorPostListView.as_view(), name='get-post-author'), #getpost_by_author() for author's profile
     path('bylikes/', views.LikedPostListView.as_view(), name='get-post-likes'), #getpost_by_my_likes() for my profile
     path('', views.PostListView.as_view(), name='get-post'), #getpost() for news feed
+    path('reco/', views.PostRecView.as_view(), name='recommender'), #getposts_by_recommender() option for news feed
 ]
