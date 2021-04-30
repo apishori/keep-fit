@@ -30,6 +30,8 @@ To run the server:
 
 Set-up:
 
+`npm install`
+
 `export PATH=~/.npm-global/bin:$PATH`
 
 
