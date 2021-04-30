@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, Button, FlatList, View, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, FlatList, View, Pressable, Image, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import VideoCard from './components/VideoCard';
@@ -72,7 +72,7 @@ const UserResult = () => {
 		//console.log(state)
 		return state.result;
 	})
-	// const [profilePic, setPic] = useState('../../backend/media/profile_default.jpg')
+
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
 
@@ -82,7 +82,6 @@ const UserResult = () => {
 	}
 
 	const renderItem = ({ item }) => {
-		// console.log(item)
 		let profilePic = '../../backend/media/profile_default.jpg'
 		if (item.profile) {
 			profilePic = item.profile.profile_pic.image
@@ -197,8 +196,22 @@ const SearchMenu = () => {
 				console.error(error);
 			});
 		}
-		
 	};
+
+	const dummyData = [
+		{
+			label: "term1",
+			value: "term1"
+		},
+		{
+			label: "term2",
+			value: "term2"
+		},
+		{
+			label: "term3",
+			value: "term3"
+		},
+	];
 
 	useEffect(() => {
 		if (didSearch) {
@@ -216,15 +229,30 @@ const SearchMenu = () => {
 
 	return (
 		<View
-			style={{zIndex: 10}}
+			// style={{zIndex: 10}}
+			style={styles.searchMenu}
 		>
 			<View style={styles.searchBar}>
 				<TextInput
 					onChangeText={searchTerm => setSearchTerm(searchTerm)}
 					placeholder='Search'
 					style={styles.searchInput}
-				>
-				</TextInput>
+				/>
+				<DropDownPicker
+					items={dummyData}
+					containerStyle={{height: 40}}
+					style={{backgroundColor: '#fafafa'}}
+					itemStyle={{
+						justifyContent: 'flex-start'
+					}}
+					// onChangeItem={item => setSearchAmong(item.value)}
+					dropDownStyle={{backgroundColor: '#fafafa'}}
+				/>
+				{/* <FlatList
+					
+					data={dummyData}
+					renderItem={renderHistory}
+				/> */}
 				<DropDownPicker
 					items={[
 						{label: 'users', value: 'users', selected: true},
@@ -252,18 +280,6 @@ const SearchMenu = () => {
 					status={status}
 				/>
 			</View>
-		</View>
-	);
-};
-
-const SearchWrapper = () => {
-	return (
-		<View
-			style={{flex:1}}
-		>
-			<SearchMenu
-				style={styles.searchMenu}
-			/>
 			<Results
 				style={styles.results}
 			/>
@@ -276,18 +292,18 @@ const Search = () => {
 		<Stack.Navigator>
 			<Stack.Screen
 				name='search'
-				component={SearchWrapper}
+				component={SearchMenu}
 				options={{headerShown:false}}
 			/>
 			<Stack.Screen
-					name='profile'
-					component={OtherProfile}
-					options={{headerShown:false}}
+				name='profile'
+				component={OtherProfile}
+				options={{headerShown:false}}
 			/>
 			<Stack.Screen
-					name='video'
-					component={VideoPlayer}
-					options={{headerShown:false}}
+				name='video'
+				component={VideoPlayer}
+				options={{headerShown:false}}
 			/>
 			<Stack.Screen
 				name='stream'
@@ -300,7 +316,7 @@ const Search = () => {
 
 const styles = StyleSheet.create({
 	searchMenu: {
-		flex: 0.2,
+		flex: 1,
 		margin: '2%'
 	},
     searchBar: {
