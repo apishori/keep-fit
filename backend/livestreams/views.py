@@ -1,16 +1,16 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions, status
 from django.contrib.auth.models import User
-from .models import Livestream
-from .serializers import LivestreamSerializer
+from django.db.models import Q
+from django.shortcuts import render
+from rest_framework import authentication, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from .models import MET_VALS, Livestream
+from .serializers import LivestreamSerializer
 
 
 # Create your views here.
 class StartStreamView(APIView): # start stream
-
     permission_classes = (permissions.IsAuthenticated,)
     
     def post(self, request, format=None):
@@ -22,7 +22,6 @@ class StartStreamView(APIView): # start stream
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EndStreamView(APIView): # end stream
-
     permission_classes = (permissions.IsAuthenticated,)
 
     def delete(self, request, id, format=None):
@@ -60,12 +59,14 @@ class TitleStreamListView(APIView):  # get_livestream_by_title()
 
     def get(self, request, format=None):
         query = request.GET.get('query')
-        stream = Livestream.objects.none()
+        category = request.GET.get('category')
+        streams = Livestream.objects.none()
         if query:
-            stream = Livestream.objects.filter(Q(title__icontains=query))
-        else:
-            serializer = LivestreamSerializer(stream, many=True, context={'request':self.request})
-            return Response(serializer.data)
+            streams = Livestream.objects.filter(Q(title__icontains=query))
+            if category and category in MET_VALS:
+                streams = streams.filter(category=category)
+        serializer = LivestreamSerializer(streams, many=True, context={'request':self.request})
+        return Response(serializer.data)
 
 class GetStreamsListView(APIView): # get_livestreams()
 
@@ -74,6 +75,9 @@ class GetStreamsListView(APIView): # get_livestreams()
 
     def get(self, request, format=None):
         streams = Livestream.objects.all()
+        category = request.GET.get('category')
+        if category and category in MET_VALS:
+            streams = streams.filter(category=category)
         serializer = LivestreamSerializer(streams, many=True, context={'request':self.request})
         return Response(serializer.data)
 

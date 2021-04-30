@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
-from .models import Post, Like
+from .models import Post, Like, MET_VALS
 from .serializers import PostSerializer
 
 # Create your views here
@@ -71,9 +71,12 @@ class TitlePostListView(APIView): #getpost_by_title()
     
     def get(self, request, format=None):
         query = request.GET.get('query')
+        category = request.GET.get('category')
         posts = Post.objects.none()
         if query:
             posts = Post.objects.filter(Q(title__icontains=query))
+            if category and category in MET_VALS:
+                posts = posts.filter(category=category)
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
     
@@ -102,5 +105,9 @@ class PostListView(APIView): #getposts()
     permission_classes = (permissions.AllowAny,)
     
     def get(self, request, format=None):
-        serializer = PostSerializer(Post.objects.all(), many=True, context={'request':self.request})
+        posts = Post.objects.all()
+        category = request.GET.get('category')
+        if category and category in MET_VALS:
+            posts = posts.filter(category=category)
+        serializer = PostSerializer(posts, many=True, context={'request':self.request})
         return Response(serializer.data)

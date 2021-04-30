@@ -6,6 +6,6 @@ urlpatterns = [
     path('<int:id>/', views.EndStreamView.as_view(), name='end-livestream'), # basically the name
     path('join/<int:id>/', views.JoinStreamView.as_view(), name='join-stream'), # join stream
     path('leave/<int:id>/', views.LeaveStreamView.as_view(), name='leave-stream'), # leave stream
-    path('search/<str:title>/', views.TitleStreamListView.as_view(), name='get-stream-title'), # search stream by title
+    path('search/', views.TitleStreamListView.as_view(), name='get-stream-title'), # search stream by title
     path('', views.GetStreamsListView.as_view(), name='get-stream-feed'), # get_livestreams()
 ]
