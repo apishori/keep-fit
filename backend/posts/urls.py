@@ -10,4 +10,8 @@ urlpatterns = [
     path('bylikes/', views.LikedPostListView.as_view(), name='get-post-likes'), #getpost_by_my_likes() for my profile
     path('', views.PostListView.as_view(), name='get-post'), #getpost() for news feed
     path('reco/', views.PostRecView.as_view(), name='recommender'), #getposts_by_recommender() option for news feed
+    path('watch/<int:id>', views.CreateWatchView.as_view(), name='create-watch'),
+    path('getwatched/', views.GetWatchedLogView.as_view(), name='get-watched-log'), 
+    path('cleanwatched/', views.CleanWatchedLogView.as_view(), name='clean-watched-log'), 
+
 ]

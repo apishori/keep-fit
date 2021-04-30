@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 
-from .models import Post, Like, MET_VALS
+from .models import Post, Like, Watch, MET_VALS
 from .serializers import PostSerializer
 
 # Create your views here
@@ -122,3 +122,33 @@ class PostRecView(APIView): #getposts_by_recommender()
         sorted_list = Post.objects.annotate(like_count=Count('likes')).order_by('-like_count')
         serializer = PostSerializer(sorted_list, many=True, context={'request':self.request})
         return Response(serializer.data)        
+
+class CreateWatchView(APIView): #create_watch()
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, id, format=None):
+        user = request.user
+        post = get_object_or_404(Post, id=id)
+        if not Watch.objects.filter(user=user, post=post):
+            Watch.objects.create(user=user, post=post)
+        return Response(status=status.HTTP_201_CREATED)
+
+class GetWatchedLogView(APIView): #getposts_by_watches()
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):   
+        watched = Post.objects.filter(watches__user=request.user).order_by("watches")
+        serializer = PostSerializer(watched, many=True, context={'request':self.request})
+        return Response(serializer.data)         
+
+class CleanWatchedLogView(APIView): #empty_watched_log()
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def delete(self, request, format=None):
+        watched = Post.objects.filter(watches__user=request.user)
+        watched.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+
+
+
