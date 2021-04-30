@@ -7,9 +7,11 @@ import axios from 'axios';
 import {useSelector,useDispatch} from 'react-redux'
 
 const VideoPlayer = ({route})=>{
-
-  const [buttonText, setButtonText] = useState("Like Exercise ❤️");
   var {videoId,title,postId, authorId,likes,category} = route.params
+  const [buttonText, setButtonText] = useState("Like Exercise ❤️");
+  const [likesAdd, setlikesAdd] = useState(1);
+  const [likesCount, setLikesCount] = useState(likes);
+  
 
   const token = useSelector(state => {
       return state.loginToken.token;
@@ -19,6 +21,7 @@ const VideoPlayer = ({route})=>{
   })
 
   const [newLikes,setNewLikes] = useState(`❤️: ${likes}`)
+  const likesSet = new Set();
 
   const fetchLikes = () => {
     const POST_LIST = `http://127.0.0.1:8000/posts/`; 
@@ -31,7 +34,7 @@ const VideoPlayer = ({route})=>{
         )
     .then(res => {
       // get number of likes
-      console.log(res.data)
+      // console.log(res.data.likes)
       // this.setState({
       //   textValue: `❤️: ${res.data}`
       // })
@@ -42,6 +45,12 @@ const VideoPlayer = ({route})=>{
   }
 
   const changeText = (text) => {
+    if(text=='Like Exercise ❤️'){
+      setLikesCount(likesCount-1)
+    }
+    else{
+      setLikesCount(likesCount+1)
+    }
     setButtonText(text)
     fetchLikes()
     const postIdInt = parseInt(postId)
@@ -62,7 +71,7 @@ const VideoPlayer = ({route})=>{
   const deletePost = () => {
     
     const postIdInt = parseInt(postId)
-    const deletePostURL = `http://localhost:8000/posts/${postIdInt}`;
+    const deletePostURL = `http://localhost:8000/posts/${postIdInt}/`;
 
     console.log(token)
 
@@ -77,6 +86,33 @@ const VideoPlayer = ({route})=>{
       // console.log(error);
     });
   };
+
+  
+  useEffect(() => {
+    const postIdInt = parseInt(postId)
+    axios.get(`http://127.0.0.1:8000/posts/bylikes/`
+        ,
+        {headers: {
+          "Authorization": `Token ${token}`
+        }}
+        )
+    .then(res => {
+      var videoId
+      for(var ids of res.data){
+        likesSet.add(ids.id)
+        console.log(ids.id)
+      }
+
+      if(likesSet.has(postIdInt)){
+        console.log("HERE")
+        setButtonText("Unlike Exercise ❤️")
+        setlikesAdd(-1)
+      }
+    })
+
+    
+  }, [])
+
 
   return(
 
@@ -104,7 +140,7 @@ const VideoPlayer = ({route})=>{
            margin:9}}>
         <Text style={{marginBottom:8}}>{author}</Text>
         <Text style={{marginBottom:8}}>Category: {category}</Text>
-        <Text style={{marginBottom:8}}>{newLikes}</Text>
+        <Text style={{marginBottom:8}}>❤️: {likesCount}</Text>
       </View>
            
       <View style={{align:"center", margin: 16}}>

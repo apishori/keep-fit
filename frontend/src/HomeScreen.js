@@ -52,7 +52,7 @@ const HomeScreen = () => {
 	const [isVisible, setIsVisible] = useState(false);
 	const list = [
 	  { title: 'All categories',
-	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/reco`)
+	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/reco/`)
 	  },
 	  { title: 'Running',
 	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=R`) // change to category filter endpoint later
@@ -92,7 +92,36 @@ const HomeScreen = () => {
 	  },
 	];
 
-	
+	const [isHistVisible, setIsHistVisible] = useState(false);
+	const listHist = [
+	  { title: 'View History',
+	    onPress: () => showHistory()
+	  },
+	  {
+	    title: 'Clear History',
+	    containerStyle: { backgroundColor: 'red' },
+	    titleStyle: { color: 'white' },
+	    onPress: () => clearHistory(),
+	  }]
+
+	const showHistory = () => {
+		fetchData(`http://127.0.0.1:8000/posts/getwatched/`)
+		setIsHistVisible(false)
+	}
+
+	const clearHistory = () => {
+		axios.delete(`http://127.0.0.1:8000/posts/cleanwatched/`,
+	        {headers: {
+	          "Authorization": `Token ${token}`
+	        }}
+	        )
+	    .then(res => {
+	    })
+	    .catch(error => {
+	      // console.log(error);
+	    });
+		setIsHistVisible(false)
+	}
 
 	const fetchData = (url) => {
 		setIsVisible(false)
@@ -225,6 +254,10 @@ const HomeScreen = () => {
     	setIsVisible(true);
     }
 
+    const selectHist = () => {
+    	setIsHistVisible(true);
+    }
+
 	const Home = () => {
 		return (
 			
@@ -234,6 +267,18 @@ const HomeScreen = () => {
 				  containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
 				>
 				  {list.map((l, i) => (
+				    <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
+				      <ListItem.Content>
+				        <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+				      </ListItem.Content>
+				    </ListItem>
+				  ))}
+				</BottomSheet>
+				<BottomSheet
+				  isVisible={isHistVisible}
+				  containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
+				>
+				  {listHist.map((l, i) => (
 				    <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
 				      <ListItem.Content>
 				        <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
@@ -267,19 +312,28 @@ const HomeScreen = () => {
 				<View style={styles.buttonContainer}>
 					<Button 
 						// type="clear"
-						title="All"
+						title="Show All"
 						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/reco`)}
 						style={styles.buttonOption}
 					/>
 					<Button 
 						// type="clear"
-						title="Category"
+						title="By Category"
 						onPress={()=>setIsVisible(true)}
 						style={styles.buttonOption}
 					/>
+					
 					<Button 
 						// type="clear"
-						title="Liked"
+						title="View History"
+						onPress={()=>setIsHistVisible(true)}
+						style={styles.buttonOption}
+					/>
+				</View>
+				<View style={styles.buttonContainer}>
+					<Button 
+						// type="clear"
+						title="My Liked Posts"
 						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes/`)}
 						style={styles.buttonOption}
 					/>
@@ -366,7 +420,8 @@ const styles = StyleSheet.create({
 		flex: 0,
 	    flexDirection: 'row',
 	    justifyContent: 'space-between',
-	    // padding: 10
+	    marginTop: -8,
+	    marginBottom: -8
 	},
 	buttonOption:{
 		marginRight:8,
