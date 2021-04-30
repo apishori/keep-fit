@@ -52,37 +52,37 @@ const HomeScreen = () => {
 	const [isVisible, setIsVisible] = useState(false);
 	const list = [
 	  { title: 'All categories',
-	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/reco`)
 	  },
 	  { title: 'Running',
-	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/`) // change to category filter endpoint later
+	    onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=R`) // change to category filter endpoint later
 	  },
 	  { title: 'Yoga',
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=Y`)
 	  },
 	  { title: 'Home Cardio',
-		onPress: () => fetchData(`http://127.0.0.1:8000/posts/`),
+		onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=HC`),
 	  },
 	  { title: 'Tennis', 
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=T`)
 	  },
 	  { title: 'Swimming', 
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=S`)
 	  },
 	  { title: 'Basketball', 
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=B`)
 	  },
 	  { title: 'Cycling',
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=C`)
 	  },
 	  { title: 'Jump rope', 
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=J`)
 	  },
 	  { title: 'Hiking', 
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=H`)
 	  },
 	  { title: 'Other', 
-	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/`)
+	  	onPress: () => fetchData(`http://127.0.0.1:8000/posts/?category=O`)
 	  },
 	  {
 	    title: 'Cancel',
@@ -218,7 +218,7 @@ const HomeScreen = () => {
 	}
 
 	useEffect(() => {
-		fetchData(`http://127.0.0.1:8000/posts/`);
+		fetchData(`http://127.0.0.1:8000/posts/reco`);
     }, [])
 
     const selectCategory = () => {
@@ -268,7 +268,7 @@ const HomeScreen = () => {
 					<Button 
 						// type="clear"
 						title="All"
-						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/`)}
+						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/reco`)}
 						style={styles.buttonOption}
 					/>
 					<Button 
@@ -280,13 +280,13 @@ const HomeScreen = () => {
 					<Button 
 						// type="clear"
 						title="Liked"
-						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes`)}
+						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes/`)}
 						style={styles.buttonOption}
 					/>
 					<Button 
 						// type="clear"
 						title="My Uploads"
-						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/byauthor`)}
+						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/byauthor/`)}
 						style={styles.buttonOption}
 					/>
 				</View>

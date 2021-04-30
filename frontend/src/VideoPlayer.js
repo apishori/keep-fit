@@ -18,8 +18,32 @@ const VideoPlayer = ({route})=>{
       return state.loginData.loginID;
   })
 
+  const [newLikes,setNewLikes] = useState(`❤️: ${likes}`)
+
+  const fetchLikes = () => {
+    const POST_LIST = `http://127.0.0.1:8000/posts/`; 
+
+    axios.get(POST_LIST
+        ,
+        {headers: {
+          "Authorization": `Token ${token}`
+        }}
+        )
+    .then(res => {
+      // get number of likes
+      console.log(res.data)
+      // this.setState({
+      //   textValue: `❤️: ${res.data}`
+      // })
+    })
+    .catch(error => {
+      console.error("error getting likes: " + error); 
+    });
+  }
+
   const changeText = (text) => {
     setButtonText(text)
+    fetchLikes()
     const postIdInt = parseInt(postId)
     const ToggleLikeView = `http://localhost:8000/posts/like/${postIdInt}/`;
 
@@ -80,7 +104,7 @@ const VideoPlayer = ({route})=>{
            margin:9}}>
         <Text style={{marginBottom:8}}>{author}</Text>
         <Text style={{marginBottom:8}}>Category: {category}</Text>
-        <Text style={{marginBottom:8}}>❤️: {likes}</Text>
+        <Text style={{marginBottom:8}}>{newLikes}</Text>
       </View>
            
       <View style={{align:"center", margin: 16}}>
