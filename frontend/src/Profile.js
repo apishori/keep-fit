@@ -28,7 +28,6 @@ const ProfileView = () => {
 	const token = useSelector(state => {
 		return state.loginToken.token
 	})
-	console.log(token)
 
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
