@@ -26,8 +26,8 @@ class PostView(APIView): #delete or edit post
 
     def delete(self, request, id, format=None):
         post = get_object_or_404(Post, id=id)
-        if post.author.username != request.user.username:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        #if post.author.username != request.user.username:
+        #    return Response(status=status.HTTP_400_BAD_REQUEST)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
