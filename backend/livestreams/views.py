@@ -4,6 +4,7 @@ from django.shortcuts import render
 from rest_framework import authentication, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from users.models import SearchTerm
 
 from .models import MET_VALS, Livestream
 from .serializers import LivestreamSerializer
@@ -53,9 +54,7 @@ class LeaveStreamView(APIView):  # leave stream
         return Response(serializer.data)
     
 class TitleStreamListView(APIView):  # get_livestream_by_title()
-
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         query = request.GET.get('query')
@@ -65,6 +64,8 @@ class TitleStreamListView(APIView):  # get_livestream_by_title()
             streams = Livestream.objects.filter(Q(title__icontains=query))
             if category and category in MET_VALS:
                 streams = streams.filter(category=category)
+            if streams and not SearchTerm.objects.filter(term=query):
+                SearchTerm.objects.create(user=request.user, term=query)
         serializer = LivestreamSerializer(streams, many=True, context={'request':self.request})
         return Response(serializer.data)
 

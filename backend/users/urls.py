@@ -11,6 +11,9 @@ urlpatterns = [
     path('update_password/', views.UpdatePasswordView.as_view(), name='update-password'),
     path('token/', auth_views.obtain_auth_token, name='obtain-token'),
 
+    #Search Term Endpoints
+    path('searchterms/', views.SearchTermListView.as_view(), name='search-terms-list'),
+    
     #Follow Endpoints
     path('follow/<str:username>/', views.ToggleFollowView.as_view(), name='toggle-follow'),
     

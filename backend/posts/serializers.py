@@ -5,7 +5,6 @@ from users.serializers import UserSerializer
 
 from .models import Like, Post
 
-
 class PostSerializer(serializers.ModelSerializer):
     video = serializers.CharField(read_only=True)
     author = UserSerializer(read_only=True)

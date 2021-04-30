@@ -47,3 +47,10 @@ class Follow(models.Model):
         if self.user1 == self.user2:
             raise ValidationError("Users cannot follow themselves")
         super(Follow, self).save(*args, **kwargs)
+
+class SearchTerm(models.Model):
+    term = models.CharField(max_length=255, blank=False, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='search_terms')
+    created_at = models.DateTimeField(default=timezone.now)
+    class Meta:
+        ordering = ('-created_at',)

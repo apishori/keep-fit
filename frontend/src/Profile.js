@@ -6,7 +6,6 @@ import { useNavigation, useIsFocused } from '@react-navigation/core';
 import { createStackNavigator } from '@react-navigation/stack';
 import ForgotPassword from './ForgotPassword'
 import UpdateProfile from './UpdateProfile'
-//import DeleteProfile from './DeleteProfile'
 
 const Stack = createStackNavigator()
 
@@ -28,7 +27,7 @@ const ProfileView = () => {
 	const token = useSelector(state => {
 		return state.loginToken.token
 	})
-	console.log(token)
+	// console.log(token)
 
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
@@ -69,14 +68,20 @@ const ProfileView = () => {
 	}
 
 	const deleteProfile = () => {
-		const USER_SEARCH = `http://127.0.0.1:8000/users/${username}`
-		axios.delete(USER_SEARCH).then(data => {
-            console.log('deleted');
+		const USER_DELETE = `http://127.0.0.1:8000/users/${username}`
+		axios.delete(USER_DELETE, {
+			headers: {
+				"Authorization": `Token ${token}`
+			}
+		})
+		.then(result => {
+            console.log('deleted')
+			// clear login id and token
+			logOut()
         })
 		.catch((error) => {
 			console.error(error);
-		});
-		navigation.navigate('login')
+		})
 	}
 
 	const updateProfile = async () => {
@@ -85,6 +90,7 @@ const ProfileView = () => {
 
 	const logOut = () => {
 		dispatch({ type: 'setLogin', payload: '' })
+		dispatch({ type: 'clearToken'})
 		navigation.navigate(
 			'login',
 			{ screen: 'login' }

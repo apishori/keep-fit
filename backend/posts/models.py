@@ -65,5 +65,14 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liked_posts")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
 
+class Watch(models.Model):
+    
+    #All data members of Like
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watched_posts")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="watches")
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    class Meta:
+       ordering = ("-created_at",)
 
     
