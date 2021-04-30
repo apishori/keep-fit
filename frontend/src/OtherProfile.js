@@ -23,7 +23,6 @@ const OtherProfile = ({ route }) => {
 	const token = useSelector(state => {
 		return state.loginToken.token
 	})
-	console.log(token)
 
 	const loadProfile = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${otherUser}`
@@ -33,7 +32,7 @@ const OtherProfile = ({ route }) => {
 			for (let i = 0; i < result.data.length; i++) {
 				if (result.data[i].username == otherUser) {
 					const data = result.data[i]
-					console.log(data)
+					// console.log(data)
 					setUsername(data.username)
 					setHeight(data.height)
 					setWeight(data.weight)

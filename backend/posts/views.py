@@ -1,10 +1,9 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, status
 from rest_framework.response import Response
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-from django.db.models import Count
+from rest_framework.views import APIView
+from users.models import SearchTerm
 
 from .models import Post, Like, Watch, MET_VALS
 from .serializers import PostSerializer
@@ -68,8 +67,7 @@ class ToggleLikeView(APIView):
         return Response(data)
     
 class TitlePostListView(APIView): #getpost_by_title()
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
     
     def get(self, request, format=None):
         query = request.GET.get('query')
@@ -79,6 +77,8 @@ class TitlePostListView(APIView): #getpost_by_title()
             posts = Post.objects.filter(Q(title__icontains=query))
             if category and category in MET_VALS:
                 posts = posts.filter(category=category)
+            if posts and not SearchTerm.objects.filter(term=query):
+                SearchTerm.objects.create(user=request.user, term=query)
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
     

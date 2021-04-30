@@ -6,8 +6,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Follow, User
-from .serializers import UserRegisterSerializer, UserSerializer
+from .models import Follow, SearchTerm, User
+from .serializers import (SearchTermSerializer, UserRegisterSerializer,
+                          UserSerializer)
 
 
 class LoginUserView(APIView):
@@ -103,6 +104,8 @@ class UserSearchView(APIView):
         users = User.objects.none()
         if query:
             users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+            if users and not SearchTerm.objects.filter(term=query):
+                SearchTerm.objects.create(user=request.user, term=query)
         serializer = UserSerializer(users, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -119,3 +122,11 @@ class UpdatePasswordView(APIView):
                 request.user.save()
                 return Response(status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class SearchTermListView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):
+        terms = SearchTerm.objects.filter(user=request.user)
+        serializer = SearchTermSerializer(terms, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
