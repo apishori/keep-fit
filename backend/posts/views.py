@@ -4,6 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
 
 from .models import Post, Like
 from .serializers import PostSerializer
@@ -104,3 +105,12 @@ class PostListView(APIView): #getposts()
     def get(self, request, format=None):
         serializer = PostSerializer(Post.objects.all(), many=True, context={'request':self.request})
         return Response(serializer.data)
+
+class PostRecView(APIView): #getposts_by_recommender()
+    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
+    
+    def get(self, request, format=None):   
+        sorted_list = Post.objects.annotate(like_count=Count('likes')).order_by('-like_count')
+        serializer = PostSerializer(sorted_list, many=True, context={'request':self.request})
+        return Response(serializer.data)        
