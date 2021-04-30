@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 
-from .models import Follow, Profile, User
+from .models import Follow, Profile, SearchTerm, User
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -117,3 +117,8 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = ['user1', 'user2', 'created_at']
+
+class SearchTermSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchTerm
+        fields = ['term']
