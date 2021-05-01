@@ -85,7 +85,7 @@ class UserRegisterSerializer(UserSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=self.context.get('request').data.get('username'),
-            email=validated_data.get('email'),
+            email=self.context.get('request').data.get('email'),
             password=validated_data.get('password'),
             first_name=validated_data.get('first_name'),
             last_name=validated_data.get('last_name')
