@@ -16,6 +16,7 @@ const ForgotPassword = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
+    const navigation = useNavigation()
 
     const getUpdatedPassword = () => {
         const CHANGEPASS = {
@@ -24,7 +25,7 @@ const ForgotPassword = () => {
             "password": password
         };
 
-        const UPDATEPASSWORD = `http://127.0.0.1:8000/users/update_password/`;
+        const UPDATEPASSWORD = `http://127.0.0.1:8000/users/forgot_password/`;
 
         axios.post(UPDATEPASSWORD, CHANGEPASS)
         .then(data => {
@@ -35,6 +36,8 @@ const ForgotPassword = () => {
             console.error(error); 
             console.log('log in error');
         })
+      
+        navigation.navigate('login')
     }
 
     useEffect (() => { 
