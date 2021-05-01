@@ -89,18 +89,38 @@ const SearchStatus = ({ status }) => {
 };
 
 const PostResult = () => {
-	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
-	const YOUTUBE_API = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCSJ4gkVC6NrvII8umztf0Ow&eventType=live&type=video&key=${API_KEY}`
-	const dispatch = useDispatch()
-	const cardData = useSelector(state=>{
-		return state.cardData
+	const [id_mapping,setid_mapping] = useState(new Map())
+	const [name_mapping,setname_mapping] = useState(new Map())
+	const [author_mapping,setauthor_mapping] = useState(new Map())
+	const [category_mapping,setcategory_mapping] = useState(new Map())
+	const [likes_mapping,setlikes_mapping] = useState(new Map())
+
+	const dispatch = useDispatch();
+	const resultData = useSelector(state => {
+		return state.result;
+	});
+	const cardData = useSelector(state => {
+		return state.cardData;
 	})
+	console.log(resultData)
+	for(var ids of resultData){
+		name_mapping.set(ids.video, ids.title)
+		id_mapping.set( ids.video, ids.id)
+		author_mapping.set( ids.video, ids.author.username)
+		category_mapping.set( ids.video, ids.category)
+		likes_mapping.set( ids.video, ids.likes)
+		var result = res.data.map(function(val) {
+			return val.video;
+		}).join('%2C');
+	}
+	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
+	const YOUTUBE_API = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
 	  
 	const [loading,setLoading] = useState(false)
 
-	const fetchData = () =>{
+	const fetchVideo = () =>{
 		setLoading(true)
-		fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=ab%workout&type=video&key=${API_KEY}`)
+		fetch(YOUTUBE_API)
 		.then(res=>res.json())
 		.then(data => {
 			setLoading(false)
@@ -109,7 +129,7 @@ const PostResult = () => {
 	}
 
 	useEffect(() => {
-		fetchData;
+		fetchVideo();
 	}, [])
 
 	const renderItem = ({ item }) => {
@@ -124,7 +144,6 @@ const PostResult = () => {
 	}
 
 	return (
-		
 		<View
 			style={{flex:1}}
 		>
@@ -139,8 +158,8 @@ const PostResult = () => {
 };
 
 const UserResult = () => {
-	const resultdata = useSelector(state => {
-		//console.log(state)
+	const resultData = useSelector(state => {
+		console.log(state)
 		return state.result;
 	})
 
@@ -165,7 +184,6 @@ const UserResult = () => {
 				>
 					{/* <View> */}
 						<Image
-							// source={{uri: item.profile.profile_pic.image}}
 							source={{uri: profilePic}}
 							style={styles.circular}
 						/>
@@ -178,10 +196,11 @@ const UserResult = () => {
 			</>
 		);
 	}
-	if (resultdata != null) {
+
+	if (resultData != null) {
 		return (
 				<FlatList
-					data={resultdata.userResult}
+					data={resultData.result}
 					renderItem={renderItem}
 					keyExtractor={item=>item.username}
 					style={{paddingTop:0, flex:1}}
@@ -193,30 +212,11 @@ const UserResult = () => {
 	}
 };
 
-const Results = () => {
-	const searchAmong = useSelector(state => {
-		return state.searchType;
-	})
-	if (searchAmong == 'users') {
-		return (
-			<View
-				style={styles.results}
-			>
-				<UserResult/>
-			</View>
-		);
-	}
-	else { //if (searchAmong === 'posts' || searchAmong === 'streams') {
-		//return <PostResult/>;
-		return <View/>;
-	}
-}
-
 const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
-	const [oldTerm, setOldTerm] = useState('');
 	const [searchAmong, setSearchAmong] = useState('users');
 	const [oldSearchAmong, setOldSearchAmong] = useState('users');
+	const [searchCategory, setSearchCategory] = useState('');
 	const [searchCounter, setSearchCounter] = useState(0);
 	// const [result, setResult] = useState([]);
 	const [numOfResults, setNumOfResults] = useState(0);
@@ -240,7 +240,8 @@ const SearchMenu = () => {
 			axios.get(USER_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
 				dispatch({ type: 'clearResult' });
-				dispatch({ type: 'storeUserResult', payload: result.data });
+				dispatch({ type: 'storeResult', payload: result.data });
+				// dispatch({ type: 'setType', payload: searchAmong });
 				setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
@@ -248,24 +249,26 @@ const SearchMenu = () => {
 			});
 		}
 		else if (searchAmong === 'posts') {
-			axios.get(POST_SEARCH)
-			.then(data => {
+			// if (searchCategory == '')
+			axios.get(POST_SEARCH, { headers: {"Authorization": `Token ${token}`}})
+			.then(result => {
 			dispatch({ type: 'clearResult' });
 			//console.log(data.data);
-			//dispatch({ type: 'storeResult', payload: data.data });
-			setNumOfResults(data.data.length);
+			dispatch({ type: 'storeResult', payload: result.data });
+			console.log(result)
+			setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
 				console.error(error);
 			});
 		}
 		else if (searchAmong === 'streams') {
-			axios.get(STREAM_SEARCH)
-			.then(data => {
+			axios.get(STREAM_SEARCH, { headers: {"Authorization": `Token ${token}`}})
+			.then(result => {
 			dispatch({ type: 'clearResult' });
 			//console.log(data.data);
-			//dispatch({ type: 'storeResult', payload: data.data });
-			setNumOfResults(data.data.length);
+			dispatch({ type: 'storeResult', payload: result.data });
+			setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
 				console.error(error);
@@ -292,20 +295,77 @@ const SearchMenu = () => {
 				});
 			}
 			setSearchLog(newLog);
-			console.log(searchLog)
+			// console.log(searchLog)
 		})
 		.catch(error => {
 			console.error(error);
 		});
 	};
+
+	const search = async () => {
+		// await setSearchTerm(searchTerm)
+		await fetchData();
+		setSearchCounter(searchCounter + 1);
+	};
+
+	const Results = () => {
+		// return (
+		// 	<View
+		// 		style={styles.results}
+		// 	>
+		// 		{/* <Stack.Navigator>
+		// 			<Stack.Screen
+		// 				name='users'
+		// 				component={UserResult}
+		// 				options={{headerShown:false}}
+		// 			/>
+		// 			<Stack.Screen
+		// 				name='posts'
+		// 				component={PostResult}
+		// 				options={{headerShown:false}}
+		// 			/>
+		// 		</Stack.Navigator>	 */}
+		// 	</View>
+		// );
+		// console.log()
+		if (oldSearchAmong == 'users') {
+			console.log("render user result")
+			return (
+				<View
+					style={styles.results}
+				>
+					<UserResult/>
+				</View>
+			);
+		}
+		else if (oldSearchAmong == 'posts') {
+			console.log("render post result")
+			return (
+				<View
+					style={styles.results}
+				>
+					<PostResult/>
+				</View>
+			);
+		}
+		else if (oldSearchAmong == 'streams') {
+			return <View></View>;
+		}
+		else {
+			return <View/>;
+		}
+	}
+
 	// initial load of search history
 	useEffect(() => {
 		getSearchLog();
 	}, []);
-	// update search history
+	// update search state
 	useEffect(() => {
 		if (searchCounter != 0) {
+			setOldSearchAmong(searchAmong);
 			getSearchLog();
+			// navigation.navigate(searchAmong);
 		}
 	}, [searchCounter]);
 	// update search result status
@@ -314,12 +374,6 @@ const SearchMenu = () => {
 			setStatus(numOfResults + ' result(s) for "' + searchTerm + '" in ' + searchAmong);		
 		}
 	}, [numOfResults]);
-
-	const search = async () => {
-		// await setSearchTerm(searchTerm)
-		await fetchData();
-		setSearchCounter(searchCounter + 1);
-	};
 
 	return (
 		<View
@@ -358,10 +412,13 @@ const SearchMenu = () => {
 				/>
 				<DropDownPicker
 					items={[
+						{label: 'Running', value: 'R'},
+						{label: 'Hiking', value: 'H'},
 						{label: 'Home Cardio', value: 'HC'},
 						{label: 'Swimming', value: 'S'},
 						{label: 'Other', value: 'O'}
 					]}
+					onChangeItem={item => setSearchCategory(item.value)}
 					placeholder='Select exercise category'
 					containerStyle={{height: 40}}
 					style={{backgroundColor: '#fafafa'}}
@@ -420,6 +477,7 @@ const Search = () => {
 const styles = StyleSheet.create({
 	searchMenu: {
 		flex: 1,
+		paddingTop: '5%',
 		margin: '2%'
 	},
     searchBar: {

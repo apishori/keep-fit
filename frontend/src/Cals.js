@@ -158,7 +158,9 @@ const ExerciseList = () => {
 
 	return (
         <>
-			<View>
+			<View
+				style={{paddingTop: '5%'}}
+			>
 				<DropDownPicker
 					items={workoutLog}
 					containerStyle={{height: 40}}
