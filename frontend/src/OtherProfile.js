@@ -63,7 +63,13 @@ const OtherProfile = ({ route }) => {
 			}}
 			)
 		.then(res => {
-			navigation.navigate('otherProfile')
+			const data = result.data
+			if(data.follow == true){
+				setButtonText("Unfollow User")
+			}
+			else{
+				setButtonText("Follow User")
+			}
 		})
 		.catch(error => {
 		  // console.log(error);
