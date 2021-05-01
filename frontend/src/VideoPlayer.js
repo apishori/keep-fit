@@ -24,7 +24,8 @@ const VideoPlayer = ({route})=>{
   const likesSet = new Set();
 
   const fetchLikes = () => {
-    const POST_LIST = `http://127.0.0.1:8000/posts/`; 
+    console.log("HERE")
+    const POST_LIST = `http://127.0.0.1:8000/bylikes/`; 
 
     axios.get(POST_LIST
         ,
@@ -90,6 +91,23 @@ const VideoPlayer = ({route})=>{
   
   useEffect(() => {
     const postIdInt = parseInt(postId)
+
+    axios.request({
+      url: `http://127.0.0.1:8000/posts/watch/${postIdInt}/`,
+      method: "post",
+      headers: {
+          "Authorization": `Token ${token}`
+      },
+      data:{}
+    })
+
+    // axios.post(`http://127.0.0.1:8000/posts/watch/${postIdInt}/`
+    //     ,
+    //     {headers: {
+    //       "Authorization": `Token ${token}`
+    //     }}
+    //     )
+
     axios.get(`http://127.0.0.1:8000/posts/bylikes/`
         ,
         {headers: {
