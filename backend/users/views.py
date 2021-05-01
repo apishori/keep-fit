@@ -32,8 +32,8 @@ class LogoutUserView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class ToggleFollowView(APIView):
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.AllowAny,)
 
     def get(self, request, username, format=None):
         following = False
