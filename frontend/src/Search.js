@@ -221,7 +221,6 @@ const SearchMenu = () => {
 	// const [result, setResult] = useState([]);
 	const [numOfResults, setNumOfResults] = useState(0);
 	const [status, setStatus] = useState('No results');
-	const [didSearch, setDidSearch] = useState(false);
 	const [searchLog, setSearchLog] = useState([]);
 
 	const dispatch = useDispatch();
@@ -241,12 +240,8 @@ const SearchMenu = () => {
 			axios.get(USER_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
 				dispatch({ type: 'clearResult' });
-				// console.log(result);
 				dispatch({ type: 'storeUserResult', payload: result.data });
-				// console.log(result.data.length)
-				// setResult(result.data);
 				setNumOfResults(result.data.length);
-				// console.log(numOfResults)
 			})
 			.catch((error) => {
 				console.error(error);
@@ -307,24 +302,17 @@ const SearchMenu = () => {
 	useEffect(() => {
 		getSearchLog();
 	}, []);
-	// update state
+	// update search history
 	useEffect(() => {
-		// if (didSearch) {
-		// 	getSearchLog();
-		// }
-		// return () => setDidSearch(false)
 		if (searchCounter != 0) {
-			// setStatus(result.length + ' result(s) for "' + searchTerm + '" in ' + searchAmong);
 			getSearchLog();
 		}
 	}, [searchCounter]);
-
+	// update search result status
 	useEffect(() => {
-		console.log('setNewResultLengths')
 		if (searchCounter != 0) {
 			setStatus(numOfResults + ' result(s) for "' + searchTerm + '" in ' + searchAmong);		
 		}
-		console.log(numOfResults)
 	}, [numOfResults]);
 
 	const search = async () => {

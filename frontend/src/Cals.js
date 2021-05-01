@@ -87,9 +87,9 @@ const ExerciseList = () => {
 			const newLog = [];
 			for (let i = 0; i < result.data.length; i++) {
 				const workout = result.data[i];
-				// console.log(element)
+				// console.log(workout)
 				const logText = workout.category + ', calories burnt: ' + workout.calories_burnt.toString();
-				console.log(logText)
+				// console.log(logText)
 				newLog.push({
 					label: logText,
 					value: 'log' + i,
@@ -111,7 +111,6 @@ const ExerciseList = () => {
 			}
 		})
 		.then(result => {
-			console.log(result);
 			getWorkoutLog();
 		})
 		.catch((error) => {
@@ -278,8 +277,7 @@ const CalorieCounter = ({ route }) => {
 	const makeWorkoutLog = () => {
 		const CREATE_LOG = `http://127.0.0.1:8000/workouts/create/`
 		const newLog = {
-			// calories_burnt: caloriesBurned,
-			calories_burnt: 5,
+			calories_burnt: caloriesBurned,
 			category: exerciseData[index[0]].category
 		}
 		axios.post(CREATE_LOG, newLog, { 
@@ -288,7 +286,7 @@ const CalorieCounter = ({ route }) => {
 			}
 		})
 		.then(result => {
-			console.log(result)
+			// console.log(result)
 		})
 		.catch(error => {
 			console.error(error);
