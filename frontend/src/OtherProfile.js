@@ -33,17 +33,15 @@ const OtherProfile = ({ route }) => {
 				if (result.data[i].username == otherUser) {
 					const data = result.data[i]
 					// console.log(data)
+					setNumFollowers(data.followers)
+					setNumFollowing(data.followings)
 					setUsername(data.username)
-					setHeight(data.height)
-					setWeight(data.weight)
-					setBirthday(data.birthday)
+					setHeight(data.profile.height)
+					setWeight(data.profile.weight)
+					setBirthday(data.profile.birthday)
 					setFirstName(data.first_name)
 					setLastName(data.last_name)
-					setNumFollowers(1200)
-					setNumFollowing(200)
 					setProfilePic(data.profile.profile_pic.image)
-					//setNumFollowers(data.)
-					//setNumFollowing(data.)
 					i = result.data.length
 				}
 			}
