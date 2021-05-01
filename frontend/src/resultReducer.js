@@ -1,11 +1,11 @@
-const initialState = { userResult: [] }
+const initialState = []
 
 const resultReducer = (state=initialState,action) => {
-    if (action.type === 'storeUserResult') {
-        return { ...state, userResult: action.payload }
+    if (action.type === 'storeResult') {
+        return { ...state, result: action.payload }
     }
     else if (action.type === 'clearResult') {
-        return { ...state, userResult: [] }
+        return { ...state, result: [] }
     }
     return state
 }
