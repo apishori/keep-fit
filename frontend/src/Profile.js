@@ -84,13 +84,10 @@ const ProfileView = () => {
 		})
 	}
 
-	const updateProfile = async () => {
-		navigation.navigate('update')
-	}
-
 	const logOut = () => {
-		dispatch({ type: 'setLogin', payload: '' })
-		dispatch({ type: 'clearToken'})
+		dispatch({ type: 'clearLogin' })
+		dispatch({ type: 'clearToken' })
+		dispatch({ type: 'clearResult' })
 		navigation.navigate(
 			'login',
 			{ screen: 'login' }
@@ -118,7 +115,7 @@ const ProfileView = () => {
 				></Button>
 				<Button
 					title='Update Profile'
-					onPress={() => updateProfile()}
+					onPress={() => navigation.navigate('update')}
 				></Button>
 				<Button
 					title='Change Password'
