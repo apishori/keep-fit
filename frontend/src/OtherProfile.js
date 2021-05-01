@@ -6,6 +6,7 @@ import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
 const OtherProfile = ({ route }) => {
+	const [buttonText, setButtonText] = useState("Follow User");
 	const [profilePicSrc, setProfilePic] = useState("")
 	const [first_name, setFirstName] = useState("")
 	const [last_name, setLastName] = useState("")
@@ -50,6 +51,24 @@ const OtherProfile = ({ route }) => {
 			console.error(error);
 		});
 	}
+	
+	const changeText = (text) => {
+		setButtonText(text)
+		//followUnfollow()
+		const ToggleFollowView = `http://localhost:8000/users/follow/${username}/`;
+	
+		axios.get(ToggleFollowView,
+		  {headers: {
+			  "Authorization": `Token ${token}`
+			}}
+			)
+		.then(res => {
+			navigation.navigate('otherProfile')
+		})
+		.catch(error => {
+		  // console.log(error);
+		});
+	  };
 
 	useEffect (() => {
 		if (username == "") {
@@ -71,8 +90,8 @@ const OtherProfile = ({ route }) => {
 				<Button
                     buttonStyle={{borderColor:"#ef476f", borderWidth:2, backgroundColor:'white'}}
                     titleStyle={{color:"#ef476f"}}
-                    type='outline'
-                    title='buttonText'
+                    type="outline"
+                    title={buttonText}
                     onPress={() => changeText(buttonText === 'Follow User' ? 'Unfollow User' : 'Follow User')}>
                     </Button>
 			</View>
