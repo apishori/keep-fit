@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -69,6 +69,8 @@ const ExerciseList = () => {
 	// const dispatch = useDispatch();
 	const [exerciseID, setExerciseID] = useState(8);
 	const [workoutLog, setWorkoutLog] = useState();
+
+	const isFocused = useIsFocused();
 	
 	const token = useSelector(state => {
 		return state.loginToken.token;
@@ -81,8 +83,21 @@ const ExerciseList = () => {
 			}
 		})
 		.then(result => {
-			console.log(result.data);
-			setWorkoutLog(result.data);
+			// console.log(result.data);
+			const newLog = [];
+			for (let i = 0; i < result.data.length; i++) {
+				const workout = result.data[i];
+				// console.log(element)
+				const logText = workout.category + ', calories burnt: ' + workout.calories_burnt.toString();
+				console.log(logText)
+				newLog.push({
+					label: logText,
+					value: 'log' + i,
+				});
+			}
+			// console.log(newLog)
+			setWorkoutLog(newLog);
+			// console.log(workoutLog)
 		})
 		.catch((error) => {
 			console.error(error);
@@ -96,7 +111,8 @@ const ExerciseList = () => {
 			}
 		})
 		.then(result => {
-			// console.log(result);
+			console.log(result);
+			getWorkoutLog();
 		})
 		.catch((error) => {
 			console.error(error);
@@ -132,6 +148,14 @@ const ExerciseList = () => {
             </View>
 		);
 	};
+
+	// useEffect(() => {
+	// 	getWorkoutLog();
+	// }, []);
+
+	useEffect (() => {
+		getWorkoutLog();
+	}, [isFocused])
 
 	return (
         <>
@@ -254,7 +278,8 @@ const CalorieCounter = ({ route }) => {
 	const makeWorkoutLog = () => {
 		const CREATE_LOG = `http://127.0.0.1:8000/workouts/create/`
 		const newLog = {
-			calories_burnt: caloriesBurned,
+			// calories_burnt: caloriesBurned,
+			calories_burnt: 5,
 			category: exerciseData[index[0]].category
 		}
 		axios.post(CREATE_LOG, newLog, { 
