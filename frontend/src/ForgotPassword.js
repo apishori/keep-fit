@@ -30,11 +30,11 @@ const ForgotPassword = () => {
         axios.post(UPDATEPASSWORD, CHANGEPASS)
         .then(data => {
             console.log(data);
-            console.log('logged in');
+            console.log('password updated');
         })
         .catch(error => {
             console.error(error); 
-            console.log('log in error');
+            console.log('password update error');
         })
       
         navigation.navigate('login')
