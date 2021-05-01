@@ -59,6 +59,8 @@ export function Navigation() {
             <Stack.Screen name="upload" component={UploadVideoScreen} options={{headerTitle: "Upload Video"}} />
             <Stack.Screen name="stream" component={UploadStreamScreen} options={{headerTitle: "Start Stream"}} />
             <Stack.Screen name="update" component={UploadStreamScreen} options={{headerTitle: "Update Profile"}} />
+            <Stack.Screen name="otherProfile" component={OtherProfile} options={{headerTitle: "Other User"}} />
+
           </Stack.Navigator>
         </NavigationContainer>
      
