@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.password_validation import validate_password
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
@@ -31,8 +32,8 @@ class LogoutUserView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class ToggleFollowView(APIView):
-    #permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.AllowAny,)
 
     def get(self, request, username, format=None):
         following = False
@@ -112,14 +113,29 @@ class UserSearchView(APIView):
 class UpdatePasswordView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    def post(self, request, username, format=None):
+        user = get_object_or_404(User, username__iexact=username)
+        password = request.data.get('password', None)
+        if request.user == user and password:
+            validate_password(password)
+            user.set_password(password)
+            user.save()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class ForgotPasswordView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request, format=None):
         username = request.data.get('username', None)
         email = request.data.get('email', None)
         password = request.data.get('password', None)
-        if request.user.username == username and password:
-            if request.user.email == email:
-                request.user.set_password(password)
-                request.user.save()
+        if username:
+            user = get_object_or_404(User, username=username)
+            if user.email == email:
+                validate_password(password)
+                user.set_password(password)
+                user.save()
                 return Response(status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 

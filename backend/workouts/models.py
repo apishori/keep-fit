@@ -31,7 +31,7 @@ class Workout(models.Model):
 
 
     #Data members of Workout
-    calories_burnt = models.IntegerField(blank=False, null=False)
+    calories_burnt = models.FloatField(blank=False, null=False)
     category = models.CharField(max_length=2, blank=False, null=False, choices=WORKOUT_CATEGORIES, default=OTHER)
     created_at = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

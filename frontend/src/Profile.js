@@ -4,7 +4,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/core';
 import { createStackNavigator } from '@react-navigation/stack';
-import ForgotPassword from './ForgotPassword'
+import ChangePassword from './ChangePassword'
 import UpdateProfile from './UpdateProfile'
 
 const Stack = createStackNavigator()
@@ -51,9 +51,9 @@ const ProfileView = () => {
 						setNumFollowers(data.followers)
 						setNumFollowing(data.followings)
 						setUsername(data.username)
-						setHeight(data.height)
-						setWeight(data.weight)
-						setBirthday(data.birthday)
+						setHeight(data.profile.height)
+						setWeight(data.profile.weight)
+						setBirthday(data.profile.birthday)
 						setFirstName(data.first_name)
 						setLastName(data.last_name)
 						setProfilePic(data.profile.profile_pic.image)
@@ -68,7 +68,7 @@ const ProfileView = () => {
 	}
 
 	const deleteProfile = () => {
-		const USER_DELETE = `http://127.0.0.1:8000/users/${username}`
+		const USER_DELETE = `http://127.0.0.1:8000/users/${username}/`
 		axios.delete(USER_DELETE, {
 			headers: {
 				"Authorization": `Token ${token}`
@@ -84,13 +84,10 @@ const ProfileView = () => {
 		})
 	}
 
-	const updateProfile = async () => {
-		navigation.navigate('update')
-	}
-
 	const logOut = () => {
-		dispatch({ type: 'setLogin', payload: '' })
-		dispatch({ type: 'clearToken'})
+		dispatch({ type: 'clearLogin' })
+		dispatch({ type: 'clearToken' })
+		dispatch({ type: 'clearResult' })
 		navigation.navigate(
 			'login',
 			{ screen: 'login' }
@@ -118,7 +115,7 @@ const ProfileView = () => {
 				></Button>
 				<Button
 					title='Update Profile'
-					onPress={() => updateProfile()}
+					onPress={() => navigation.navigate('update')}
 				></Button>
 				<Button
 					title='Change Password'
@@ -148,7 +145,7 @@ const Profile = () => {
 			/>
 			<Stack.Screen
 				name='changepw'
-				component={ForgotPassword}
+				component={ChangePassword}
 				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>

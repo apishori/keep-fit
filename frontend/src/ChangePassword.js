@@ -7,37 +7,50 @@ import { push } from 'react-redux';
 import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
 import { Input, Button } from 'react-native-elements';
+import {useSelector} from 'react-redux'
 import axios from "axios";
+import ProfileView from './Profile';
 import {useNavigation ,useTheme} from '@react-navigation/native';
 import {NavigationContainer,DefaultTheme,DarkTheme} from '@react-navigation/native'
+import UpdateProfile from "./UpdateProfile";
 
-const ForgotPassword = () => {
+
+const ChangePassword = () => {
   
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [email, setEmail] = useState('')
+    const login = useSelector(state => {
+		return state.loginData.loginID;
+	})
+	const token = useSelector(state => {
+		return state.loginToken.token
+	})
     const navigation = useNavigation()
 
     const getUpdatedPassword = () => {
         const CHANGEPASS = {
-            "username": username,
-            "email": email,
             "password": password
         };
 
-        const UPDATEPASSWORD = `http://127.0.0.1:8000/users/forgot_password/`;
+        const UPDATEPASSWORD = `http://127.0.0.1:8000/users/${username}/update_password/`;
 
-        axios.post(UPDATEPASSWORD, CHANGEPASS)
+        axios.request({
+			url: UPDATEPASSWORD,
+			method: "post",
+            data: CHANGEPASS,
+			headers: { 
+				"Authorization": `Token ${token}`,
+		}})
         .then(data => {
             console.log(data);
-            console.log('password updated');
+            console.log('Password Changed');
         })
         .catch(error => {
             console.error(error); 
-            console.log('password update error');
+            console.log('Password Change Error');
         })
-      
-        navigation.navigate('login')
+
+        navigation.navigate('profile')
     }
 
     useEffect (() => { 
@@ -55,11 +68,6 @@ const ForgotPassword = () => {
                   onChangeText={username => setUsername(username)}
                   label='Username'
                   placeholder='Enter username'
-              />
-              <Input
-                  onChangeText={email => setEmail(email)}
-                  label='Email'
-                  placeholder='Enter email'
               />
               <Input
                   secureTextEntry={true}
@@ -104,4 +112,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ForgotPassword
+export default ChangePassword

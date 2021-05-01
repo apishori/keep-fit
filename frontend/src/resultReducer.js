@@ -1,4 +1,4 @@
-const initialState = null
+const initialState = { userResult: [] }
 
 const resultReducer = (state=initialState,action) => {
     if (action.type === 'storeUserResult') {

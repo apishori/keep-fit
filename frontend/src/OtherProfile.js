@@ -6,6 +6,7 @@ import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
 const OtherProfile = ({ route }) => {
+	const [buttonText, setButtonText] = useState("Follow User");
 	const [profilePicSrc, setProfilePic] = useState("")
 	const [first_name, setFirstName] = useState("")
 	const [last_name, setLastName] = useState("")
@@ -33,17 +34,15 @@ const OtherProfile = ({ route }) => {
 				if (result.data[i].username == otherUser) {
 					const data = result.data[i]
 					// console.log(data)
+					setNumFollowers(data.followers)
+					setNumFollowing(data.followings)
 					setUsername(data.username)
-					setHeight(data.height)
-					setWeight(data.weight)
-					setBirthday(data.birthday)
+					setHeight(data.profile.height)
+					setWeight(data.profile.weight)
+					setBirthday(data.profile.birthday)
 					setFirstName(data.first_name)
 					setLastName(data.last_name)
-					setNumFollowers(1200)
-					setNumFollowing(200)
 					setProfilePic(data.profile.profile_pic.image)
-					//setNumFollowers(data.)
-					//setNumFollowing(data.)
 					i = result.data.length
 				}
 			}
@@ -52,6 +51,24 @@ const OtherProfile = ({ route }) => {
 			console.error(error);
 		});
 	}
+	
+	const changeText = (text) => {
+		setButtonText(text)
+		//followUnfollow()
+		const ToggleFollowView = `http://localhost:8000/users/follow/${username}/`;
+	
+		axios.get(ToggleFollowView,
+		  {headers: {
+			  "Authorization": `Token ${token}`
+			}}
+			)
+		.then(res => {
+			navigation.navigate('otherProfile')
+		})
+		.catch(error => {
+		  // console.log(error);
+		});
+	  };
 
 	useEffect (() => {
 		if (username == "") {
@@ -73,8 +90,8 @@ const OtherProfile = ({ route }) => {
 				<Button
                     buttonStyle={{borderColor:"#ef476f", borderWidth:2, backgroundColor:'white'}}
                     titleStyle={{color:"#ef476f"}}
-                    type='outline'
-                    title='buttonText'
+                    type="outline"
+                    title={buttonText}
                     onPress={() => changeText(buttonText === 'Follow User' ? 'Unfollow User' : 'Follow User')}>
                     </Button>
 			</View>
