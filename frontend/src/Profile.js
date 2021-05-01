@@ -51,9 +51,9 @@ const ProfileView = () => {
 						setNumFollowers(data.followers)
 						setNumFollowing(data.followings)
 						setUsername(data.username)
-						setHeight(data.height)
-						setWeight(data.weight)
-						setBirthday(data.birthday)
+						setHeight(data.profile.height)
+						setWeight(data.profile.weight)
+						setBirthday(data.profile.birthday)
 						setFirstName(data.first_name)
 						setLastName(data.last_name)
 						setProfilePic(data.profile.profile_pic.image)
@@ -68,7 +68,7 @@ const ProfileView = () => {
 	}
 
 	const deleteProfile = () => {
-		const USER_DELETE = `http://127.0.0.1:8000/users/${username}`
+		const USER_DELETE = `http://127.0.0.1:8000/users/${username}/`
 		axios.delete(USER_DELETE, {
 			headers: {
 				"Authorization": `Token ${token}`
