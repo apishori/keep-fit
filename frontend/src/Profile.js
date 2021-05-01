@@ -4,7 +4,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import { StyleSheet, Image, FlatList, Text, View, Button } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/core';
 import { createStackNavigator } from '@react-navigation/stack';
-import ForgotPassword from './ForgotPassword'
+import ChangePassword from './ChangePassword'
 import UpdateProfile from './UpdateProfile'
 
 const Stack = createStackNavigator()
@@ -145,7 +145,7 @@ const Profile = () => {
 			/>
 			<Stack.Screen
 				name='changepw'
-				component={ForgotPassword}
+				component={ChangePassword}
 				options={{headerShown:false}}
 			/>
 		</Stack.Navigator>
