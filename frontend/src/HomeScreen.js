@@ -116,6 +116,7 @@ const HomeScreen = () => {
 	        }}
 	        )
 	    .then(res => {
+	    	fetchData(`http://127.0.0.1:8000/posts/getwatched/`)
 	    })
 	    .catch(error => {
 	      // console.log(error);
