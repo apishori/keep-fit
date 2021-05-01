@@ -8,7 +8,7 @@ urlpatterns = [
     path('logout/', views.LogoutUserView.as_view(), name='logout-user'),
     path('register/', views.RegisterUserView.as_view(), name='register-user'),
     path('search/', views.UserSearchView.as_view(), name='search-user'),
-    path('update_password/', views.UpdatePasswordView.as_view(), name='update-password'),
+    path('forgot_password/', views.ForgotPasswordView.as_view(), name='forgot-password'),
     path('token/', auth_views.obtain_auth_token, name='obtain-token'),
 
     #Search Term Endpoints
@@ -19,4 +19,5 @@ urlpatterns = [
     
     #Profile Endpoints
     path('<str:username>/', views.UserView.as_view(), name='edit-view-profile'),
+    path('<str:username>/update_password/', views.UpdatePasswordView.as_view(), name='update-password'),
 ]
