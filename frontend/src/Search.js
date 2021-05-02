@@ -369,6 +369,23 @@ const SearchMenu = () => {
 		});
 	};
 
+	const clearSearchLog = () => {
+		const CLEAR_LOG = `http://127.0.0.1:8000/users/searchterms/`;
+		axios.delete(CLEAR_LOG, {
+			headers: {
+				"Authorization": `Token ${token}`
+			}
+		})
+		.then(result => {
+			// console.log(result.data)
+			getSearchLog();
+			// console.log(searchLog)
+		})
+		.catch(error => {
+			console.error(error);
+		});
+	};
+
 	const search = async () => {
 		// await setSearchTerm(searchTerm)
 		await fetchData();
@@ -408,6 +425,11 @@ const SearchMenu = () => {
 				<Button
 					title='Search'
 					onPress={() => search()}
+					style={styles.searchSubmitButton}
+				/>
+				<Button
+					title='Clear history'
+					onPress={() => clearSearchLog()}
 					style={styles.searchSubmitButton}
 				/>
 			</View>
@@ -507,7 +529,7 @@ const Search = () => {
 const styles = StyleSheet.create({
 	searchMenu: {
 		flex: 1,
-		paddingTop: '7%',
+		paddingTop: '10%',
 		margin: '2%'
 	},
 	searchOptions: {
