@@ -446,7 +446,7 @@ const SearchMenu = () => {
 					// onChangeItem={item => setSearchTerm(item.value)}
 					dropDownStyle={{backgroundColor: '#fafafa'}}
 					placeholder='View history'
-				/>
+				/>				
 				<DropDownPicker
 					items={[
 						{label: 'users', value: 'users', selected: true},
@@ -533,7 +533,9 @@ const styles = StyleSheet.create({
 		margin: '2%'
 	},
 	searchOptions: {
+		flex: 1,
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 		zIndex: 10
 	},
     searchBar: {
