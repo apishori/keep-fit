@@ -31,10 +31,18 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.CharField(read_only=True)
     followers = serializers.IntegerField(source='followers.count', read_only=True)
     followings = serializers.IntegerField(source='followings.count', read_only=True)
-
+    is_following = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'full_name', 'email', 'profile', 'followers', 'followings']
+        fields = ['username', 'first_name', 'last_name', 'full_name', 'email', 'profile', 'followers', 'followings', 'is_following']
+
+    def get_is_following(self, obj):
+        request_user = self.context.get('request').user
+        try:
+            Follow.objects.get(user1=request_user, user2=obj)
+            return True
+        except:
+            return False
 
     def update(self, instance, validated_data):
         instance.first_name=validated_data.get('first_name', instance.first_name)
