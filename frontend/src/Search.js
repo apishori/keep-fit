@@ -427,11 +427,6 @@ const SearchMenu = () => {
 					onPress={() => search()}
 					style={styles.searchSubmitButton}
 				/>
-				<Button
-					title='Clear history'
-					onPress={() => clearSearchLog()}
-					style={styles.searchSubmitButton}
-				/>
 			</View>
 			<View
 				style={styles.searchOptions}
