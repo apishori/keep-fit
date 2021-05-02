@@ -495,6 +495,7 @@ const styles = StyleSheet.create({
 	},
 	searchOptions: {
 		flexDirection: 'row',
+		zIndex: 10
 	},
     searchBar: {
 		flexDirection: 'row',

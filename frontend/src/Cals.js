@@ -159,7 +159,7 @@ const ExerciseList = () => {
 	return (
         <>
 			<View
-				style={{paddingTop: '5%'}}
+				style={{paddingTop: '5%', zIndex: 10}}
 			>
 				<DropDownPicker
 					items={workoutLog}
@@ -171,11 +171,12 @@ const ExerciseList = () => {
 					// onChangeItem={item => setSearchAmong(item.value)}
 					dropDownStyle={{backgroundColor: '#fafafa'}}
 				/>
-				<Button
+				
+			</View>
+			<Button
 					title='Clear log'
 					onPress={() => clearWorkoutLog()}		
 				/>
-			</View>			
             <FlatList
                 data={exerciseData}
                 renderItem={renderItem}
@@ -289,6 +290,7 @@ const CalorieCounter = ({ route }) => {
 		})
 		.then(result => {
 			// console.log(result)
+			navigation.navigate('exerciseList');
 		})
 		.catch(error => {
 			console.error(error);
