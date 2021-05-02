@@ -150,7 +150,7 @@ const HomeScreen = () => {
 				}).join('%2C');
 			}
 			const YOUTUBE_API_CALL = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
-			console.log(YOUTUBE_API_CALL)
+			// console.log(YOUTUBE_API_CALL)
 			
 			setLoading(true)
 			fetch(YOUTUBE_API_CALL)

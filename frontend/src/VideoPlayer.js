@@ -24,8 +24,7 @@ const VideoPlayer = ({route})=>{
   const likesSet = new Set();
 
   const fetchLikes = () => {
-    console.log("HERE")
-    const POST_LIST = `http://127.0.0.1:8000/bylikes/`; 
+    const POST_LIST = `http://127.0.0.1:8000/posts/bylikes/`; 
 
     axios.get(POST_LIST
         ,
@@ -74,7 +73,7 @@ const VideoPlayer = ({route})=>{
     const postIdInt = parseInt(postId)
     const deletePostURL = `http://localhost:8000/posts/${postIdInt}/`;
 
-    console.log(token)
+    // console.log(token)
 
     axios.delete(deletePostURL,
         {headers: {
@@ -118,11 +117,10 @@ const VideoPlayer = ({route})=>{
       var videoId
       for(var ids of res.data){
         likesSet.add(ids.id)
-        console.log(ids.id)
+        // console.log(ids.id)
       }
 
       if(likesSet.has(postIdInt)){
-        console.log("HERE")
         setButtonText("Unlike Exercise ❤️")
         setlikesAdd(-1)
       }
