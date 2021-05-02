@@ -16,10 +16,10 @@ const VideoPlayer = ({route})=>{
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const ShowOtherProfile = ( otherUser ) => {
-    // console.log(otherUser.otherUser)
-    navigation.navigate('profile', {otherUser})
-  }
+  // const ShowOtherProfile = ( otherUser ) => {
+  //   // console.log(otherUser.otherUser)
+  //   navigation.navigate('profile', {otherUser})
+  // }
   
 
   const token = useSelector(state => {
@@ -163,11 +163,11 @@ const VideoPlayer = ({route})=>{
 
       <View style={{borderBottomWidth:1,width:Dimensions.get("screen").width - 50,
            margin:9}}>
-        <Pressable
-          onPress={() => ShowOtherProfile({otherUser: author})}
-        >
-        <Text style={{marginBottom:8}}>{author}</Text>
-        </Pressable>
+       {/* <Pressable
+          onPress={() => ShowOtherProfile({otherUser: authorId})}
+        >*/}
+        <Text style={{marginBottom:8}}>{authorId}</Text>
+        {/*</Pressable>*/}
         <Text style={{marginBottom:8}}>Category: {category}</Text>
         <Text style={{marginBottom:8}}>❤️: {likesCount}</Text>
       </View>
