@@ -1,16 +1,25 @@
 import React, {useState, useEffect}  from 'react';
-import { StyleSheet, Text, View,Dimensions, Animated} from 'react-native';
+import { StyleSheet, Text, View,Dimensions, Animated,Pressable} from 'react-native';
 import Constant from 'expo-constants'
 import { WebView } from 'react-native-webview';
 import {Button} from 'react-native-elements';
 import axios from 'axios';
 import {useSelector,useDispatch} from 'react-redux'
+import { useNavigation } from '@react-navigation/native';
 
 const VideoPlayer = ({route})=>{
   var {videoId,title,postId, authorId,likes,category} = route.params
   const [buttonText, setButtonText] = useState("Like Exercise ❤️");
   const [likesAdd, setlikesAdd] = useState(1);
   const [likesCount, setLikesCount] = useState(likes);
+
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
+
+  const ShowOtherProfile = ( otherUser ) => {
+    // console.log(otherUser.otherUser)
+    navigation.navigate('profile', {otherUser})
+  }
   
 
   const token = useSelector(state => {
@@ -154,7 +163,11 @@ const VideoPlayer = ({route})=>{
 
       <View style={{borderBottomWidth:1,width:Dimensions.get("screen").width - 50,
            margin:9}}>
+        <Pressable
+          onPress={() => ShowOtherProfile({otherUser: author})}
+        >
         <Text style={{marginBottom:8}}>{author}</Text>
+        </Pressable>
         <Text style={{marginBottom:8}}>Category: {category}</Text>
         <Text style={{marginBottom:8}}>❤️: {likesCount}</Text>
       </View>
