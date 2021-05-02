@@ -528,7 +528,7 @@ const styles = StyleSheet.create({
 		margin: '2%'
 	},
 	searchOptions: {
-		flex: 1,
+		// flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		zIndex: 10
