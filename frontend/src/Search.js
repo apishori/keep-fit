@@ -507,7 +507,7 @@ const Search = () => {
 const styles = StyleSheet.create({
 	searchMenu: {
 		flex: 1,
-		paddingTop: '5%',
+		paddingTop: '7%',
 		margin: '2%'
 	},
 	searchOptions: {

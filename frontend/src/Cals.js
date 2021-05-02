@@ -159,7 +159,7 @@ const ExerciseList = () => {
 	return (
         <>
 			<View
-				style={{paddingTop: '5%', zIndex: 10}}
+				style={{paddingTop: '7%', zIndex: 10}}
 			>
 				<DropDownPicker
 					items={workoutLog}
