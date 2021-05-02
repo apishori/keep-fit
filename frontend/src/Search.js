@@ -433,7 +433,7 @@ const SearchMenu = () => {
 			>
 				<DropDownPicker
 					items={searchLog}
-					containerStyle={{height: 40}}
+					containerStyle={{height: 40, width: '30%'}}
 					style={{backgroundColor: '#fafafa', width: '100%'}}
 					itemStyle={{
 						justifyContent: 'flex-start'
@@ -448,7 +448,7 @@ const SearchMenu = () => {
 						{label: 'posts', value: 'posts'},
 						{label: 'streams', value: 'streams'}
 					]}
-					containerStyle={{height: 40}}
+					containerStyle={{height: 40, width: '30%'}}
 					style={{backgroundColor: '#fafafa', width: '100%'}}
 					itemStyle={{
 						justifyContent: 'flex-start'
@@ -471,7 +471,7 @@ const SearchMenu = () => {
 					]}
 					onChangeItem={item => setSearchCategory(item.value)}
 					placeholder='Select category'
-					containerStyle={{height: 40}}
+					containerStyle={{height: 40, width: '30%'}}
 					style={{backgroundColor: '#fafafa', width: '100%'}}
 					itemStyle={{
 						justifyContent: 'flex-start'
