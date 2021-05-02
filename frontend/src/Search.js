@@ -97,53 +97,60 @@ const PostResult = () => {
 
 	const dispatch = useDispatch();
 	const resultData = useSelector(state => {
-		return state.result;
+		return state.result.result;
 	});
 	const cardData = useSelector(state => {
 		return state.cardData;
 	})
 	console.log(resultData)
-	for(var ids of resultData){
-		name_mapping.set(ids.video, ids.title)
-		id_mapping.set( ids.video, ids.id)
-		author_mapping.set( ids.video, ids.author.username)
-		category_mapping.set( ids.video, ids.category)
-		likes_mapping.set( ids.video, ids.likes)
-		var result = res.data.map(function(val) {
-			return val.video;
-		}).join('%2C');
-	}
-	const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
-	const YOUTUBE_API = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
+	// for(var ids of resultData){
+	// 	name_mapping.set(ids.video, ids.title)
+	// 	id_mapping.set( ids.video, ids.id)
+	// 	author_mapping.set( ids.video, ids.author.username)
+	// 	category_mapping.set( ids.video, ids.category)
+	// 	likes_mapping.set( ids.video, ids.likes)
+	// 	var result = res.data.map(function(val) {
+	// 		return val.video;
+	// 	}).join('%2C');
+	// }
+	// const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
+	// const YOUTUBE_API = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
 	  
-	const [loading,setLoading] = useState(false)
+	// const [loading,setLoading] = useState(false)
 
-	const fetchVideo = () =>{
-		setLoading(true)
-		fetch(YOUTUBE_API)
-		.then(res=>res.json())
-		.then(data => {
-			if (loading) {
-				dispatch({type:"add",payload:data.items})
-			}
-			setLoading(false)
-		})
-	}
-
-	useEffect(() => {
-		fetchVideo();
-	}, [])
+	// const fetchVideo = () =>{
+	// 	setLoading(true)
+	// 	fetch(YOUTUBE_API)
+	// 	.then(res=>res.json())
+	// 	.then(data => {
+	// 		if (loading) {
+	// 			dispatch({type:"add",payload:data.items})
+	// 		}
+	// 		setLoading(false)
+	// 	})
+	// }
 
 	const renderItem = ({ item }) => {
+		console.log(item)
 			// fetchVideo();
-			console.log('display video result')
-			return (
-				<VideoCard 
-					videoId={item.id.videoId}
-					title={item.snippet.title}
-					channel={item.snippet.channelTitle}
-				/>
-			);
+			// console.log('display video result')
+			// return (
+			// 	<VideoCard 
+			// 		videoId={item.id.videoId}
+			// 		title={item.snippet.title}
+			// 		channel={item.snippet.channelTitle}
+			// 	/>
+			// );
+		return (
+			<View>
+				<Text>
+					{item.title + ', category: ' + item.category}
+				</Text>
+				{/* <Text>
+					{item.category}
+				</Text> */}
+			</View>			
+		);
 	}
 
 	return (
@@ -151,9 +158,9 @@ const PostResult = () => {
 			style={{flex:1}}
 		>
 			<FlatList
-				data={cardData}
+				data={resultData}
 				renderItem={renderItem}
-				keyExtractor={item=>item.id.videoId}
+				keyExtractor={item=>item.id}
 				   style={{paddingTop:0, flex:1}}
 			/>	
 		</View>
@@ -267,7 +274,7 @@ const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchAmong, setSearchAmong] = useState('users');
 	const [oldSearchAmong, setOldSearchAmong] = useState('users');
-	const [searchCategory, setSearchCategory] = useState('');
+	const [searchCategory, setSearchCategory] = useState('A');
 	const [searchCounter, setSearchCounter] = useState(0);
 	// const [result, setResult] = useState([]);
 	const [numOfResults, setNumOfResults] = useState(0);
@@ -288,7 +295,6 @@ const SearchMenu = () => {
 
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
-		const POST_SEARCH = `http://127.0.0.1:8000/posts/search/?query=${searchTerm}`;
 		const STREAM_SEARCH = `http://127.0.0.1:8000/livestreams/search/?query=${searchTerm}`;
 
 		if (searchAmong === 'users') {
@@ -304,11 +310,16 @@ const SearchMenu = () => {
 			});
 		}
 		else if (searchAmong === 'posts') {
-			// if (searchCategory == '')
+			let POST_SEARCH = `http://127.0.0.1:8000/posts/search/?query=${searchTerm}`;
+
+			if (searchCategory != 'A') {
+				POST_SEARCH += `&category=${searchCategory}`;
+			}
+			console.log(POST_SEARCH)
 			axios.get(POST_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
 			dispatch({ type: 'clearResult' });
-			//console.log(data.data);
+			// console.log(data.data);
 			dispatch({ type: 'storeResult', payload: result.data });
 			console.log(result)
 			console.log(resultData)
@@ -412,6 +423,7 @@ const SearchMenu = () => {
 					}}
 					// onChangeItem={item => setSearchTerm(item.value)}
 					dropDownStyle={{backgroundColor: '#fafafa'}}
+					placeholder='View history'
 				/>
 				<DropDownPicker
 					items={[
@@ -429,11 +441,16 @@ const SearchMenu = () => {
 				/>
 				<DropDownPicker
 					items={[
-						{label: 'Running', value: 'R'},
-						{label: 'Hiking', value: 'H'},
+						{label: 'Run', value: 'R'},
+						{label: 'Yoga', value: 'Y'},
 						{label: 'Home Cardio', value: 'HC'},
+						{label: 'Tennis', value: 'T'},
 						{label: 'Swimming', value: 'S'},
-						{label: 'Other', value: 'O'}
+						{label: 'Basketball', value: 'B'},
+						{label: 'Jump Rope', value: 'JR'},
+						{label: 'Hiking', value: 'H'},
+						{label: 'Other', value: 'O'},
+						{label: 'All', value: 'A'}
 					]}
 					onChangeItem={item => setSearchCategory(item.value)}
 					placeholder='Select category'
