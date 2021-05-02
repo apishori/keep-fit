@@ -145,7 +145,7 @@ class CleanWatchedLogView(APIView): #empty_watched_log()
     permission_classes = (permissions.IsAuthenticated,)
 
     def delete(self, request, format=None):
-        watched = Watch.objects.filter(watches__user=request.user)
+        watched = Watch.objects.filter(watched_posts__user=request.user)
         watched.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
