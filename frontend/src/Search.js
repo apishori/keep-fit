@@ -123,8 +123,10 @@ const PostResult = () => {
 		fetch(YOUTUBE_API)
 		.then(res=>res.json())
 		.then(data => {
+			if (loading) {
+				dispatch({type:"add",payload:data.items})
+			}
 			setLoading(false)
-			dispatch({type:"add",payload:data.items})
 		})
 	}
 
@@ -133,6 +135,7 @@ const PostResult = () => {
 	}, [])
 
 	const renderItem = ({ item }) => {
+			// fetchVideo();
 			console.log('display video result')
 			return (
 				<VideoCard 
@@ -212,6 +215,54 @@ const UserResult = () => {
 	}
 };
 
+const Results = ({ searchAmong }) => {
+	// return (
+	// 	<View
+	// 		style={styles.results}
+	// 	>
+	// 		{/* <Stack.Navigator>
+	// 			<Stack.Screen
+	// 				name='users'
+	// 				component={UserResult}
+	// 				options={{headerShown:false}}
+	// 			/>
+	// 			<Stack.Screen
+	// 				name='posts'
+	// 				component={PostResult}
+	// 				options={{headerShown:false}}
+	// 			/>
+	// 		</Stack.Navigator>	 */}
+	// 	</View>
+	// );
+	// console.log()
+	if (searchAmong == 'users') {
+		console.log("render user result")
+		return (
+			<View
+				style={styles.results}
+			>
+				<UserResult/>
+			</View>
+		);
+	}
+	else if (searchAmong == 'posts') {
+		console.log("render post result")
+		return (
+			<View
+				style={styles.results}
+			>
+				<PostResult/>
+			</View>
+		);
+	}
+	else if (searchAmong == 'streams') {
+		return <View></View>;
+	}
+	else {
+		return <View/>;
+	}
+}
+
 const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchAmong, setSearchAmong] = useState('users');
@@ -230,6 +281,10 @@ const SearchMenu = () => {
 	const token = useSelector(state => {
 		return state.loginToken.token;
 	});
+	const resultData = useSelector(state => {
+		console.log(state)
+		return state.result;
+	})
 
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
@@ -256,6 +311,7 @@ const SearchMenu = () => {
 			//console.log(data.data);
 			dispatch({ type: 'storeResult', payload: result.data });
 			console.log(result)
+			console.log(resultData)
 			setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
@@ -308,54 +364,6 @@ const SearchMenu = () => {
 		setSearchCounter(searchCounter + 1);
 	};
 
-	const Results = () => {
-		// return (
-		// 	<View
-		// 		style={styles.results}
-		// 	>
-		// 		{/* <Stack.Navigator>
-		// 			<Stack.Screen
-		// 				name='users'
-		// 				component={UserResult}
-		// 				options={{headerShown:false}}
-		// 			/>
-		// 			<Stack.Screen
-		// 				name='posts'
-		// 				component={PostResult}
-		// 				options={{headerShown:false}}
-		// 			/>
-		// 		</Stack.Navigator>	 */}
-		// 	</View>
-		// );
-		// console.log()
-		if (oldSearchAmong == 'users') {
-			console.log("render user result")
-			return (
-				<View
-					style={styles.results}
-				>
-					<UserResult/>
-				</View>
-			);
-		}
-		else if (oldSearchAmong == 'posts') {
-			console.log("render post result")
-			return (
-				<View
-					style={styles.results}
-				>
-					<PostResult/>
-				</View>
-			);
-		}
-		else if (oldSearchAmong == 'streams') {
-			return <View></View>;
-		}
-		else {
-			return <View/>;
-		}
-	}
-
 	// initial load of search history
 	useEffect(() => {
 		getSearchLog();
@@ -386,6 +394,15 @@ const SearchMenu = () => {
 					placeholder='Search'
 					style={styles.searchInput}
 				/>
+				<Button
+					title='Search'
+					onPress={() => search()}
+					style={styles.searchSubmitButton}
+				/>
+			</View>
+			<View
+				style={styles.searchOptions}
+			>
 				<DropDownPicker
 					items={searchLog}
 					containerStyle={{height: 40}}
@@ -419,18 +436,13 @@ const SearchMenu = () => {
 						{label: 'Other', value: 'O'}
 					]}
 					onChangeItem={item => setSearchCategory(item.value)}
-					placeholder='Select exercise category'
+					placeholder='Select category'
 					containerStyle={{height: 40}}
 					style={{backgroundColor: '#fafafa'}}
 					itemStyle={{
 						justifyContent: 'flex-start'
 					}}
 					dropDownStyle={{backgroundColor: '#fafafa'}}
-				/>
-				<Button
-					title='Search'
-					onPress={() => search()}
-					style={styles.searchSubmitButton}
 				/>
 			</View>
 			<View
@@ -441,6 +453,7 @@ const SearchMenu = () => {
 				/>
 			</View>
 			<Results
+				searchAmong={oldSearchAmong}
 				style={styles.results}
 			/>
 		</View>
@@ -479,6 +492,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: '5%',
 		margin: '2%'
+	},
+	searchOptions: {
+		flexDirection: 'row',
 	},
     searchBar: {
 		flexDirection: 'row',
