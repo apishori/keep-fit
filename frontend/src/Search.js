@@ -223,25 +223,6 @@ const UserResult = () => {
 };
 
 const Results = ({ searchAmong }) => {
-	// return (
-	// 	<View
-	// 		style={styles.results}
-	// 	>
-	// 		{/* <Stack.Navigator>
-	// 			<Stack.Screen
-	// 				name='users'
-	// 				component={UserResult}
-	// 				options={{headerShown:false}}
-	// 			/>
-	// 			<Stack.Screen
-	// 				name='posts'
-	// 				component={PostResult}
-	// 				options={{headerShown:false}}
-	// 			/>
-	// 		</Stack.Navigator>	 */}
-	// 	</View>
-	// );
-	// console.log()
 	if (searchAmong == 'users') {
 		console.log("render user result")
 		return (
@@ -263,7 +244,13 @@ const Results = ({ searchAmong }) => {
 		);
 	}
 	else if (searchAmong == 'streams') {
-		return <View></View>;
+		return (
+			<View
+				style={styles.results}
+			>
+				<PostResult/>
+			</View>
+		);
 	}
 	else {
 		return <View/>;
@@ -295,7 +282,6 @@ const SearchMenu = () => {
 
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
-		const STREAM_SEARCH = `http://127.0.0.1:8000/livestreams/search/?query=${searchTerm}`;
 
 		if (searchAmong === 'users') {
 			axios.get(USER_SEARCH, { headers: {"Authorization": `Token ${token}`}})
@@ -311,18 +297,17 @@ const SearchMenu = () => {
 		}
 		else if (searchAmong === 'posts') {
 			let POST_SEARCH = `http://127.0.0.1:8000/posts/search/?query=${searchTerm}`;
-
 			if (searchCategory != 'A') {
 				POST_SEARCH += `&category=${searchCategory}`;
 			}
-			console.log(POST_SEARCH)
+
 			axios.get(POST_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
 			dispatch({ type: 'clearResult' });
 			// console.log(data.data);
 			dispatch({ type: 'storeResult', payload: result.data });
-			console.log(result)
-			console.log(resultData)
+			// console.log(result)
+			// console.log(resultData)
 			setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
@@ -330,11 +315,18 @@ const SearchMenu = () => {
 			});
 		}
 		else if (searchAmong === 'streams') {
+			let STREAM_SEARCH = `http://127.0.0.1:8000/livestreams/search/?query=${searchTerm}`;
+			if (searchCategory != 'A') {
+				STREAM_SEARCH += `&category=${searchCategory}`;
+			}
+
 			axios.get(STREAM_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
 			dispatch({ type: 'clearResult' });
-			//console.log(data.data);
+			// console.log(data.data);
 			dispatch({ type: 'storeResult', payload: result.data });
+			// console.log(result)
+			// console.log(resultData)
 			setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
@@ -362,23 +354,6 @@ const SearchMenu = () => {
 				});
 			}
 			setSearchLog(newLog);
-			// console.log(searchLog)
-		})
-		.catch(error => {
-			console.error(error);
-		});
-	};
-
-	const clearSearchLog = () => {
-		const CLEAR_LOG = `http://127.0.0.1:8000/users/searchterms/`;
-		axios.delete(CLEAR_LOG, {
-			headers: {
-				"Authorization": `Token ${token}`
-			}
-		})
-		.then(result => {
-			// console.log(result.data)
-			getSearchLog();
 			// console.log(searchLog)
 		})
 		.catch(error => {
