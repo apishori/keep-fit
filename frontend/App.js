@@ -12,7 +12,6 @@ import loginReducer from './src/loginReducer'
 import likedReducer from './src/likedReducer' 
 import resultReducer from './src/resultReducer'
 import videoReducer from './src/videoReducer'
-import searchReducer from './src/searchReducer'
 import exerciseReducer from './src/exerciseReducer'
 import tokenReducer from './src/tokenReducer'
 import {Provider,useSelector,configureStore} from 'react-redux'
@@ -30,7 +29,6 @@ const rooReducer = combineReducers({
   loginData:loginReducer,
   loginToken:tokenReducer,
   result:resultReducer,
-  // searchType:searchReducer,
   exercise:exerciseReducer,
   videoData:videoReducer,
 })
