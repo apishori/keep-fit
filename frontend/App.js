@@ -126,7 +126,7 @@ export function Navigation() {
           } else if(route.name === 'profile') {
             iconName = 'person'
           } else if(route.name === 'calendar') {
-            iconName = 'calendar'
+            iconName = 'date-range'
           }
           // You can return any component that you like here!
           return <MaterialIcons name={iconName} size={32} color={color} />;
