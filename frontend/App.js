@@ -9,6 +9,7 @@ import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
 import reducer from './src/reducer'
 import loginReducer from './src/loginReducer' 
+import likedReducer from './src/likedReducer' 
 import resultReducer from './src/resultReducer'
 import searchReducer from './src/searchReducer'
 import exerciseReducer from './src/exerciseReducer'
@@ -24,6 +25,7 @@ import axios from 'axios';
 
 const rooReducer = combineReducers({
   cardData:reducer,
+  cardData2: likedReducer,
   loginData:loginReducer,
   loginToken:tokenReducer,
   result:resultReducer,
