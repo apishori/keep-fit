@@ -29,7 +29,7 @@ const rooReducer = combineReducers({
   loginData:loginReducer,
   loginToken:tokenReducer,
   result:resultReducer,
-  searchType:searchReducer,
+  // searchType:searchReducer,
   exercise:exerciseReducer,
 })
 const store = createStore(rooReducer)
