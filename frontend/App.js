@@ -1,11 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
-import {StyleSheet, Text, View, Button, Modal } from 'react-native';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import {StyleSheet, Alert, View } from 'react-native';
 import HomeScreen from "./src/HomeScreen";
 import Profile from "./src/Profile";
 import Search from "./src/Search";
 import Cals from "./src/Cals";
+import ExerciseCalendar from "./src/ExerciseCalendar";
 import UploadVideoScreen from "./src/UploadVideoScreen";
 import {MaterialIcons} from '@expo/vector-icons'
 import reducer from './src/reducer'
@@ -20,6 +19,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createStore,combineReducers} from 'redux'
 import {NavigationContainer,DefaultTheme,useNavigation,DarkTheme,useTheme} from '@react-navigation/native'
 import Login from "./src/Login";
+import axios from 'axios';
 // import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const rooReducer = combineReducers({
@@ -34,40 +34,114 @@ const store = createStore(rooReducer)
 const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
 
+const Reminder = () => {
+  const loginID = useSelector(state => {
+    return state.loginData.loginID;
+  });
+  const token = useSelector(state => {
+		return state.loginToken.token;
+	});
+
+  const [isChecking, setIsChecking] = useState(false);
+  const [isMakingAlert, setIsMakingAlert] = useState(true);
+
+  const createExerciseReminder = () => {
+    Alert.alert(
+      "Reminder Title",
+      "Reminder message",
+      [
+        { text: "OK" }
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
+
+  const checkForReminder = () => {
+    console.log("in checkForReminder")
+    const GET_ = `http://127.0.0.1:8000/`;
+
+    axios.get(GET_, {
+      headers: `Authorization: ${token}`
+    })
+    .then(result => {
+      console.log(result)
+      // set state
+    })
+    .catch(error => {
+      console.error(error)
+    })
+  };
+
+  useEffect(() => {
+		if (loginID != "") {
+      console.log("called checkForReminder")
+      checkForReminder();
+		}
+	}, [isChecking]);
+
+  useEffect(() => {
+    const check = setInterval(() => {
+      setIsChecking(isChecking => !isChecking);
+      console.log(isChecking)
+    }, 1000 * 60 * 30); // every 30 min
+  
+    return () => clearInterval(check);
+  }, []);
+
+  // if one is within time of reminder then make alert
+  // else return null
+  if (isMakingAlert) {
+    return createExerciseReminder;
+  }
+  else {
+    // return null;
+    return <View/>;
+  }
+};
+
 export function Navigation() {
   const {colors} = useTheme();
-  return ( 
-    <Tabs.Navigator
-      screenOptions={({ route }) => ({
-      tabBarIcon: ({ color }) => {
-        let iconName;
 
-        if (route.name === 'home') {
-          iconName = 'home';
-        } else if (route.name === 'search') {
-          iconName = 'search';
-        } else if (route.name === 'upload') {
-          iconName = 'add';
-        } else if(route.name === 'cals')  {
-          iconName = 'local-fire-department'
-        } else if(route.name === 'profile') {
-          iconName = 'person'
-        }
-        // You can return any component that you like here!
-        return <MaterialIcons name={iconName} size={32} color={color} />;
-      },
-    })}
-    tabBarOptions={{
-      activeTintColor: colors.tabIcon,
-      inactiveTintColor: 'gray',
-    }}
-    >
-      <Tabs.Screen name="home" component={HomeScreen} />
-      <Tabs.Screen name="search" component={Search} />
-      <Tabs.Screen name="upload" component={UploadVideoScreen} />
-      <Tabs.Screen name="cals" component={Cals} />
-      <Tabs.Screen name="profile" component={Profile} />
-    </Tabs.Navigator>
+  return (
+    <>
+      <Reminder/>
+      <Tabs.Navigator
+        screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
+          let iconName;
+
+          if (route.name === 'home') {
+            iconName = 'home';
+          } else if (route.name === 'search') {
+            iconName = 'search';
+          } else if (route.name === 'upload') {
+            iconName = 'add';
+          } else if(route.name === 'cals')  {
+            iconName = 'local-fire-department'
+          } else if(route.name === 'profile') {
+            iconName = 'person'
+          } else if(route.name === 'calendar') {
+            iconName = 'calendar'
+          }
+          // You can return any component that you like here!
+          return <MaterialIcons name={iconName} size={32} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: colors.tabIcon,
+        inactiveTintColor: 'gray',
+      }}
+      >
+        <Tabs.Screen name="home" component={HomeScreen} />
+        <Tabs.Screen name="search" component={Search} />
+        <Tabs.Screen name="upload" component={UploadVideoScreen} />
+        <Tabs.Screen name="cals" component={Cals} />
+        <Tabs.Screen name="profile" component={Profile} />
+        <Tabs.Screen name="calendar" component={ExerciseCalendar} />
+      </Tabs.Navigator>
+    </>
   );
 }
 
