@@ -163,9 +163,9 @@ const PostResult = ({ results }) => {
 	const resultData = useSelector(state => {
 		return state.result.result;
 	});
-	const cardData = useSelector(state => {	
+	const videoData = useSelector(state => {	
 		console.log(state)
-		return state.cardData.data;
+		return state.videoData;
 	});
 
 	// console.log(cardData)
@@ -173,8 +173,8 @@ const PostResult = ({ results }) => {
 
 	useEffect(() => {
 		fetchVideo();
-		console.log(cardData)
-	}, [resultData]);
+
+	}, [videoData]);
 
 	useEffect(() => {
 		// if (resultData.length > 0) {
@@ -218,7 +218,7 @@ const PostResult = ({ results }) => {
 				console.log(data)
 				// if (loading) {
 					dispatch({type:"clear"})
-					dispatch({type:"add",payload:data.items})
+					dispatch({type:"addVideo",payload:data.items})
 				// }
 				// setLoading(false)
 			})
@@ -270,7 +270,7 @@ const PostResult = ({ results }) => {
 			style={{flex:1}}
 		>
 			<FlatList
-				data={cardData}
+				data={videoData}
 				renderItem={renderItem}
 				keyExtractor={(item, index) => item.key} 
 				style={{paddingTop:0, flex:1}}
