@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {StyleSheet, Alert, View } from 'react-native';
+import {StyleSheet, Modal, View, Text, Button } from 'react-native';
 import HomeScreen from "./src/HomeScreen";
 import Profile from "./src/Profile";
 import Search from "./src/Search";
@@ -43,23 +43,14 @@ const Reminder = () => {
 	});
 
   const [isChecking, setIsChecking] = useState(false);
-  const [isMakingAlert, setIsMakingAlert] = useState(true);
+  const [isAlertVisible, setAlertVisible] = useState(false);
 
-  const createExerciseReminder = () => {
-    Alert.alert(
-      "Reminder Title",
-      "Reminder message",
-      [
-        { text: "OK" }
-      ],
-      {
-        cancelable: true,
-      }
-    );
+  const setAlertMessage = () => {
+    
   };
 
   const checkForReminder = () => {
-    console.log("in checkForReminder")
+    // console.log("in checkForReminder")
     const GET_ = `http://127.0.0.1:8000/`;
 
     axios.get(GET_, {
@@ -67,7 +58,8 @@ const Reminder = () => {
     })
     .then(result => {
       console.log(result)
-      // set state
+      // set alert message
+      setAlertVisible(!isAlertVisible);
     })
     .catch(error => {
       console.error(error)
@@ -76,29 +68,40 @@ const Reminder = () => {
 
   useEffect(() => {
 		if (loginID != "") {
-      console.log("called checkForReminder")
+      // console.log("called checkForReminder")
       checkForReminder();
 		}
 	}, [isChecking]);
 
   useEffect(() => {
     const check = setInterval(() => {
-      setIsChecking(isChecking => !isChecking);
+      setIsChecking(!isChecking);
       console.log(isChecking)
     }, 1000 * 60 * 30); // every 30 min
   
     return () => clearInterval(check);
   }, []);
-
-  // if one is within time of reminder then make alert
-  // else return null
-  if (isMakingAlert) {
-    return createExerciseReminder;
-  }
-  else {
-    // return null;
-    return <View/>;
-  }
+  
+  return (
+    <Modal
+      visible={isAlertVisible}
+      transparent={true}
+      animationType='slide'    
+    >
+      <View
+        style={styles.reminderView}
+        backgroundColor='white'
+        opacity={1.0}
+      >
+        <Text>
+          {"Reminder Content"}
+        </Text>
+        <Button
+          onPress={() => setAlertVisible(!isAlertVisible)}
+        />
+      </View>
+    </Modal>
+  );
 };
 
 export function Navigation() {
@@ -182,6 +185,16 @@ const styles = StyleSheet.create({
   sectionTitle:{
     fontSize: 24,
     fontWeight: 'bold'
+  },
+  reminderModalView: {
+    padding: '20%',
+  },
+  reminderView: {
+    padding: '15%',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center'
+    // flex: 1,
   }
 });
 
