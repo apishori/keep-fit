@@ -133,7 +133,35 @@ const Home = () => {
 
 	const post = () => {
 		
+    	var category = postCategory.toLowerCase();
+    	var req_category
     	
+    	if (category == "yoga" || category == "y"){
+			req_category = "Y"
+		} else if (category == "running" || category == "r"){
+			req_category = "R"
+		} else if (category == "home cardio" || category == "hc"){
+			req_category = "HC"
+		} else if (category == "tennis" || category == "t"){
+			req_category = "T"
+		} else if (category == "swimming" || category == "s"){
+			req_category = "S"
+		} else if (category == "basketball" || category == "b"){
+			req_category = "B"
+		} else if (category == "cycling" || category == "c"){
+			req_category = "C"
+		} else if (category == "jump rope" || category == "j"){
+			req_category = "J"
+		} else if (category == "hiking" || category == "h"){
+			req_category = "H"
+		} else if (category == "other" || category == "0"){
+			req_category = "O"
+		} else if (category.length > 0){
+			req_category = "O"
+		}
+		
+		
+
     	console.log("TOKEN: " + token)
 			// send video id to server
         const POST_CREATE = `http://127.0.0.1:8000/posts/create/`; 
@@ -141,7 +169,7 @@ const Home = () => {
 		{
 			"video": "inpok4MKVLM",
 			"title": postTitle,
-			"category": postCategory
+			"category": req_category
 		},
 		{headers: {
 			"Authorization": `Token ${token}`
