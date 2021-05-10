@@ -104,12 +104,16 @@ const Login = () => {
               />
               <Button 
                     title="Forgot Password"
+                    type="outline"
                     onPress={() => forgotPW()}
+                    style = {{paddingBottom:8}}
               >
               </Button>
               <Button 
                     title="Sign Up"
+                    type="outline"
                     onPress={() => navigation.navigate('register')}
+
               >
               </Button>
               </View>
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: "center",
         fontWeight: 'bold',
-        marginTop:32
+        marginTop:48
         
      },
      videosWrapper: {

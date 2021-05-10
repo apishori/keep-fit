@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View,ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from "axios";
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import { Input,Button } from 'react-native-elements';
 
 const SignUp = () => {
         const [username, setUsername] = useState('')
@@ -68,78 +69,85 @@ const SignUp = () => {
 
         return (
           //  <View style={styles.login}>
-          <View style={{flex:1}}>
+          <ScrollView style={{marginTop: 48, flex:1}}>
               <Text style = {styles.sectionTitle}>Sign Up</Text>
               <View style = {styles.form}>
-              <TextInput
+              <Input
                   onChangeText={username => setUsername(username)}
                   label='Username'
                   placeholder='Enter username'
               />
-              <TextInput
-                  onChangeText={first => setFirst(first)}
-                  label='First Name'
-                  placeholder='Enter first name'
+              <Input
+                onChangeText={first => setFirst(first)}
+                label='First Name'
+                placeholder='Enter first name'
+                style={styles.input2}
               />
-              <TextInput
+              <Input
                   onChangeText={last => setLast(last)}
                   label='Last Name'
                   placeholder='Enter last name'
               />
-              <TextInput
+              <Input
                   onChangeText={email => setEmail(email)}
                   label='Email'
                   placeholder='Enter email'
               />
-              <TextInput
+              <Input
                   secureTextEntry={true}
                   onChangeText={password => setPassword(password)}
                   label='Password'
                   placeholder='Enter password'
               />
-              <TextInput
+              <Input
                   onChangeText={weight => setWeight(weight)}
                   label='Weight'
                   placeholder='Enter weight'
               />
-              <TextInput
+              <Input
                   onChangeText={height => setHeight(height)}
                   label='Height'
                   placeholder='Enter height'
+              />
+              <Input
+                  type = "date"
+                  onChangeText={birthday=> setBirthday(birthday)}
+                label='Birthday'
+                placeholder="format='YYYY-MM-DD'"
               />
               <DropDownPicker items={[
                             {label: 'Female', value: 'F'},
                             {label: 'Male', value: 'M'},
                             {label: 'Other', value: 'O'}
                         ]}
-                        containerStyle={{height: 40}}
-                        style={{backgroundColor: '#fafafa'}}
+                        containerStyle={{height: 54}}
+                        style={{backgroundColor: '#fafafa', marginLeft: 32, marginRight:32, marginBottom: 16}}
                         itemStyle={{
-                            justifyContent: 'flex-start'
+                            // justifyContent: 'flex-start', 
+                            // width: 128
                         }}
                         onChangeItem={item => setSex(item.value)}
                         placeholder="Select Sex"
                         dropDownStyle={{backgroundColor: '#fafafa'}}/>
-              <TextInput
-                  type = "date"
-                  onChangeText={birthday=> setBirthday(birthday)}
-                label='Birthday'
-                placeholder="format='YYYY-MM-DD'"
-              />
+              
               <Button
                 onPress={() => pickImage()}
                 title='Upload profile image'
+                style={{marginLeft: 16, marginRight: 16, marginBottom: 8}}
               />
               <Button
                 title="Sign Up"
                 onPress={() => getReg()}
+                style={{marginLeft: 16, marginRight: 16, marginBottom: 8}}
               />
               <Button
                 title="Already registered? Sign In"
+                type="clear"
                 onPress={() => navigation.navigate('login')}
+                style={{marginLeft: 16, marginRight: 16, marginBottom: 8}}
               />
            </View>
-        </View>
+        </ScrollView>
         )
     };
 
@@ -162,7 +170,10 @@ const styles = StyleSheet.create({
     form:{
         paddingTop: 32,
         paddingBottom: 24,
-        alignItems:"flex-start"
+        // alignItems:"flex-start"
+    },
+    rowContainer: {
+      flexDirection: 'row'
     }
 })
 

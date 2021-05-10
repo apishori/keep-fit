@@ -323,27 +323,6 @@ const HomeScreen = () => {
 						onPress={()=>setIsVisible(true)}
 						style={styles.buttonOption}
 					/>
-					
-					<Button 
-						// type="clear"
-						title="View History"
-						onPress={()=>setIsHistVisible(true)}
-						style={styles.buttonOption}
-					/>
-				</View>
-				<View style={styles.buttonContainer}>
-					<Button 
-						// type="clear"
-						title="My Liked Posts"
-						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/bylikes/`)}
-						style={styles.buttonOption}
-					/>
-					<Button 
-						// type="clear"
-						title="My Uploads"
-						onPress={()=>fetchData(`http://127.0.0.1:8000/posts/byauthor/`)}
-						style={styles.buttonOption}
-					/>
 				</View>
 				<FlatList
 				   data={cardData}

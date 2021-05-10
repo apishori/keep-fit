@@ -88,67 +88,38 @@ const SearchStatus = ({ status }) => {
 	return <Text>{status}</Text>;
 };
 
-const PostResult = () => {
-	const [id_mapping,setid_mapping] = useState(new Map())
-	const [name_mapping,setname_mapping] = useState(new Map())
-	const [author_mapping,setauthor_mapping] = useState(new Map())
-	const [category_mapping,setcategory_mapping] = useState(new Map())
-	const [likes_mapping,setlikes_mapping] = useState(new Map())
+const StreamResult = () => {
+	const category_dict = new Map()
+	category_dict.set("R","Running")
+	category_dict.set("Y","Yoga")
+	category_dict.set("HC","Home cardio")
+	category_dict.set("T","Tennis")
+	category_dict.set("S","Swimming")
+	category_dict.set("B","Basketball")
+	category_dict.set("C","Cycling")
+	category_dict.set("J","Jump rope")
+	category_dict.set("H","Hiking")
+	category_dict.set("O","Other")
 
-	const dispatch = useDispatch();
 	const resultData = useSelector(state => {
 		return state.result.result;
 	});
-	const cardData = useSelector(state => {
-		return state.cardData;
-	})
-	console.log(resultData)
-	// for(var ids of resultData){
-	// 	name_mapping.set(ids.video, ids.title)
-	// 	id_mapping.set( ids.video, ids.id)
-	// 	author_mapping.set( ids.video, ids.author.username)
-	// 	category_mapping.set( ids.video, ids.category)
-	// 	likes_mapping.set( ids.video, ids.likes)
-	// 	var result = res.data.map(function(val) {
-	// 		return val.video;
-	// 	}).join('%2C');
-	// }
-	// const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
-	// const YOUTUBE_API = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${result}&type=video&key=${API_KEY}`
-	  
-	// const [loading,setLoading] = useState(false)
-
-	// const fetchVideo = () =>{
-	// 	setLoading(true)
-	// 	fetch(YOUTUBE_API)
-	// 	.then(res=>res.json())
-	// 	.then(data => {
-	// 		if (loading) {
-	// 			dispatch({type:"add",payload:data.items})
-	// 		}
-	// 		setLoading(false)
-	// 	})
-	// }
 
 	const renderItem = ({ item }) => {
-		console.log(item)
-			// fetchVideo();
-			// console.log('display video result')
-			// return (
-			// 	<VideoCard 
-			// 		videoId={item.id.videoId}
-			// 		title={item.snippet.title}
-			// 		channel={item.snippet.channelTitle}
-			// 	/>
-			// );
 		return (
 			<View>
-				<Text>
-					{item.title + ', category: ' + item.category}
-				</Text>
-				{/* <Text>
-					{item.category}
-				</Text> */}
+				<Pressable
+					// onPress={() => navigation.navigate('video', {
+					// 	video: ,
+					// })}
+				>
+					<Text>
+						{item.title + ', category: ' + item.category}
+					</Text>
+					{/* <Text>
+						{item.category}
+					</Text> */}
+				</Pressable>				
 			</View>			
 		);
 	}
@@ -160,8 +131,149 @@ const PostResult = () => {
 			<FlatList
 				data={resultData}
 				renderItem={renderItem}
-				keyExtractor={item=>item.id}
-				   style={{paddingTop:0, flex:1}}
+				// keyExtractor={index=>index.toString()}
+				style={{paddingTop:0, flex:1}}
+			/>	
+		</View>
+	);
+};
+
+const PostResult = ({ results }) => {
+	const [loading,setLoading] = useState(false);
+	const [id_mapping,setid_mapping] = useState(new Map())
+	const [name_mapping,setname_mapping] = useState(new Map())
+	const [author_mapping,setauthor_mapping] = useState(new Map())
+	const [category_mapping,setcategory_mapping] = useState(new Map())
+	const [likes_mapping,setlikes_mapping] = useState(new Map())
+	const [result, setResult] = useState([])
+
+	const category_dict = new Map()
+	category_dict.set("R","Running")
+	category_dict.set("Y","Yoga")
+	category_dict.set("HC","Home cardio")
+	category_dict.set("T","Tennis")
+	category_dict.set("S","Swimming")
+	category_dict.set("B","Basketball")
+	category_dict.set("C","Cycling")
+	category_dict.set("J","Jump rope")
+	category_dict.set("H","Hiking")
+	category_dict.set("O","Other")
+
+	const dispatch = useDispatch();
+	const resultData = useSelector(state => {
+		return state.result.result;
+	});
+	const videoData = useSelector(state => {	
+		console.log(state)
+		return state.videoData;
+	});
+
+	// console.log(cardData)
+	// console.log(resultData)
+
+	useEffect(() => {
+		fetchVideo();
+
+	}, [resultData]);
+
+	useEffect(() => {
+		// if (resultData.length > 0) {
+		// 	for(var ids of resultData){
+		// 		name_mapping.set(ids.video, ids.title)
+		// 		id_mapping.set( ids.video, ids.id)
+		// 		author_mapping.set( ids.video, ids.author.username)
+		// 		category_mapping.set( ids.video, ids.category)
+		// 		likes_mapping.set( ids.video, ids.likes)
+		// 		var id = resultData.map(function(val) {
+		// 			return val.video;
+		// 		}).join('%2C');
+		// 	}
+		// }
+	}, []);
+	
+	// useEffect(() => {
+	// 	setResult(cardData);
+	// }, [cardData])
+
+	const fetchVideo = () => {
+		if (resultData && resultData.length > 0) {
+			for(var ids of resultData){
+				name_mapping.set(ids.video, ids.title)
+				id_mapping.set( ids.video, ids.id)
+				author_mapping.set( ids.video, ids.author.username)
+				category_mapping.set( ids.video, ids.category)
+				likes_mapping.set( ids.video, ids.likes)
+				var id = resultData.map(function(val) {
+					return val.video;
+				}).join('%2C');
+			}
+
+			const API_KEY = `AIzaSyDD-5omLZO04LGwOytAAIeRGFxa5Xqa5CE`;
+			const YOUTUBE_API = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&type=video&key=${API_KEY}`;
+			// setLoading(true)
+			// console.log(YOUTUBE_API)
+			fetch(YOUTUBE_API)
+			.then(res =>res.json())
+			.then(data => {
+				console.log(data)
+				// if (loading) {
+					dispatch({type:"clear"})
+					dispatch({type:"addVideo",payload:data.items})
+				// }
+				// setLoading(false)
+			})
+			.catch(error => {
+				console.log(error);
+			});
+		}
+	};
+
+	// useEffect(() => {
+	// 	setResult(cardData)
+	// }, [cardData]);
+
+	// console.log(cardData)
+	// console.log(result)
+	const renderItem = ({ item }) => {
+		console.log(item)
+			// console.log('display video result')
+			return (
+				<VideoCard 
+					videoId={item.id}
+					title= {name_mapping.get(item.id)} // {item.snippet.title}
+					channel={author_mapping.get(item.id)}
+					category = {category_dict.get(category_mapping.get(item.id))}
+					postId = {id_mapping.get(item.id)}
+					likes = {likes_mapping.get(item.id)}
+				/>
+			);
+		// return (
+			// <View>
+			// 	<Pressable
+			// 		// onPress={() => navigation.navigate('video', {
+			// 		// 	video: ,
+			// 		// })}
+			// 	>
+			// 		<Text>
+			// 			{item.title + ', category: ' + item.category}
+			// 		</Text>
+			// 		{/* <Text>
+			// 			{item.category}
+			// 		</Text> */}
+			// 	</Pressable>				
+			// </View>			
+		// );
+	}
+
+	return (
+		<View
+			style={{flex:1}}
+		>
+			<FlatList
+				data={videoData}
+				renderItem={renderItem}
+				keyExtractor={(item, index) => item.key} 
+				style={{paddingTop:0, flex:1}}
 			/>	
 		</View>
 	);
@@ -169,11 +281,11 @@ const PostResult = () => {
 
 const UserResult = () => {
 	const resultData = useSelector(state => {
-		console.log(state)
+		// console.log(state)
 		return state.result;
 	})
 
-	const navigation = useNavigation()
+	const navigation = useNavigation();
 	const dispatch = useDispatch()
 
 	const ShowOtherProfile = ( otherUser ) => {
@@ -223,27 +335,7 @@ const UserResult = () => {
 };
 
 const Results = ({ searchAmong }) => {
-	// return (
-	// 	<View
-	// 		style={styles.results}
-	// 	>
-	// 		{/* <Stack.Navigator>
-	// 			<Stack.Screen
-	// 				name='users'
-	// 				component={UserResult}
-	// 				options={{headerShown:false}}
-	// 			/>
-	// 			<Stack.Screen
-	// 				name='posts'
-	// 				component={PostResult}
-	// 				options={{headerShown:false}}
-	// 			/>
-	// 		</Stack.Navigator>	 */}
-	// 	</View>
-	// );
-	// console.log()
 	if (searchAmong == 'users') {
-		console.log("render user result")
 		return (
 			<View
 				style={styles.results}
@@ -253,7 +345,6 @@ const Results = ({ searchAmong }) => {
 		);
 	}
 	else if (searchAmong == 'posts') {
-		console.log("render post result")
 		return (
 			<View
 				style={styles.results}
@@ -263,7 +354,13 @@ const Results = ({ searchAmong }) => {
 		);
 	}
 	else if (searchAmong == 'streams') {
-		return <View></View>;
+		return (
+			<View
+				style={styles.results}
+			>
+				<StreamResult/>
+			</View>
+		);
 	}
 	else {
 		return <View/>;
@@ -273,10 +370,10 @@ const Results = ({ searchAmong }) => {
 const SearchMenu = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchAmong, setSearchAmong] = useState('users');
+	const [oldSearchTerm, setOldSearchTerm] = useState('');
 	const [oldSearchAmong, setOldSearchAmong] = useState('users');
 	const [searchCategory, setSearchCategory] = useState('A');
 	const [searchCounter, setSearchCounter] = useState(0);
-	// const [result, setResult] = useState([]);
 	const [numOfResults, setNumOfResults] = useState(0);
 	const [status, setStatus] = useState('No results');
 	const [searchLog, setSearchLog] = useState([]);
@@ -288,14 +385,9 @@ const SearchMenu = () => {
 	const token = useSelector(state => {
 		return state.loginToken.token;
 	});
-	const resultData = useSelector(state => {
-		console.log(state)
-		return state.result;
-	})
 
 	const fetchData = () => {
 		const USER_SEARCH = `http://127.0.0.1:8000/users/search/?query=${searchTerm}`;
-		const STREAM_SEARCH = `http://127.0.0.1:8000/livestreams/search/?query=${searchTerm}`;
 
 		if (searchAmong === 'users') {
 			axios.get(USER_SEARCH, { headers: {"Authorization": `Token ${token}`}})
@@ -311,31 +403,38 @@ const SearchMenu = () => {
 		}
 		else if (searchAmong === 'posts') {
 			let POST_SEARCH = `http://127.0.0.1:8000/posts/search/?query=${searchTerm}`;
-
 			if (searchCategory != 'A') {
 				POST_SEARCH += `&category=${searchCategory}`;
 			}
-			console.log(POST_SEARCH)
+
 			axios.get(POST_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
-			dispatch({ type: 'clearResult' });
-			// console.log(data.data);
-			dispatch({ type: 'storeResult', payload: result.data });
-			console.log(result)
-			console.log(resultData)
-			setNumOfResults(result.data.length);
+				dispatch({ type: 'clearResult' });
+				// console.log(data.data);
+				dispatch({ type: 'storeResult', payload: result.data });
+				// console.log(result)
+				// console.log(resultData)
+				setNumOfResults(result.data.length);
+				// fetchVideo();
 			})
 			.catch((error) => {
 				console.error(error);
 			});
 		}
 		else if (searchAmong === 'streams') {
+			let STREAM_SEARCH = `http://127.0.0.1:8000/livestreams/search/?query=${searchTerm}`;
+			if (searchCategory != 'A') {
+				STREAM_SEARCH += `&category=${searchCategory}`;
+			}
+
 			axios.get(STREAM_SEARCH, { headers: {"Authorization": `Token ${token}`}})
 			.then(result => {
-			dispatch({ type: 'clearResult' });
-			//console.log(data.data);
-			dispatch({ type: 'storeResult', payload: result.data });
-			setNumOfResults(result.data.length);
+				dispatch({ type: 'clearResult' });
+				// console.log(data.data);
+				dispatch({ type: 'storeResult', payload: result.data });
+				// console.log(result)
+				// console.log(resultData)
+				setNumOfResults(result.data.length);
 			})
 			.catch((error) => {
 				console.error(error);
@@ -369,23 +468,6 @@ const SearchMenu = () => {
 		});
 	};
 
-	const clearSearchLog = () => {
-		const CLEAR_LOG = `http://127.0.0.1:8000/users/searchterms/`;
-		axios.delete(CLEAR_LOG, {
-			headers: {
-				"Authorization": `Token ${token}`
-			}
-		})
-		.then(result => {
-			// console.log(result.data)
-			getSearchLog();
-			// console.log(searchLog)
-		})
-		.catch(error => {
-			console.error(error);
-		});
-	};
-
 	const search = async () => {
 		// await setSearchTerm(searchTerm)
 		await fetchData();
@@ -400,6 +482,7 @@ const SearchMenu = () => {
 	useEffect(() => {
 		if (searchCounter != 0) {
 			setOldSearchAmong(searchAmong);
+			setOldSearchTerm(searchTerm);
 			getSearchLog();
 			// navigation.navigate(searchAmong);
 		}
@@ -409,7 +492,9 @@ const SearchMenu = () => {
 		if (searchCounter != 0) {
 			setStatus(numOfResults + ' result(s) for "' + searchTerm + '" in ' + searchAmong);		
 		}
-	}, [numOfResults]);
+	}, [numOfResults, oldSearchTerm, oldSearchAmong]);
+
+	
 
 	return (
 		<View
@@ -487,8 +572,8 @@ const SearchMenu = () => {
 				/>
 			</View>
 			<Results
-				searchAmong={oldSearchAmong}
 				style={styles.results}
+				searchAmong={oldSearchAmong}
 			/>
 		</View>
 	);
