@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from .models import Calendar, Day, Month
 from .serializers import CalendarSerializer, MonthSerializer, DaySerializer
 from rest_framework.response import Response
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone, utc
 import pytz
 
@@ -15,7 +15,7 @@ class CurrentMonthView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
-        today = datetime.datetime.now(tz=utc)
+        today = datetime.now(tz=utc)
         today = today.astimezone(timezone('US/Pacific'))
         curr_month = today.strftime("%b")
         serializer = MonthSerializer(Month.objects.filter(author=request.user, this_month=curr_month), context={"request": self.request})
@@ -26,7 +26,7 @@ class GetTodayView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
-        today = datetime.datetime.now(tz=utc)
+        today = datetime.now(tz=utc)
         today = today.astimezone(timezone('US/Pacific'))
         curr_month = today.strftime("%b")
         curr_day = today.strftime("%d")

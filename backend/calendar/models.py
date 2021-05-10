@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from users.models import User
 from workouts.models import Workout
-from datetime import date
+from datetime import datetime, timedelta
 import calendar
 
 # Create your models here.
