@@ -7,7 +7,7 @@ class CalendarSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
 
     class Meta:
-        model = Workout
+        model = Calendar
         fields = ['created_at', 'author']
 
 
@@ -27,7 +27,7 @@ class MonthSerializer(serializers.ModelSerializer):
 
 
 class DaySerializer(serializers.ModelSerializer):   
-    this_month = MonthSerializer(serializers.ModelSerializer):
+    linked_month = MonthSerializer(serializers.ModelSerializer)
 
     class Meta:
         model = Day
@@ -48,7 +48,7 @@ class DaySerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def update_planned(self, instance, validated_data)
+    def update_planned(self, instance, validated_data):
         day_data = self.context.get('request').data
         instance.planned_workout=validated_data.get('planned_workout', instance.planned_workout)
         instance.this_day = day_data.get('this_day', instance.this_day)

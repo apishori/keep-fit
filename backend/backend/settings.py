@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'livestreams.apps.LivestreamsConfig',
     'users.apps.UsersConfig',
     'workouts.apps.WorkoutsConfig',
+    'calendar.apps.CalendarConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
