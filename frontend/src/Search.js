@@ -174,7 +174,7 @@ const PostResult = ({ results }) => {
 	useEffect(() => {
 		fetchVideo();
 
-	}, [videoData]);
+	}, [resultData]);
 
 	useEffect(() => {
 		// if (resultData.length > 0) {
