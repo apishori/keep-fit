@@ -24,6 +24,7 @@ urlpatterns = [
     path('posts/', include('posts.urls')),
     path('livestreams/', include('livestreams.urls')),
     path('workouts/', include('workouts.urls'))
+    path('calendar/', include('calendar.urls'))
 ]
 
 if settings.DEBUG:
